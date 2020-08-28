@@ -1,0 +1,15 @@
+!/backend/vendor/
+/backend/vendor/*
+!/backend/vendor/theframework/
+/backend/tests/logs/
+/backend/logs/
+/backend/config/config.php
+/backend/config/contexts.json
+/backend/config/login.json
+/backend/config/encdecrypt.json
+/backend/config/domains.json
+/backend/public/temp/
+/backend/public/resources/
+/backend/public/*_custom.log
+.idea
+/backend/.env.local
