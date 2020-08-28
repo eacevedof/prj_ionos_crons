@@ -16,7 +16,7 @@ class MainController
     {
         $cronfile = "cron_dbbackup.php";
         $pathcron = $this->_get_cronpath($cronfile);
-        echo "_crondbs(): $pathcron";
+        //echo "_crondbs(): $pathcron";
         if(is_file($pathcron)){
             include_once($pathcron);
             (new \CronDbbackup())->excecute();
