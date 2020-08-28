@@ -1,6 +1,6 @@
 <?php
 include("../boot/appbootstrap.php");
-include("../src/MainController.php");
+include("../src/Controllers/MainController.php");
 
-(new MainController())->index();
+(new \App\Controllers\MainController())->index();
 

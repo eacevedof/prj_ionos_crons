@@ -1,4 +1,5 @@
 <?php
+namespace App\Controllers;
 
 if(is_file("cron_dbbackup.php")) include("cron_dbbackup.php");
 
