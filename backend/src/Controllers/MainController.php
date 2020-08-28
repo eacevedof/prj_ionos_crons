@@ -1,12 +1,19 @@
 <?php
 namespace App\Controllers;
 
-if(is_file("cron_dbbackup.php")) include("cron_dbbackup.php");
-
 class MainController
 {
+    private function _crondbs()
+    {
+        $pathcron = "cron_dbbackup.php";
+        if(is_file($pathcron)){
+            include_once($pathcron);
+            (new CronDbbackup())->execute();
+        }
+    }
+
     public function index()
     {
-        echo "maincontroller.index";
+        $this->_crondbs();
     }
 }
