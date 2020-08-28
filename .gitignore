@@ -1,3 +1,4 @@
+/backend/crons/
 /backend/logs/
 /backend/public/*_custom.log
 .idea
