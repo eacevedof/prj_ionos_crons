@@ -3,6 +3,7 @@
 class CronDbbackup
 {
     //scadado de /Users/ioedu/projects/prj_bash/py/config/projects.json
+    //https://trello.com/c/iu5W0ldc/13-ionos-administrar-crons
     private $projects = [
 
     ];
@@ -29,8 +30,8 @@ class CronDbbackup
         //$hour = substr($now,0,10)
         $todday = date("Ymd");
         $min = "{$todday}030000";
-        $max = "{$todday}033000";
-        //if($now<$min || $now>$min) die("Out of time");
+        $max = "{$todday}040000";
+        if($now<$min || $now>$max) die("Out of time");
 
         $results = [];
         $output = [];
