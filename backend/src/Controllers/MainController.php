@@ -3,11 +3,14 @@ namespace App\Controllers;
 
 class MainController
 {
-    private const FOLDER_CRONS = "";
+    private $FOLDER_CRONS = "";
 
-    private function _get_cronpath($filename){
-        return self::FOLDER_CRONS."/".$filename;
+    public function __construct()
+    {
+        $this->FOLDER_CRONS = $_ENV["FOLDER_CRONS"] ?? "";
     }
+
+    private function _get_cronpath($filename){return $this->FOLDER_CRONS."/".$filename;}
 
     private function _crondbs()
     {
