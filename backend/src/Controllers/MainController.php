@@ -19,7 +19,7 @@ class MainController
         echo "_crondbs(): $pathcron";
         if(is_file($pathcron)){
             include_once($pathcron);
-            (new CronDbbackup())->execute();
+            (new \CronDbbackup())->execute();
         }
     }
 
