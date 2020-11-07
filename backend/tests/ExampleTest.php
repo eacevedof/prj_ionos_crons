@@ -33,3 +33,23 @@ class ExampleTest extends TestCase
     }
 
 }//ExampleTest
+
+/*
+ Array
+(
+    [0] => Array
+        (
+            [0] => 13service   =
+        )
+
+    [1] => Array
+        (
+            [0] => 13service
+        )
+
+    [2] => Array
+        (
+            [0] =>
+        )
+)
+*/
