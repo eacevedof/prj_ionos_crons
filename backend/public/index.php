@@ -1,6 +1,4 @@
 <?php
-include("../boot/appbootstrap.php");
-include("../src/Controllers/MainController.php");
+require __DIR__."/../vendor/autoload.php";
 
-(new \App\Controllers\MainController())->index();
-
+(new \App\Controllers\MainController)();
