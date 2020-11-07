@@ -2,9 +2,12 @@
 namespace App\Controllers;
 
 use App\Components\ConsoleComponent as Console;
+use App\Traits\LogTrait;
 
 abstract class MainController
 {
+    use LogTrait;
+
     protected $argv;
     protected $request = [];
 
@@ -14,20 +17,11 @@ abstract class MainController
         $this->request = (new Console($this->argv))->get_request();
     }
 
-    private function _load_request()
+    protected function get_param($key) {return $this->request[$key] ?? null;}
+
+    protected function get_parsed_ns($dotns)
     {
-        foreach ($this->argv as $i => $param) {
-
-        }
-    }
-
-    protected function get_param($ipos) {return $this->console[$ipos] ?? null;}
-
-    protected function load_service(){
-        /*
-        spl_autoload_register(function ($nombre_clase) {
-            include_once $nombre_clase . '.php';
-        });
-        */
+        $changed = str_replace(".","\\",$dotns);
+        return $changed;
     }
 }
