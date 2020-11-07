@@ -8,7 +8,7 @@ namespace App\Services\Cron;
 
 final class DumpscleanerService extends AbstractService
 {
-    private static $PATH_DUMPS = "";
+    private static $PATH_DUMPSDS = "";
     private const KEEP_LIMIT = 10;
 
     private $files = [];
@@ -17,8 +17,8 @@ final class DumpscleanerService extends AbstractService
     public function __construct()
     {
         $home = $this->_get_env("HOME");
-        self::$PATH_DUMPS = "$home/backup_bd/";
-        $this->logpr(self::$PATH_DUMPS,"PATH_DUMPS");
+        self::$PATH_DUMPSDS = "$home/backup_bd/";
+        $this->logpr(self::$PATH_DUMPSDS,"PATH_DUMPS");
     }
 
     private function _remove_dots()
@@ -71,7 +71,7 @@ final class DumpscleanerService extends AbstractService
     {
         foreach ($files as $filename)
         {
-            $pathfile = self::$PATH_DUMPS.DS.$filename;
+            $pathfile = self::$PATH_DUMPSDS.$filename;
             if(is_file($pathfile)){
                 $this->logpr("removing file: $pathfile");
                 //unlink($pathfile);
@@ -82,9 +82,9 @@ final class DumpscleanerService extends AbstractService
     public function run()
     {
         $this->logpr("START","dumpscleaner.run");
-        if(!is_dir(self::$PATH_DUMPS)) throw new \Exception("No dir found: ".self::$PATH_DUMPS);
+        if(!is_dir(self::$PATH_DUMPSDS)) throw new \Exception("No dir found: ".self::$PATH_DUMPSDS);
 
-        $this->files = scandir(self::$PATH_DUMPS);
+        $this->files = scandir(self::$PATH_DUMPSDS);
         //$this->logpr($this->files,"FILES");
         $this->_remove_dots();
         $this->_order_desc();
