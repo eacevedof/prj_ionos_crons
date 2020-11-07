@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Components\ConsoleComponent as Console;
+use App\Component\ConsoleComponent as Console;
 use App\Traits\LogTrait;
 
 abstract class MainController

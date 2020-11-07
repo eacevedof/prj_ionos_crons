@@ -11,10 +11,10 @@ class DispatcherController extends MainController
         $service = $this->get_parsed_ns($service);
         $class = "App\\Services\\$service";
         try {
-
+            (new $class())->run();
         }
         catch (\Exception $e){
-
+            $this->log($e->getMessage(),"ERROR");
         }
 
     }

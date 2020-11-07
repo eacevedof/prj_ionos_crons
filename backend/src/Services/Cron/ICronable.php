@@ -1,5 +1,5 @@
 <?php
-namespace App\Crons;
+namespace App\Services\Cron;
 
 interface ICronable
 {
