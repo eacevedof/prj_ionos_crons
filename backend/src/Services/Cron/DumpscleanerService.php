@@ -37,11 +37,11 @@ final class DumpscleanerService extends AbstractService
         foreach ($this->files as $filename)
         {
             $prefix = explode("_",$filename);
-            $prefix = array_pop($prefix);
+            array_pop($prefix);
             $prefix = implode("_",$prefix);
             $r[] = $prefix;
         }
-        $this->logpr($r,"prefixes??");
+        //$this->logpr($r,"prefixes??");
         $this->prefixes = array_unique($r);
     }
 
