@@ -38,7 +38,7 @@ final class DumpscleanerService extends AbstractService
         {
             $prefix = explode("_",$filename);
             $prefix = array_pop($prefix);
-            $prefix = implode("_");
+            $prefix = implode("_",$prefix);
             $r[] = $prefix;
         }
         $this->logpr($r,"prefixes??");
