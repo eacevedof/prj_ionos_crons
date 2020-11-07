@@ -41,6 +41,7 @@ final class DumpscleanerService extends AbstractService
             $prefix = implode("_");
             $r[] = $prefix;
         }
+        $this->logpr($r,"prefixes??");
         $this->prefixes = array_unique($r);
     }
 
