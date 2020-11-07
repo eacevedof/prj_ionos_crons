@@ -1,4 +1,4 @@
-/backend/src/config/projects.php
+/backend/config/projects.php
 /backend/logs/
 /backend/public/*_custom.log
 .idea

@@ -4,8 +4,9 @@ define("DS",DIRECTORY_SEPARATOR);
 
 $pathpublic = $_SERVER["DOCUMENT_ROOT"];
 if($pathpublic) $sPath = realpath($pathpublic.DS."..");
-else $sPath = $_SERVER["PWD"];
+else $sPath = realpath(dirname($_SERVER["PHP_SELF"])."/../");
 define("PATH_ROOT",$sPath);
+//print_r(PATH_ROOT); DIE;
 
 $sPath = realpath(PATH_ROOT.DS."public");
 define("PATH_PUBLIC",$sPath);//carpeta public
