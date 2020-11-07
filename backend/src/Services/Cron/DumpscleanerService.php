@@ -74,7 +74,7 @@ final class DumpscleanerService extends AbstractService
             $pathfile = self::$PATH_DUMPSDS.$filename;
             if(is_file($pathfile)){
                 $this->logpr("removing file: $pathfile");
-                //unlink($pathfile);
+                unlink($pathfile);
             }
         }
     }
@@ -85,7 +85,7 @@ final class DumpscleanerService extends AbstractService
         if(!is_dir(self::$PATH_DUMPSDS)) throw new \Exception("No dir found: ".self::$PATH_DUMPSDS);
 
         $this->files = scandir(self::$PATH_DUMPSDS);
-        //$this->logpr($this->files,"FILES");
+        $this->logpr($this->files,"files to handle");
         $this->_remove_dots();
         $this->_order_desc();
         $this->_load_prefixes();
