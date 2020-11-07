@@ -76,7 +76,10 @@ final class DumpscleanerService extends AbstractService implements ICronable
         $this->logpr("START","dumpscleaner.run");
         //if(!is_dir(self::PATH_DUMPS)) throw new \Exception("No dir found: ".self::PATH_DUMPS);
 
-        $this->files = scandir(self::PATH_DUMPS);
+        $realpath = realpath(self::PATH_DUMPS);
+        echo "REALPATH";
+        print_r($realpath);
+        $this->files = scandir($realpath);
         $this->logpr($this->files,"FILES");
         $this->_remove_dots();
         $this->_order_desc();
