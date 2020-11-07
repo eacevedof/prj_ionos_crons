@@ -89,6 +89,7 @@ final class DumpscleanerService extends AbstractService
         $this->_order_desc();
         $this->_load_prefixes();
 
+        $this->logpr($this->prefixes,"prefixes");
         foreach ($this->prefixes as $prefix){
             $files = $this->_get_by_prefix($prefix);
             if(count($files)<=self::KEEP_LIMIT)
