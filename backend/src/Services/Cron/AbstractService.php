@@ -3,7 +3,7 @@ namespace App\Services\Cron;
 
 use App\Traits\LogTrait;
 
-abstract class AbstractService
+abstract class AbstractService implements ICronable
 {
     use LogTrait;
 
@@ -14,4 +14,5 @@ abstract class AbstractService
         $this->projects = include_once(PATH_CONFIG.DS."projects.php");
     }
 
+    protected function _get_env($key){ return getenv($key);}
 }

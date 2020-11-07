@@ -6,13 +6,20 @@
  */
 namespace App\Services\Cron;
 
-final class DumpscleanerService extends AbstractService implements ICronable
+final class DumpscleanerService extends AbstractService
 {
-    private const PATH_DUMPS = "~/backup_bd/";
+    private static $PATH_DUMPS = "";
     private const KEEP_LIMIT = 10;
 
     private $files = [];
     private $prefixes = [];
+
+    public function __construct()
+    {
+        $home = $this->_get_env("HOME");
+        self::$PATH_DUMPS = "$home/backup_bd/";
+        $this->logpr(self::$PATH_DUMPS,"PATH_DUMPS");
+    }
 
     private function _remove_dots()
     {
@@ -63,7 +70,7 @@ final class DumpscleanerService extends AbstractService implements ICronable
     {
         foreach ($files as $filename)
         {
-            $pathfile = self::PATH_DUMPS.$filename;
+            $pathfile = self::$PATH_DUMPS.$filename;
             if(is_file($pathfile)){
                 $this->logpr("removing file: $pathfile");
                 //unlink($pathfile);
@@ -74,12 +81,9 @@ final class DumpscleanerService extends AbstractService implements ICronable
     public function run()
     {
         $this->logpr("START","dumpscleaner.run");
-        //if(!is_dir(self::PATH_DUMPS)) throw new \Exception("No dir found: ".self::PATH_DUMPS);
+        if(!is_dir(self::$PATH_DUMPS)) throw new \Exception("No dir found: ".self::$PATH_DUMPS);
 
-        $realpath = realpath(self::PATH_DUMPS);
-        echo "REALPATH";
-        print_r($realpath);
-        $this->files = scandir($realpath);
+        $this->files = scandir(self::$PATH_DUMPS);
         $this->logpr($this->files,"FILES");
         $this->_remove_dots();
         $this->_order_desc();
