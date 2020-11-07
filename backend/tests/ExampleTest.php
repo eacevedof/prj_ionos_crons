@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class ExampleTest extends TestCase
 {
-    private function match_test()
+    public function match_test()
     {
         $keypattern = "^([a-z,\d]+)\s*=(.*?)";
         $strkeyval = "13service   = \"sfsodmem string to servi\";";
