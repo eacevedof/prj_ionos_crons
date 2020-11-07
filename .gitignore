@@ -1,4 +1,4 @@
-/backend/crons/
+# /backend/crons/projects.php
 /backend/logs/
 /backend/public/*_custom.log
 .idea

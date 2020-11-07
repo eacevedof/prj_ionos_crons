@@ -1,15 +1,13 @@
 <?php
-//fecha: 28/08/2020
-class CronDbbackup
+include_once("icronable.php");
+//fecha: 07/11/2020
+class CronDbbackup implements icronable
 {
-    //scadado de /Users/ioedu/projects/prj_bash/py/config/projects.json
-    //https://trello.com/c/iu5W0ldc/13-ionos-administrar-crons
-    private $projects = [
-
-    ];
+    private $projects = [];
 
     private function _start()
     {
+
         $now = date("Ymd H:i:s");
         $msg = "START crondbbackup.execute $now \n";
         echo $msg;
@@ -22,7 +20,7 @@ class CronDbbackup
         echo $msg;
     }
 
-    public function excecute()
+    public function run()
     {
         //echo "<pre>";
         $this->_start();
@@ -65,4 +63,4 @@ class CronDbbackup
     }
 }//class CronDbbackup
 
-(new CronDbbackup())->excecute();
+(new CronDbbackup())->run();
