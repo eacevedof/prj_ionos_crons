@@ -22,7 +22,6 @@ abstract class MainController
 
     protected function get_param($key) {return $this->request[$key] ?? null;}
 
-
     protected function _is_service($class)
     {
         if(!$class) return false;
