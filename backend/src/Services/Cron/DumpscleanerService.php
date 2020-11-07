@@ -2,14 +2,15 @@
 /**
  * Actualizado: 07/11/2020
  * crontab -l
- * 15 3 * * *  /usr/bin/php7.4  $HOME/mi_common/crons/cron_dbbackup.php
+ * se lanza todos los días a las 04:15
+ * 15 4 * * *  /usr/bin/php7.4 <thisfile>
  */
 namespace App\Services\Cron;
 
 final class DumpscleanerService extends AbstractService
 {
     private static $PATH_DUMPSDS = "";
-    private const KEEP_LIMIT = 10;
+    private const KEEP_LIMIT = 15;
 
     private $files = [];
     private $prefixes = [];

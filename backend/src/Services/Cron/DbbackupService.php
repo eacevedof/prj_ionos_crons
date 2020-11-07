@@ -1,6 +1,9 @@
 <?php
 /**
  * Actualizado: 07/11/2020
+ *
+ * se lanza a las 03:15 todos los días
+ * 15 3 * * *  /usr/bin/php7.4
  */
 namespace App\Services\Cron;
 
