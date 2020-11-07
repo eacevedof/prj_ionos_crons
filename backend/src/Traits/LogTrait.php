@@ -23,18 +23,24 @@ trait LogTrait
 
     protected function logerr($mxVar,$sTitle=NULL)
     {
+        $this->_pr($mxVar,$sTitle);
         $pathlogs = $this->_get_pathlog();
         $oLog = new L("error",$pathlogs);
         $oLog->save($mxVar,$sTitle);
     }
 
-    protected function logpr($mxvar,$title="")
+    private function _pr($mxvar,$title="")
     {
         $now = date("Ymd H:i:s");
         echo "\n$now";
         if($title) echo "\n$title:\n";
         print_r($mxvar);
         echo "\n";
+    }
+
+    protected function logpr($mxvar,$title="")
+    {
+        $this->_pr($mxvar,$title);
         $this->log($mxvar,$title);
     }
 }
