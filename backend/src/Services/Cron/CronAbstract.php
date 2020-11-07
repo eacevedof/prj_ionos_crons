@@ -1,5 +1,7 @@
 <?php
-abstract class AbstractCron
+namespace App\Services\Cron;
+
+abstract class CronAbstract
 {
     protected $projects;
 

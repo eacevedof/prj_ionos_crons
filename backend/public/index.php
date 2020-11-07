@@ -1,4 +1,5 @@
 <?php
 require __DIR__."/../vendor/autoload.php";
 
-(new \App\Controllers\MainController)();
+if(PHP_SAPI) $_REQUEST = $argv;
+(new \App\Controllers\DispatcherController())();

@@ -3,8 +3,6 @@ namespace App\Controllers;
 
 class MainController
 {
-    public function __invoke()
-    {
-        die("maincontroller");
-    }
+    protected function get_param($ipos) {return $_REQUEST[$ipos] ?? null;}
+
 }

@@ -4,12 +4,12 @@
  * crontab -l
  * 15 3 * * *  /usr/bin/php7.4  $HOME/mi_common/crons/cron_dbbackup.php
  */
-namespace App\Crons;
+namespace App\Services\Cron;;
 
-include_once("icronable.php");
-include_once("cron_abstract.php");
+//include_once("icronable.php");
+//include_once("cron_abstract.php");
 
-final class CronDbbackup extends AbstractCron implements Icronable
+final class Dbbackup extends AbstractCron implements Icronable
 {
 
     private function _start()
@@ -71,4 +71,4 @@ final class CronDbbackup extends AbstractCron implements Icronable
 
 }//class CronDbbackup
 
-(new CronDbbackup())->run();
+(new Dbbackup())->run();
