@@ -5,6 +5,7 @@ final class DispatcherController extends MainController
 {
     public function __invoke()
     {
+        $this->log("dipsatcher.invoke");
         try
         {
             $service = $this->get_param("service");
