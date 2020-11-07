@@ -12,7 +12,6 @@ abstract class AbstractService
     public function __construct()
     {
         $this->projects = include_once(PATH_SRC_CONFIG.DS."projects.php");
-        print_r($this->projects);die("xx");
     }
 
     protected function logjson($mxvar, $title="")
