@@ -10,20 +10,22 @@ abstract class MainController
 
     protected $argv;
     protected $request = [];
+    protected $servicemapper = [];
 
     public function __construct()
     {
         $this->argv = $_REQUEST;
         $this->request = (new Console($this->argv))->get_request();
+        $this->servicemapper = include_once(PATH_CONFIG.DS."services.php");
+        //print_r($this->servicemapper);die;
     }
 
     protected function get_param($key) {return $this->request[$key] ?? null;}
 
-    protected function get_parsed_ns($dotns)
-    {
-        $changed = str_replace(".","\\",$dotns);
-        return $changed;
-    }
 
-    protected function _is_service($class) {return class_exists($class,true);}
+    protected function _is_service($class)
+    {
+        if(!$class) return false;
+        return class_exists($class,true);
+    }
 }

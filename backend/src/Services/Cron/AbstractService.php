@@ -11,7 +11,7 @@ abstract class AbstractService
 
     public function __construct()
     {
-        $this->projects = include_once(PATH_SRC_CONFIG.DS."projects.php");
+        $this->projects = include_once(PATH_CONFIG.DS."projects.php");
     }
 
 }

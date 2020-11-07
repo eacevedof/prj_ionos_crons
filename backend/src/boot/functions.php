@@ -4,7 +4,7 @@ function appboot_loadenv()
 {
     $arpaths = [
         "%PATH_PUBLIC%" => PATH_PUBLIC, "%PATH_ROOT%" => PATH_ROOT,
-        "%PATH_SRC%" => PATH_SRC, "%PATH_SRC_CONFIG%" => PATH_SRC_CONFIG
+        "%PATH_SRC%" => PATH_SRC, "%PATH_CONFIG%" => PATH_CONFIG
     ];
 
     $arEnvs = ["local" => ".env.local", "dev" => ".env.dev","test" => ".env.test","prod" => ".env", ];
