@@ -64,9 +64,7 @@ final class CronDbbackup extends AbstractCron implements Icronable
             $results[] = "$alias resultado: $result"; // 0:ok, 1:error
         }//forach
 
-        if($results){
-            $this->logjson($results,"dbbackup");
-        }
+        $this->log($results,"dbbackup");
 
         $this->_end();
     }
