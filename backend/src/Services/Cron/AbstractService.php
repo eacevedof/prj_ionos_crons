@@ -13,4 +13,5 @@ abstract class AbstractService
     {
         $this->projects = include_once(PATH_SRC_CONFIG.DS."projects.php");
     }
+
 }

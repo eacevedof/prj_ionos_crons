@@ -27,4 +27,14 @@ trait LogTrait
         $oLog = new L("error",$pathlogs);
         $oLog->save($mxVar,$sTitle);
     }
+
+    protected function logpr($mxvar,$title="")
+    {
+        $now = date("Ymd H:i:s");
+        echo "\n$now";
+        if($title) echo "\n$title:\n";
+        print_r($mxvar);
+        echo "\n";
+        $this->log($mxvar,$title);
+    }
 }

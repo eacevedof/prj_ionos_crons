@@ -8,21 +8,6 @@ namespace App\Services\Cron;
 
 final class DbbackupService extends AbstractService implements ICronable
 {
-
-    private function _start()
-    {
-        $now = date("Ymd H:i:s");
-        $msg = "START crondbbackup.execute $now \n";
-        echo $msg;
-    }
-
-    private function _end()
-    {
-        $now = date("Ymd H:i:s");
-        $msg = "END crondbbackup.execute $now \n";
-        echo $msg;
-    }
-
     private function _check_intime()
     {
         $now = date("YmdHis");
@@ -38,7 +23,7 @@ final class DbbackupService extends AbstractService implements ICronable
 
     public function run()
     {
-        $this->_start();
+        $this->logpr("START","dbbackupservice.run");
         $r = $this->_check_intime();
         $min = $r["min"];
 
@@ -61,9 +46,8 @@ final class DbbackupService extends AbstractService implements ICronable
             $results[] = "$alias resultado: $result"; // 0:ok, 1:error
         }//forach
 
-        $this->log($results,"dbbackup");
-
-        $this->_end();
+        $this->log($results,"dbbackupservice.run.results");
+        $this->logpr("END","dbbackupservice.run");
     }
 
 }//class CronDbbackup
