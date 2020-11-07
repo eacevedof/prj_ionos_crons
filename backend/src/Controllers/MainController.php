@@ -25,5 +25,5 @@ abstract class MainController
         return $changed;
     }
 
-    protected function get_argv(){ return $this->argv;}
+    protected function _is_service($class) {return class_exists($class,true);}
 }

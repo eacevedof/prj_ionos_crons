@@ -3,8 +3,6 @@ namespace App\Controllers;
 
 final class DispatcherController extends MainController
 {
-    private function _is_service($class) {return class_exists($class,true);}
-
     public function __invoke()
     {
         try

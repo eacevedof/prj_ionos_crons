@@ -3,7 +3,7 @@ namespace App\Component;
 
 final class ConsoleComponent
 {
-    private const KEY_PATTERN = "^([a-z,\d]+)\s*=\s*";
+    private const KEY_PATTERN = "^([\-]{0,2}[a-z,\d]+)\s*=\s*";
 
     private $argv = [];
     private $request = [];
@@ -21,7 +21,20 @@ final class ConsoleComponent
         $result = [];
         $keypattern = self::KEY_PATTERN;
         preg_match_all("#$keypattern#sim", $strkeyval,$result);
+        #print_r($result);
         return $result[0][0] ?? "";
+    }
+
+    private function _get_keycleaned($key)
+    {
+        $key = str_replace("=","",$key);
+        $key = trim($key);
+        $i = strpos($key,"--");
+        if($i===0) $key = substr($key,2);
+        $i = strpos($key,"-");
+        if($i===0) $key = substr($key,1);
+        //print_r($key);die;
+        return $key;
     }
 
     private function _get_splitted($strkeyval)
@@ -29,8 +42,7 @@ final class ConsoleComponent
         $key = $this->_get_key($strkeyval);
         $value = str_replace($key,"",$strkeyval);
         $value = trim($value);
-        $key = str_replace("=","",$key);
-        $key = trim($key);
+        $key = $this->_get_keycleaned($key);
         return [
             "key"=>$key, "value"=>$value
         ];
