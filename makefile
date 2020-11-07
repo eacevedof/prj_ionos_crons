@@ -5,4 +5,4 @@ test:
 	backend/vendor/bin/phpunit ./backend/tests
 
 remlogs:
-	rm -fr backend/logs
+	rm -fr backend/logs/*
