@@ -6,11 +6,23 @@ use PHPUnit\Framework\TestCase;
 
 class ExampleTest extends TestCase
 {
-    public function match_test()
+    private const KEY_PATTERN = "^([a-z,\d]+)\s*=(.*?)";
+
+    public function test_key_value_con_dobles_comillas()
     {
-        $keypattern = "^([a-z,\d]+)\s*=(.*?)";
-        $strkeyval = "13service   = \"sfsodmem string to servi\";";
-        preg_match_all("#$keypattern#im", $strkeyval,$result);
+        $keypattern = self::KEY_PATTERN;
+        $strkeyval = "13service   = \"sfsodmem 
+        = a b = xx string to servi\";";
+        preg_match_all("#$keypattern#sim", $strkeyval,$result);
+        print_r($result);
+    }
+
+    public function test_key_value_sin_comillas()
+    {
+        $keypattern = self::KEY_PATTERN;
+        $strkeyval = "13service   = sfsodmem 
+        = a b = xx string to servi;";
+        preg_match_all("#$keypattern#sim", $strkeyval,$result);
         print_r($result);
     }
 
