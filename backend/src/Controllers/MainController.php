@@ -1,13 +1,24 @@
 <?php
 namespace App\Controllers;
 
+use App\Components\ConsoleComponent as Console;
+
 abstract class MainController
 {
-    protected $console;
+    protected $argv;
+    protected $request = [];
 
     public function __construct()
     {
-        $this->console = $_REQUEST;
+        $this->argv = $_REQUEST;
+        $this->request = (new Console($this->argv))->get_request();
+    }
+
+    private function _load_request()
+    {
+        foreach ($this->argv as $i => $param) {
+
+        }
     }
 
     protected function get_param($ipos) {return $this->console[$ipos] ?? null;}

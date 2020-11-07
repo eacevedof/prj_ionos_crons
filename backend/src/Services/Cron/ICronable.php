@@ -1,7 +1,7 @@
 <?php
 namespace App\Crons;
 
-interface Icronable
+interface ICronable
 {
     public function run();
 }
