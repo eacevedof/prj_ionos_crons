@@ -4,6 +4,7 @@ define("DS",DIRECTORY_SEPARATOR);
 
 $pathpublic = $_SERVER["DOCUMENT_ROOT"];
 if($pathpublic) $sPath = realpath($pathpublic.DS."..");
+elseif(PHP_SAPI) $path = realpath(dirname($argv[0])."/../");
 else $sPath = realpath(dirname($_SERVER["PHP_SELF"])."/../");
 define("PATH_ROOT",$sPath);
 //print_r(PATH_ROOT); DIE;
