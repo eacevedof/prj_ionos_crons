@@ -10,7 +10,7 @@ trait LogTrait
     protected function log($mxVar,$sTitle=NULL)
     {
         $pathlogs = $this->_get_pathlog();
-        $oLog = new L("sql",$pathlogs);
+        $oLog = new L("warning",$pathlogs);
         $oLog->save($mxVar,$sTitle);
     }
 
