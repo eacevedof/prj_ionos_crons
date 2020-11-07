@@ -3,7 +3,14 @@ namespace App\Controllers;
 
 abstract class MainController
 {
-    protected function get_param($ipos) {return $_REQUEST[$ipos] ?? null;}
+    protected $console;
+
+    public function __construct()
+    {
+        $this->console = $_REQUEST;
+    }
+
+    protected function get_param($ipos) {return $this->console[$ipos] ?? null;}
 
     protected function load_service(){
         /*
