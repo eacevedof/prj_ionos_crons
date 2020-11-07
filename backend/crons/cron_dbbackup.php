@@ -1,13 +1,15 @@
 <?php
-include_once("icronable.php");
 //fecha: 07/11/2020
-class CronDbbackup implements icronable
+namespace App\Crons;
+
+include_once("icronable.php");
+include_once("cron_abstract.php");
+
+final class CronDbbackup extends AbstractCron implements Icronable
 {
-    private $projects = [];
 
     private function _start()
     {
-
         $now = date("Ymd H:i:s");
         $msg = "START crondbbackup.execute $now \n";
         echo $msg;
