@@ -1,7 +1,7 @@
 <?php
 namespace App\Component;
 
-class Log
+class LogComponent
 {
     const DS = DIRECTORY_SEPARATOR;
 
@@ -24,6 +24,7 @@ class Log
     {
         $sLogFolder = $this->sPathFolder.self::DS
             .$this->sSubfType.self::DS;
+        //die($sLogFolder);
         if(!is_dir($sLogFolder)) @mkdir($sLogFolder);
     }
 

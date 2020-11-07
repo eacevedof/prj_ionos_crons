@@ -24,4 +24,6 @@ abstract class MainController
         $changed = str_replace(".","\\",$dotns);
         return $changed;
     }
+
+    protected function get_argv(){ return $this->argv;}
 }
