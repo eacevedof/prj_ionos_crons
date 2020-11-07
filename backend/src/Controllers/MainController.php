@@ -26,6 +26,6 @@ abstract class MainController
     protected function _is_service($class)
     {
         if(!$class) return false;
-        return class_exists($class,true);
+        return class_exists($class,false);
     }
 }
