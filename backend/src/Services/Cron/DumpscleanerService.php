@@ -70,7 +70,7 @@ final class DumpscleanerService extends AbstractService
     {
         foreach ($files as $filename)
         {
-            $pathfile = self::$PATH_DUMPS.$filename;
+            $pathfile = self::$PATH_DUMPS.DS.$filename;
             if(is_file($pathfile)){
                 $this->logpr("removing file: $pathfile");
                 //unlink($pathfile);
@@ -84,7 +84,7 @@ final class DumpscleanerService extends AbstractService
         if(!is_dir(self::$PATH_DUMPS)) throw new \Exception("No dir found: ".self::$PATH_DUMPS);
 
         $this->files = scandir(self::$PATH_DUMPS);
-        $this->logpr($this->files,"FILES");
+        //$this->logpr($this->files,"FILES");
         $this->_remove_dots();
         $this->_order_desc();
         $this->_load_prefixes();
@@ -94,6 +94,7 @@ final class DumpscleanerService extends AbstractService
             if(count($files)<=self::KEEP_LIMIT)
                 continue;
             $filesrmv = $this->_get_remanent($files);
+            $this->logpr($filesrmv,"files to remove");
             $this->_remove($filesrmv);
         }
 
