@@ -3,3 +3,4 @@
 /backend/public/*_custom.log
 .idea
 /backend/.env.local
+/backend/vendor
