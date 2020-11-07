@@ -24,13 +24,12 @@ final class CronDbbackup extends AbstractCron implements Icronable
 
     public function run()
     {
-        //echo "<pre>";
         $this->_start();
         $now = date("YmdHis");
-        //$hour = substr($now,0,10)
-        $todday = date("Ymd");
-        $min = "{$todday}030000";
-        $max = "{$todday}040000";
+
+        $today = date("Ymd");
+        $min = "{$today}030000";
+        $max = "{$today}040000";
         if($now<$min || $now>$max) die("Out of time");
 
         $results = [];
@@ -52,13 +51,8 @@ final class CronDbbackup extends AbstractCron implements Icronable
             $results[] = "$alias resultado: $result"; // 0:ok, 1:error
         }//forach
 
-        //print_r($output);
-        print_r($results);
-
         if($results){
-            $json = json_encode($results, 1);
-            $logfile = "cronlog_${now}.log";
-            file_put_contents($logfile, $json);
+            $this->logjson($results,"dbbackup");
         }
 
         $this->_end();
