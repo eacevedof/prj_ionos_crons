@@ -51,5 +51,3 @@ final class DbbackupService extends AbstractService implements ICronable
     }
 
 }//class CronDbbackup
-
-(new DbbackupService())->run();
