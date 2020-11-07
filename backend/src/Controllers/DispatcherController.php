@@ -17,6 +17,7 @@ final class DispatcherController extends MainController
         }
         catch (\Exception $e)
         {
+            $this->logpr(PATH_ROOT,"PATH_ROOT");
             $this->logerr($this->argv,"ERROR dispatchcontroller.invoke argv");
             $this->logerr($e->getMessage(),"ERROR dispatchcontroller.invoke message");
         }
