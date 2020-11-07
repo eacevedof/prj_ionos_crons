@@ -1,5 +1,9 @@
 <?php
-//fecha: 07/11/2020
+/**
+ * Actualizado: 07/11/2020
+ * crontab -l
+ * 15 3 * * *  /usr/bin/php7.4  $HOME/mi_common/crons/cron_dbbackup.php
+ */
 namespace App\Crons;
 
 include_once("icronable.php");
@@ -22,15 +26,24 @@ final class CronDbbackup extends AbstractCron implements Icronable
         echo $msg;
     }
 
-    public function run()
+    private function _check_intime()
     {
-        $this->_start();
         $now = date("YmdHis");
 
         $today = date("Ymd");
         $min = "{$today}030000";
         $max = "{$today}040000";
         if($now<$min || $now>$max) die("Out of time");
+        return [
+            "min"=>$min, "max"=>$max
+        ];
+    }
+
+    public function run()
+    {
+        $this->_start();
+        $r = $this->_check_intime();
+        $min = $r["min"];
 
         $results = [];
         $output = [];
