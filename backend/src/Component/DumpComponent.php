@@ -25,7 +25,7 @@ class DumpComponent
         array_pop($arstr2);
         $c1 = count($arstr1);
         $c2 = count($arstr2);
-        //pr("file1:$c1, file2:$c2","dumpcomponent");
+        pr("file1:$c1, file2:$c2","dumpcomponent");
 
         $this->str1 = implode("\n",$arstr1);
         $this->str2 = implode("\n",$arstr2);
