@@ -1,10 +1,12 @@
 <?php
 /*
-mapping <command> = <namespace-class>
-
 20 11 * * * /usr/bin/php7.4 <path-this>/crons/backend/public/index.php service=cron.dbbackupservice
 20 11 * * * /usr/bin/php7.4 <path-this>/crons/backend/public/index.php service=cron.dumpscleaner
 
+php	backend/public/index.php service=<command-alias>
+
+mapping:
+    <command-alias> => <namespace-class>
 */
 return [
     "cron.dbbackup"             => "App\\Services\\Cron\\DbbackupService",
