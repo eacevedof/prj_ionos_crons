@@ -28,12 +28,8 @@ class DumpComponent
         $this->str1 = implode("\n",$arstr1);
         $this->str2 = implode("\n",$arstr2);
     }
-    
-    private function _same_len()
-    {
-        return strlen($this->str1) === strlen($this->str2);
-    }
-    
+
+    private function _same_len(){ return strlen($this->str1) === strlen($this->str2);}
 
     public function are_thesame()
     {
