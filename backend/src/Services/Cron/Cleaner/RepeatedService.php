@@ -60,13 +60,22 @@ final class RepeatedService extends AbstractService
         $r = [];
         //buscar
         foreach($files as $file1){
+            //si ya está en repetidos se comprueba el sig
+            if(in_array($file1,$r)) continue;
+
             $path1 = self::$PATH_DUMPSDS.$file1;
 
             foreach ($files as $file2){
-                $path2 = self::$PATH_DUMPSDS.$file2;
+                if($file1 == $file2) continue;
 
-            }
-        }
+                $path2 = self::$PATH_DUMPSDS.$file2;
+                $areequal = (new DumpComponent($path1,$path2))->are_thesame();
+
+                if($areequal) $r[] = $file2;
+
+            }//foreach file2
+
+        }//foreach file1
 
         return $r;
     }
@@ -102,7 +111,7 @@ final class RepeatedService extends AbstractService
                 continue;
             $filesrmv = $this->_get_repeated($files);
             $this->logpr($filesrmv,"files to remove");
-            $this->_remove($filesrmv);
+            //$this->_remove($filesrmv);
         }
 
         $this->logpr("END","repeatedcleaner.run");

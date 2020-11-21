@@ -12,7 +12,7 @@ class DumpComponent
         $this->str2 = file_get_contents($path2);
     }
 
-    public function _remove_lastline()
+    private function _remove_lastline()
     {
         $arstr1 = explode("\n",$this->str1);
         $arstr2 = explode("\n",$this->str2);
