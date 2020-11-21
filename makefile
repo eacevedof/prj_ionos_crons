@@ -22,3 +22,11 @@ cron-dbbackup:
 cron-cleanerdump:
 	clear
 	php	backend/public/index.php service=cron.cleaner.dump
+
+cron-cleanerrepeated:
+	clear
+	php	backend/public/index.php service=cron.cleaner.repeated
+
+help:
+	clear
+	cat makefile
