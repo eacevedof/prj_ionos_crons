@@ -1,11 +1,10 @@
 <?php
 /**
- * Actualizado: 07/11/2020
- * crontab -l
- * se lanza todos los días a las 04:15
- * 15 4 * * *  /usr/bin/php7.4 <thisfile>
+ * Actualizado: 21/11/2020
  */
 namespace App\Services\Cron\Cleaner;
+
+use App\Services\Cron\AbstractService;
 
 final class DumpService extends AbstractService
 {
