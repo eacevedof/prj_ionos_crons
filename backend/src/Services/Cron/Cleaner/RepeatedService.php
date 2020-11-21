@@ -57,6 +57,7 @@ final class RepeatedService extends AbstractService
 
     private function _get_repeated($files)
     {
+        sort($files);
         $r = [];
         //buscar
         foreach($files as $file1){

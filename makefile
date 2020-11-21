@@ -7,11 +7,11 @@ test:
 remlogs:
 	rm -fr backend/logs/*
 
-showservices:
+show-services:
 	clear
 	cat backend/config/services.php
 
-showprojects:
+show-projects:
 	clear
 	cat backend/config/projects.php
 
