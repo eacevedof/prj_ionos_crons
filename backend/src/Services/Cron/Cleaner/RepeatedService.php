@@ -111,7 +111,7 @@ final class RepeatedService extends AbstractService
             $files = $this->_get_by_prefix($prefix);
             $filesrmv = $this->_get_repeated($files);
             $this->logpr($filesrmv,"files to remove");
-            //$this->_remove($filesrmv);
+            $this->_remove($filesrmv);
         }
 
         $this->logpr("END","repeatedcleaner.run");
