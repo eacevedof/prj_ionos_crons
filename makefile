@@ -14,3 +14,11 @@ showservices:
 showprojects:
 	clear
 	cat backend/config/projects.php
+
+cron-dbbackup:
+	clear
+	php	backend/public/index.php service=cron.dbbackup
+
+cron-cleanerdump:
+	clear
+	php	backend/public/index.php service=cron.cleaner.dump
