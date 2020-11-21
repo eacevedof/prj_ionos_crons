@@ -8,7 +8,9 @@ remlogs:
 	rm -fr backend/logs/*
 
 showservices:
+	clear
 	cat backend/config/services.php
 
 showprojects:
+	clear
 	cat backend/config/projects.php
