@@ -50,7 +50,8 @@ final class DumpService extends AbstractService
         $r = [];
         foreach ($this->files as $filename)
         {
-            if(strstr($filename,$prefix))
+            //if(strstr($filename,$prefix))
+            if(strpos($filename,$prefix)===0)
                 $r[] = $filename;
         }
         return $r;
