@@ -6,3 +6,9 @@ test:
 
 remlogs:
 	rm -fr backend/logs/*
+
+showservices:
+	cat backend/config/services.php
+
+showprojects:
+	cat backend/config/projects.php
