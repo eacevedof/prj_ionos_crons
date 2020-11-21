@@ -48,3 +48,12 @@ function get_in_bytes(string $from)
 
     return $number * (1024 ** $exponent);
 }
+
+function pr($mxvar,$title="")
+{
+    $now = date("Ymd H:i:s");
+    echo "\n$now";
+    if($title) echo "\n$title:\n";
+    print_r($mxvar);
+    echo "\n";
+}
