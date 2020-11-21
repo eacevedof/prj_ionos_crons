@@ -5,11 +5,11 @@
 namespace App\Services\Cron\Cleaner;
 
 use App\Services\Cron\AbstractService;
+use App\Component\DumpComponent;
 
 final class RepeatedService extends AbstractService
 {
     private static $PATH_DUMPSDS = "";
-    private const KEEP_LIMIT = 15;
 
     private $files = [];
     private $prefixes = [];
@@ -41,7 +41,6 @@ final class RepeatedService extends AbstractService
             $prefix = implode("_",$prefix);
             $r[] = $prefix;
         }
-        //$this->logpr($r,"prefixes??");
         $this->prefixes = array_unique($r);
     }
 
@@ -56,14 +55,19 @@ final class RepeatedService extends AbstractService
         return $r;
     }
 
-    private function _get_remanent($files)
+    private function _get_repeated($files)
     {
         $r = [];
-        foreach ($files as $i=>$filename)
-        {
-            if($i>=self::KEEP_LIMIT)
-                $r[] = $filename;
+        //buscar
+        foreach($files as $file1){
+            $path1 = self::$PATH_DUMPSDS.$file1;
+
+            foreach ($files as $file2){
+                $path2 = self::$PATH_DUMPSDS.$file2;
+
+            }
         }
+
         return $r;
     }
 
@@ -81,7 +85,7 @@ final class RepeatedService extends AbstractService
 
     public function run()
     {
-        $this->logpr("START","dumpscleaner.run");
+        $this->logpr("START","repeatedcleaner.run");
         if(!is_dir(self::$PATH_DUMPSDS)) throw new \Exception("No dir found: ".self::$PATH_DUMPSDS);
 
         $this->files = scandir(self::$PATH_DUMPSDS);
@@ -93,14 +97,15 @@ final class RepeatedService extends AbstractService
         $this->logpr($this->prefixes,"prefixes");
         foreach ($this->prefixes as $prefix){
             $files = $this->_get_by_prefix($prefix);
+
             if(count($files)<=self::KEEP_LIMIT)
                 continue;
-            $filesrmv = $this->_get_remanent($files);
+            $filesrmv = $this->_get_repeated($files);
             $this->logpr($filesrmv,"files to remove");
             $this->_remove($filesrmv);
         }
 
-        $this->logpr("END","dumpscleaner.run");
+        $this->logpr("END","repeatedcleaner.run");
     }
 
 }//class CronDbbackup
