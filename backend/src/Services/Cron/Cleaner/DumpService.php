@@ -41,7 +41,6 @@ final class DumpService extends AbstractService
             $prefix = implode("_",$prefix);
             $r[] = $prefix;
         }
-        //$this->logpr($r,"prefixes??");
         $this->prefixes = array_unique($r);
     }
 
@@ -50,7 +49,6 @@ final class DumpService extends AbstractService
         $r = [];
         foreach ($this->files as $filename)
         {
-            //if(strstr($filename,$prefix))
             if(strpos($filename,$prefix)===0)
                 $r[] = $filename;
         }
