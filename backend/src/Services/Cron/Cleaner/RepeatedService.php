@@ -106,6 +106,7 @@ final class RepeatedService extends AbstractService
         $this->logpr($this->prefixes,"prefixes");
         foreach ($this->prefixes as $prefix){
             $this->logpr($prefix,"prefix");
+            if($prefix!=="cron_db_tinymarket") continue;
             $files = $this->_get_by_prefix($prefix);
             $filesrmv = $this->_get_repeated($files);
             $this->logpr($filesrmv,"files to remove");

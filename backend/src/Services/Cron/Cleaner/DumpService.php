@@ -92,7 +92,7 @@ final class DumpService extends AbstractService
         $this->logpr($this->prefixes,"prefixes");
         foreach ($this->prefixes as $prefix){
             $this->logpr($prefix,"prefix");
-            if($prefix!=="cron_db_tinymarket") continue;
+            //if($prefix!=="cron_db_tinymarket") continue;
             $files = $this->_get_by_prefix($prefix);
             if(count($files)<=self::KEEP_LIMIT)
                 continue;
