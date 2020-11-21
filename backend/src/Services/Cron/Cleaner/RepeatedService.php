@@ -5,9 +5,9 @@
  * se lanza todos los días a las 04:15
  * 15 4 * * *  /usr/bin/php7.4 <thisfile>
  */
-namespace App\Services\Cron;
+namespace App\Services\Cron\Cleaner;
 
-final class DumpscleanerService extends AbstractService
+final class RepeatedService extends AbstractService
 {
     private static $PATH_DUMPSDS = "";
     private const KEEP_LIMIT = 15;

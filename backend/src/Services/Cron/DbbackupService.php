@@ -22,6 +22,11 @@ final class DbbackupService extends AbstractService
         ];
     }
 
+    private function _get_previous_backup()
+    {
+
+    }
+
     public function run()
     {
         $this->logpr("START","dbbackupservice.run");
