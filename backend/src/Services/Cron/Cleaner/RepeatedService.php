@@ -106,9 +106,6 @@ final class RepeatedService extends AbstractService
         $this->logpr($this->prefixes,"prefixes");
         foreach ($this->prefixes as $prefix){
             $files = $this->_get_by_prefix($prefix);
-
-            if(count($files)<=self::KEEP_LIMIT)
-                continue;
             $filesrmv = $this->_get_repeated($files);
             $this->logpr($filesrmv,"files to remove");
             //$this->_remove($filesrmv);
