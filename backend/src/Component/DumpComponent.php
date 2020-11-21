@@ -19,8 +19,8 @@ class DumpComponent
         $arstr2 = explode("\n",$this->str2);
 
         //-- Dump completed on 2020-11-21  3:15:07
-        $arstr1 = array_pop($arstr1);
-        $arstr2 = array_pop($arstr2);
+        array_pop($arstr1);
+        array_pop($arstr2);
         $c1 = count($arstr1);
         $c2 = count($arstr2);
         pr("file1:$c1, file2:$c2","dumpcomponent");
