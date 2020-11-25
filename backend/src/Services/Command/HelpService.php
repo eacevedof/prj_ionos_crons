@@ -19,6 +19,7 @@ class HelpService extends AbstractService
         foreach ($cmds as $cmd => $class){
             $echo[] = "$cmd\t:\t$class";
         }
+        $echo[] = "";
         echo implode("\n",$echo);
     }
 }
