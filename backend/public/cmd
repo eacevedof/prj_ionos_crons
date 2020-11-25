@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-
+# para ejecutarlo ./cmd <arguments>
 clear
-/usr/bin/php7.4-cli ./index.php $1 $2 $3 $4 $5
+/usr/bin/php7.4-cli ./index.php "$@"
