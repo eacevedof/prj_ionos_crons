@@ -4,6 +4,7 @@
 20 11 * * * /usr/bin/php7.4 <path-this>/crons/backend/public/index.php service=cron.dumpscleaner
 
 php	backend/public/index.php service=<command-alias>
+./cmd <command-alias> <parameters>
 
 mapping:
     <command-alias> => <namespace-class>
