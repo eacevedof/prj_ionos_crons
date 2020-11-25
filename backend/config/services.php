@@ -12,4 +12,6 @@ return [
     "cron.dbbackup"             => "App\\Services\\Cron\\DbbackupService",
     "cron.cleaner.dump"         => "App\\Services\\Cron\\Cleaner\\DumpService",
     "cron.cleaner.repeated"     => "App\\Services\\Cron\\Cleaner\\RepeatedService",
+
+    "exclude-ip"                => "App\\Services\\Command\\ExcludeIpService",
 ];
