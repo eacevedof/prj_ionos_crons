@@ -7,7 +7,7 @@ class ExcludeIpService extends AbstractService
     {
         $ip = $this->_get_param(2);
         if(!filter_var($ip, FILTER_VALIDATE_IP))
-            throw new \Exception("Wrong ip value");
+            throw new \Exception("\nWrong ip value\n");
 
     }
 
