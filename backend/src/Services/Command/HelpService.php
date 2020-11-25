@@ -17,7 +17,7 @@ class HelpService extends AbstractService
         $cmds = $this->get_commands();
         $echo[] = "";
         foreach ($cmds as $cmd => $class){
-            $echo[] = "$cmd\n:\t$class";
+            $echo[] = "$cmd:\n\t$class";
         }
         $echo[] = "";
         echo implode("\n",$echo);
