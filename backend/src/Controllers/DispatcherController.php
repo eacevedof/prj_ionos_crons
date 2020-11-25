@@ -13,7 +13,7 @@ final class DispatcherController extends MainController
             if(!$service) throw new \Exception("Missing service name");
 
             $class = $this->servicemapper[$service] ?? "";
-            if(!$this->_is_service($class)) throw new \Exception("Class \"$class\" not found");
+            if(!$this->_is_service($class)) throw new \Exception("Class \"$class\" not found for service or command $service");
 
             (new $class())->run();
         }
