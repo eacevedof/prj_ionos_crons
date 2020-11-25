@@ -16,7 +16,7 @@ abstract class MainController
     {
         $this->argv = $_REQUEST;
         $this->request = (new Console($this->argv))->get_request();
-        $this->servicemapper = include_once(PATH_CONFIG.DS."services.php");
+        $this->servicemapper = include(PATH_CONFIG.DS."services.php");
         //print_r($this->servicemapper);die;
     }
 

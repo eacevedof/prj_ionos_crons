@@ -13,5 +13,6 @@ return [
     "cron.cleaner.dump"         => "App\\Services\\Cron\\Cleaner\\DumpService",
     "cron.cleaner.repeated"     => "App\\Services\\Cron\\Cleaner\\RepeatedService",
 
-    "excludeip"                => "App\\Services\\Command\\ExcludeIpService",
+    "help"                      => "App\\Services\\Command\\HelpService",
+    "excludeip"                 => "App\\Services\\Command\\ExcludeIpService",
 ];
