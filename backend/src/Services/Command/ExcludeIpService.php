@@ -5,6 +5,6 @@ class ExcludeIpService extends AbstractService
 {
     public function run()
     {
-
+        echo "xD";
     }
 }
