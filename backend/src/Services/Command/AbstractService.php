@@ -14,7 +14,7 @@ abstract class AbstractService implements ICommand
         $this->projects = include_once(PATH_CONFIG.DS."projects.php");
     }
 
-    protected function _get_request($key){
+    protected function _get_param($key){
         return $_REQUEST[$key] ?? "";
     }
 
