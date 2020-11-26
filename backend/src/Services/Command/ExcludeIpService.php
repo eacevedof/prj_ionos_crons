@@ -46,9 +46,12 @@ class ExcludeIpService extends AbstractService
             throw new \Exception("\nWrong ip value\n");
     }
 
-    private function _pr($context)
+    private function _pr($context, $type="saved")
     {
-        echo "\nIP saved {$this->ip} in context: $context\n";
+        if($type=="saved")
+            echo "\nIP saved {$this->ip} in context: $context\n";
+        else
+            echo  "\nIP {$this->ip} already exists in context: $context\n";
     }
 
     public function run()
@@ -67,6 +70,8 @@ class ExcludeIpService extends AbstractService
                 $this->_save_ip($context);
                 $this->_pr($context);
             }
+            else
+                $this->_pr($context,"exists");
         }
     }
 
