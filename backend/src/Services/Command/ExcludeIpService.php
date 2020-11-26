@@ -20,8 +20,12 @@ class ExcludeIpService extends AbstractService
 
     private function _exists_ip($context)
     {
-        $sql = "SELECT id FROM app_ip_untracked WHERE remote_ip='{$this->id}'";
-        return db::get($context)->query($sql,0,0);
+        $sql = "SELECT id FROM app_ip_untracked WHERE remote_ip='{$this->ip}'";
+        $r = db::get($context)->query($sql,1,1);
+        $this->logpr($r,"exists_ip");
+        $r = db::get($context)->query($sql,0,0);
+        $this->logpr($r,"exists_ip");
+        return $r;
     }
 
     private function _save_ip($context)
@@ -46,7 +50,7 @@ class ExcludeIpService extends AbstractService
 
     private function _pr($context)
     {
-        echo "\nIP saved $this->ip} in context: $context\n";
+        echo "\nIP saved {$this->ip} in context: $context\n";
     }
 
     public function run()
