@@ -10,6 +10,16 @@ class ExcludeIpService extends AbstractService
         $this->ip = $this->_get_ip();
     }
 
+    private function _exists_ip()
+    {
+
+    }
+
+    private function _save_ip()
+    {
+
+    }
+
     private function _get_ip()
     {
         $ip = $this->_get_param(2);
@@ -24,12 +34,18 @@ class ExcludeIpService extends AbstractService
             throw new \Exception("\nWrong ip value\n");
     }
 
+    private function _pr()
+    {
+        echo "IP saved $this->ip}";
+    }
+
     public function run()
     {
         $this->_exceptions();
-        echo "
-        agregando ip $this->ip
-        ";
+        if(!$this->_exists_ip()){
+            $this->_save_ip();
+            $this->_pr();
+        }
     }
 
 }
