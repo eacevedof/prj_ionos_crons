@@ -11,7 +11,7 @@ abstract class AbstractService implements ICommand
 
     public function __construct()
     {
-        $this->projects = include_once(PATH_CONFIG.DS."projects.php");
+        $this->projects = include(PATH_CONFIG.DS."projects.php");
     }
 
     protected function _get_param($key){return $_REQUEST[$key] ?? "";}

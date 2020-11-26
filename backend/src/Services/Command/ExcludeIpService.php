@@ -55,6 +55,9 @@ class ExcludeIpService extends AbstractService
         $contexts = array_keys($this->projects);
 
         foreach ($contexts as $context) {
+            if(in_array($context,["upload","tools"]))
+                continue;
+
             if (!$this->_is_table($context))
                 continue;
 

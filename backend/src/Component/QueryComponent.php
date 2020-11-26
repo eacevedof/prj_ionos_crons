@@ -1,7 +1,7 @@
 <?php
 namespace App\Component;
 
-use App\Components\Db\MysqlComponent;
+use App\Component\Db\MysqlComponent;
 
 class QueryComponent
 {
@@ -14,7 +14,7 @@ class QueryComponent
 
     public function __construct($context="ipblocker")
     {
-        $this->projects = include_once(PATH_CONFIG.DS."projects.php");
+        $this->projects = include(PATH_CONFIG.DS."projects.php");
         $this->context = $context;
         $this->_load_db();
     }

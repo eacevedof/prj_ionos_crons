@@ -2,12 +2,12 @@
 /**
  * @author Eduardo Acevedo Farje.
  * @link www.eduardoaf.com
- * @name App\Components\Db\MysqlComponent
+ * @name App\Component\Db\MysqlComponent
  * @file component_mysql.php v2.1.2
  * @date 29-06-2019 17:08 SPAIN
  * @observations
  */
-namespace App\Components\Db;
+namespace App\Component\Db;
 
 use App\Traits\LogTrait;
 
