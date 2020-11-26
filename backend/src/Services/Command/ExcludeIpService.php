@@ -1,7 +1,7 @@
 <?php
 namespace App\Services\Command;
 
-use function App\Factories\db;
+use App\Factories\Db as db;
 
 class ExcludeIpService extends AbstractService
 {
@@ -15,19 +15,19 @@ class ExcludeIpService extends AbstractService
 
     private function _is_table($context)
     {
-        return db($context)->is_table("app_ip_untracked");
+        return db::get($context)->is_table("app_ip_untracked");
     }
 
     private function _exists_ip($context)
     {
         $sql = "SELECT id FROM app_ip_untracked WHERE remote_ip='{$this->id}'";
-        return db($context)->query($sql,0,0);
+        return db::get($context)->query($sql,0,0);
     }
 
     private function _save_ip($context)
     {
         $sql = "INSERT INTO app_ip_untracked (remote_ip) VALUES('{$this->ip}')";
-        db($context)->exec($sql);
+        db::get($context)->exec($sql);
     }
 
     private function _get_ip()

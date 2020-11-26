@@ -1,10 +1,12 @@
 <?php
-namespace App\Factories {
+namespace App\Factories;
 
-    use App\Component\QueryComponent;
+use App\Component\QueryComponent;
 
-    function db($context = "ipblocker")
+final class Db
+{
+    public static function get($context)
     {
-        return new QueryComponent($context);
+       return new QueryComponent($context);
     }
 }
