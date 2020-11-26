@@ -9,19 +9,25 @@ class ExcludeIpService extends AbstractService
 
     public function __construct()
     {
+        parent::__construct();
         $this->ip = $this->_get_ip();
     }
 
-    private function _exists_ip()
+    private function _is_table($context)
     {
-        $sql = "SELECT id FROM app_ip_skip WHERE remote_ip";
-        db("ipblocker")->query($sql);
+        return db($context)->is_table("app_ip_untracked");
     }
 
-    private function _save_ip()
+    private function _exists_ip($context)
     {
-        $sql = "INSERT INTO app_ip_skip (remote_ip) VALUES('{$this->ip}')";
-        db("ipblocker")->exec($sql);
+        $sql = "SELECT id FROM app_ip_untracked WHERE remote_ip='{$this->id}'";
+        return db($context)->query($sql,0,0);
+    }
+
+    private function _save_ip($context)
+    {
+        $sql = "INSERT INTO app_ip_untracked (remote_ip) VALUES('{$this->ip}')";
+        db($context)->exec($sql);
     }
 
     private function _get_ip()
@@ -46,9 +52,16 @@ class ExcludeIpService extends AbstractService
     public function run()
     {
         $this->_exceptions();
-        if(!$this->_exists_ip()){
-            $this->_save_ip();
-            $this->_pr();
+        $contexts = array_keys($this->projects);
+
+        foreach ($contexts as $context) {
+            if (!$this->_is_table($context))
+                continue;
+
+            if (!$this->_exists_ip($context)) {
+                $this->_save_ip($context);
+                $this->_pr($context);
+            }
         }
     }
 

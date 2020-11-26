@@ -39,13 +39,26 @@ class QueryComponent
         $this->db = new MysqlComponent($config);
     }
 
-    public function query($sql)
+    public function query($sql,$c=null,$r=null)
     {
-        return $this->db->query($sql);
+        return $this->db->query($sql,$c,$r);
     }
 
     public function exec($sql)
     {
         return $this->db->exec($sql);
+    }
+
+    public function is_table($tablename)
+    {
+        $sql = "
+        SELECT t.TABLE_NAME AS t
+        FROM information_schema.TABLES as t
+        WHERE 1
+        AND t.TABLE_SCHEMA=DATABASE() -- la bd seleccionada
+        AND t.TABLE_NAME='$tablename'        
+        ";
+        $table = $this->db->query($sql,0,0);
+        return $table;
     }
 }
