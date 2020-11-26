@@ -1,7 +1,7 @@
 <?php
 namespace App\Services\Command;
 
-use function App\Component\db as db;
+use function App\Component\{db};
 
 class ExcludeIpService extends AbstractService
 {
