@@ -7,72 +7,68 @@ class CleanRequest extends AbstractService
 {
     private $ip;
 
+    /**
+     * @var \App\Component\QueryComponent
+     */
+    private $db;
+
     public function __construct()
     {
         parent::__construct();
         $this->ip = $this->_get_ip();
+        $this->db = db::get("ipblocker");
     }
 
-    private function _is_table($context)
-    {
-        return db::get($context)->is_table("app_ip_untracked");
-    }
-
-    private function _exists_ip($context)
-    {
-        $sql = "SELECT id FROM app_ip_untracked WHERE remote_ip='{$this->ip}'";
-        $r = db::get($context)->query($sql,0,0);
-        //$this->logpr($r,"exists_ip");
-        return $r;
-    }
-
-    private function _save_ip($context)
-    {
-        $sql = "INSERT INTO app_ip_untracked (remote_ip) VALUES('{$this->ip}')";
-        db::get($context)->exec($sql);
-    }
 
     private function _get_ip()
     {
         $ip = $this->_get_param(2);
+        if(!$ip) return "-1";
         $ip = trim($ip);
         $ip = str_replace(",",".",$ip);
         return $ip;
     }
 
-    private function _exceptions()
+    private function _pr()
     {
-        if(!filter_var($this->ip, FILTER_VALIDATE_IP))
-            throw new \Exception("\nWrong ip value\n");
+        echo "\nIP {$this->ip} in context ipblocker\n";
     }
 
-    private function _pr($context, $type="saved")
+    private function _delete_fromip()
     {
-        if($type=="saved")
-            echo "\nIP saved {$this->ip} in context: $context\n";
-        else
-            echo  "\nIP {$this->ip} already exists in context: $context\n";
+        $sql = "DELETE FROM app_ip_request WHERE 1 AND remote_ip='{$this->ip}'";
+        $this->db->exec($sql);
+        $r = $this->db->exec($sql);
+        $this->logpr($r,"_delete_fromip");
+    }
+
+    private function _delete_apple_icons()
+    {
+        $sql = "
+        DELETE t.* 
+        FROM `app_ip_request` t 
+        WHERE 1
+        AND t.id IN 
+        ( 
+            SELECT id 
+            FROM 
+            (
+                SELECT id 
+                FROM `app_ip_request`
+                WHERE 1 
+                AND request_uri LIKE '%apple%icon%'
+            ) as ids
+        )        
+        ";
+        $r = $this->db->exec($sql);
+        $this->logpr($r,"_delete_apple_icons");
     }
 
     public function run()
     {
-        $this->_exceptions();
-        $contexts = array_keys($this->projects);
-
-        foreach ($contexts as $context) {
-            if(in_array($context,["upload","tools"]))
-                continue;
-
-            if (!$this->_is_table($context))
-                continue;
-
-            if (!$this->_exists_ip($context)) {
-                $this->_save_ip($context);
-                $this->_pr($context);
-            }
-            else
-                $this->_pr($context,"exists");
-        }
+        $this->_pr();
+        $this->_delete_apple_icons();
+        $this->_delete_fromip();
     }
 
 }
