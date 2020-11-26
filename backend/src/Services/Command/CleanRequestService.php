@@ -64,11 +64,21 @@ class CleanRequestService extends AbstractService
         $this->logpr($r,"_delete_apple_icons affected");
     }
 
+    private function _delete_favicon()
+    {
+        $sql = "
+        DELETE FROM app_ip_request WHERE 1 AND request_uri LIKE '/favicon.ico%'
+        ";
+        $r = $this->db->exec($sql);
+        $this->logpr($r,"_delete_favicon affected");
+    }
+
     public function run()
     {
         $this->_pr();
         $this->_delete_apple_icons();
         $this->_delete_fromip();
+        $this->_delete_favicon();
     }
 
 }
