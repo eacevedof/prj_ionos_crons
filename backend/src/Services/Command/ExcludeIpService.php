@@ -12,11 +12,12 @@ class ExcludeIpService extends AbstractService
 
     private function _exists_ip()
     {
-
+        $sql = "SELECT id FROM app_ip_skip WHERE remote_ip";
     }
 
     private function _save_ip()
     {
+        $sql = "INSERT INTO app_ip_skip (remote_ip) VALUES('{$this->ip}')";
 
     }
 
