@@ -44,9 +44,9 @@ class ExcludeIpService extends AbstractService
             throw new \Exception("\nWrong ip value\n");
     }
 
-    private function _pr()
+    private function _pr($context)
     {
-        echo "IP saved $this->ip}";
+        echo "\nIP saved $this->ip} in context: $context\n";
     }
 
     public function run()
