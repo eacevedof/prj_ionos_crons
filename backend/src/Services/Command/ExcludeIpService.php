@@ -1,6 +1,8 @@
 <?php
 namespace App\Services\Command;
 
+use function App\Component\db;
+
 class ExcludeIpService extends AbstractService
 {
     private $ip;
@@ -13,12 +15,13 @@ class ExcludeIpService extends AbstractService
     private function _exists_ip()
     {
         $sql = "SELECT id FROM app_ip_skip WHERE remote_ip";
+        db("ipblocker")->query($sql);
     }
 
     private function _save_ip()
     {
         $sql = "INSERT INTO app_ip_skip (remote_ip) VALUES('{$this->ip}')";
-
+        db("ipblocker")->exec($sql);
     }
 
     private function _get_ip()
