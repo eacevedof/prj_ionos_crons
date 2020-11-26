@@ -3,7 +3,7 @@ namespace App\Services\Command;
 
 use App\Factories\Db as db;
 
-class CleanRequest extends AbstractService
+class CleanRequestService extends AbstractService
 {
     private $ip;
 
@@ -39,7 +39,7 @@ class CleanRequest extends AbstractService
         $sql = "DELETE FROM app_ip_request WHERE 1 AND remote_ip='{$this->ip}'";
         $this->db->exec($sql);
         $r = $this->db->exec($sql);
-        $this->logpr($r,"_delete_fromip");
+        $this->logpr($r,"_delete_fromip affected");
     }
 
     private function _delete_apple_icons()
@@ -61,7 +61,7 @@ class CleanRequest extends AbstractService
         )        
         ";
         $r = $this->db->exec($sql);
-        $this->logpr($r,"_delete_apple_icons");
+        $this->logpr($r,"_delete_apple_icons affected");
     }
 
     public function run()
