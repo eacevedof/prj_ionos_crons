@@ -67,7 +67,7 @@ class CleanRequestService extends AbstractService
     private function _delete_favicon()
     {
         $sql = "
-        DELETE FROM app_ip_request WHERE 1 AND request_uri LIKE '/favicon.ico%'
+        DELETE FROM app_ip_request WHERE 1 AND request_uri='/favicon.ico'
         ";
         $r = $this->db->exec($sql);
         $this->logpr($r,"_delete_favicon affected");
