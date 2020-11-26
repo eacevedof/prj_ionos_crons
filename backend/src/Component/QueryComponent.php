@@ -3,10 +3,6 @@ namespace App\Component;
 
 use App\Components\Db\MysqlComponent;
 
-function db($context="ipblocker"){
-    return new QueryComponent($context);
-}
-
 class QueryComponent
 {
     private $context;
