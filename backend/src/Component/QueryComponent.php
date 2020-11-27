@@ -57,4 +57,18 @@ class QueryComponent
         $table = $this->db->query($sql,0,0);
         return $table;
     }
+
+    public function is_conn()
+    {
+        $sql = "
+        SELECT t.TABLE_NAME AS t
+        FROM information_schema.TABLES as t
+        WHERE 1
+        AND t.TABLE_SCHEMA=DATABASE()
+        LIMIT 1
+        ";
+
+        $this->db->query($sql,0,0);
+        return !$this->db->is_error();
+    }
 }

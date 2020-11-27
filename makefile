@@ -27,6 +27,14 @@ cron-cleanerrepeated:
 	clear
 	php	backend/public/index.php service=cron.cleaner.repeated
 
+cmd-excludeip:
+	clear
+	php	backend/public/index.php excludeip 127.1.1.8
+
+cmd-check-dbconn:
+	clear
+	php	backend/public/index.php check-dbconn
+
 help:
 	clear
 	cat makefile
