@@ -73,6 +73,7 @@ final class DbReplicatorService extends AbstractService
     {
         $path = self::$PATH_DUMPSDS.$file;
         $content = file_get_contents($path);
+        $this->logpr($content,"content 1");
         $arcontent = explode("\n",$content);
         array_splice($arcontent,-11);
         array_splice($arcontent,17);
