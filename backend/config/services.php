@@ -11,9 +11,10 @@ mapping:
 */
 return [
     "cron.dbbackup"             => "App\\Services\\Cron\\DbbackupService",
+    "cron.dbreplicator"         => "App\\Services\\Cron\\DbReplicatorService",
+
     "cron.cleaner.dump"         => "App\\Services\\Cron\\Cleaner\\DumpService",
     "cron.cleaner.repeated"     => "App\\Services\\Cron\\Cleaner\\RepeatedService",
-    "cron.dbreplicator"         => "App\\Services\\Cron\\Cleaner\\DbReplicatorService",
 
     "help"                      => "App\\Services\\Command\\HelpService",
     "excludeip"                 => "App\\Services\\Command\\ExcludeIpService",
