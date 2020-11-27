@@ -5,6 +5,8 @@
  */
 namespace App\Services\Cron;
 
+use App\Factories\Db;
+
 final class DbReplicatorService extends AbstractService
 {
     /**
@@ -74,11 +76,10 @@ final class DbReplicatorService extends AbstractService
         $path = self::$PATH_DUMPSDS.$file;
         $this->logpr($path,"path to read");
         $content = file_get_contents($path);
-        $this->logpr($content,"content 1");
+        //$this->logpr($content,"content 1");
         $arcontent = explode("\n",$content);
-        $ilines = count($arcontent);
 
-        //elimina las 11 ultimas
+        //elimina las 12 ultimas
         array_splice($arcontent,-12);
 
         //elimina las primeras 20 (desde la pos 0 contar 20 posiciones)
@@ -89,9 +90,15 @@ final class DbReplicatorService extends AbstractService
         $this->tmpdump = "tmp_".uniqid().".sql";
         $this->tmpdump = self::$PATH_DUMPSDS.$this->tmpdump;
         $r = file_put_contents($this->tmpdump, $content);
-        $this->logpr($content,"content");
+        //$this->logpr($content,"content");
         $this->logpr($r, "file_put_contents.r");
         sleep(1);
+    }
+
+    private function _logtables($context)
+    {
+        $r = Db::get($context)->get_tables();
+        $this->logpr($r, "tables of $context");
     }
 
     public function run()
@@ -129,8 +136,12 @@ final class DbReplicatorService extends AbstractService
                 
                 $command = "/usr/bin/mysql --host={$server} --user={$user} --password={$password} {$database} < $this->tmpdump";
                 exec($command, $output, $result);
-
+                sleep(1);
                 $results[] = "$ctxto resultado: $result"; // 0:ok, 1:error
+
+                $this->_logtables($ctxto);
+                unlink($this->tmpdump);
+
             }//foreach arto
 
         }//foreach this->config

@@ -58,6 +58,23 @@ class QueryComponent
         return $table;
     }
 
+    public function get_tables()
+    {
+        $sql = "
+        SELECT table_schema AS db,
+        TABLE_NAME AS t,
+        COALESCE(TABLE_ROWS,0) AS irows,
+        ROUND(SUM(COALESCE(data_length,0) + COALESCE(index_length,0)) / 1024 / 1024, 2) AS mb
+        FROM information_schema.TABLES
+        WHERE 1
+        AND TABLE_SCHEMA=DATABASE()
+        GROUP BY table_schema, TABLE_NAME
+        ORDER BY db, t, irows desc, mb DESC;
+        ";
+        $r = $this->db->query($sql);
+        return $r;
+    }
+
     public function is_conn()
     {
         $sql = "
