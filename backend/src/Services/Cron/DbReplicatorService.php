@@ -72,6 +72,7 @@ final class DbReplicatorService extends AbstractService
     private function _create_tmpdump($file)
     {
         $path = self::$PATH_DUMPSDS.$file;
+        $this->logpr($path,"path to read");
         $content = file_get_contents($path);
         $this->logpr($content,"content 1");
         $arcontent = explode("\n",$content);
