@@ -68,7 +68,8 @@ class QueryComponent
         ROUND(SUM(COALESCE(data_length,0) + COALESCE(index_length,0)) / 1024 / 1024, 2) AS mb
         FROM information_schema.TABLES 
         WHERE 1
-        AND TABLE_SCHEMA='$database'
+        -- AND TABLE_SCHEMA='$database'
+        AND TABLE_SCHEMA=DATABASE()
         GROUP BY db, t
         ORDER BY db, t, irows DESC, mb DESC
         ";
