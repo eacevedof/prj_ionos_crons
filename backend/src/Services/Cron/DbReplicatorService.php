@@ -5,8 +5,6 @@
  */
 namespace App\Services\Cron;
 
-use App\Factories\Db as db;
-
 final class DbReplicatorService extends AbstractService
 {
     /**
@@ -20,9 +18,17 @@ final class DbReplicatorService extends AbstractService
     public function __construct()
     {
         parent::__construct();
+
+        $this->_load_pathdumps()
+            ->_load_config()
+            ->_load_dumps();
+    }
+
+    private function _load_pathdumps()
+    {
         $home = $this->_get_env("HOME");
         self::$PATH_DUMPSDS = "$home/backup_bd/";
-        $this->_load_config();
+        return $this;
     }
 
     private function _load_config()
@@ -30,6 +36,7 @@ final class DbReplicatorService extends AbstractService
         $this->config = [
             "ipblocker" => ["ipblocker-ro"],
         ];
+        return $this;
     }
 
     private function _load_dumps()
@@ -37,6 +44,7 @@ final class DbReplicatorService extends AbstractService
         $dumps = scandir(self::$PATH_DUMPSDS);
         arsort($dumps);
         $this->dumps = $dumps;
+        return $this;
     }
 
     private function _check_intime()
@@ -46,10 +54,9 @@ final class DbReplicatorService extends AbstractService
         $today = date("Ymd");
         $min = "{$today}030000";
         $max = "{$today}040000";
-        if($now<$min || $now>$max) die("Out of time");
-        return [
-            "min"=>$min, "max"=>$max
-        ];
+
+        if($now<$min || $now>$max)
+            die("Out of time");
     }
 
     private function _get_lastdump($prefix)
@@ -73,66 +80,46 @@ final class DbReplicatorService extends AbstractService
         $this->tmpdump = "tmp_".uniqid().".sql";
         $this->tmpdump = self::$PATH_DUMPSDS.$this->tmpdump;
         file_put_contents($path,$content);
-        //obtener el ultimo backup de un contexto
-        //recuperar su contenido
-        //limpiar 16 lineas por arriba
-        //limpiar 10 por abajo
-        //guardar un tmp-uniqid.sql para restore
-        //ejecutar
-        // ssh.cmd(f"mysql --host={dbserver} --user={dbuser} --password={dbpassword} {dbname} < $HOME/{pathremote}/db/temp.sql")
+        sleep(1);
     }
 
     public function run()
     {
-        $this->logpr("START","dbbackupservice.run");
-        $r = $this->_check_intime();
-        $min = $r["min"];
+        $this->logpr("START","dbreplicator");
+        $this->_check_intime();
 
         $results = [];
         $output = [];
 
         foreach ($this->config as $ctxfrom => $arto)
         {
+            $arproject = $this->projects[$ctxfrom] ?? "";
+            if(!$arproject) continue;
+
+            $dblocal = $arproject["dblocal"];
+            $prefix = "cron_{$dblocal}_";
+            $filename = $this->_get_lastdump($prefix);
+            if(!$filename) continue;
+
             foreach ($arto as $ctxto)
             {
-                $arproject = $this->projects[$ctxfrom] ?? "";
-                if(!$arproject) continue;
-
-                $dblocal = $arproject["dblocal"];
-                $prefix = "cron_{$dblocal}_";
-                $filename = $this->_get_lastdump($prefix);
-                if(!$filename) continue;
-
                 $arproject = $this->projects[$ctxto] ?? "";
                 if(!$arproject) continue;
+
                 list($dblocal, $server, $port, $database, $user, $password) = array_values($arproject);
                 $this->_create_tmpdump($filename);
                 if(!is_file($this->tmpdump)) continue;
                 
-                $command = "mysql --host={$server} --user={$user} --password={$password} {$dblocal} < $this->tmpdump"
+                $command = "/usr/bin/mysql --host={$server} --user={$user} --password={$password} {$database} < $this->tmpdump";
                 exec($command, $output, $result);
-            }
-        }
 
+                $results[] = "$ctxto resultado: $result"; // 0:ok, 1:error
+            }//foreach arto
 
-        foreach($this->projects as $alias => $arproject)
-        {
-            if(!$arproject) continue;
-
-            list($dblocal, $server, $port, $database, $user, $password) = array_values($arproject);
-
-            $dbfile = "~/backup_bd/cron_{$dblocal}_{$min}.sql";
-            if(is_file($dbfile)) die("backup already done");
-
-            $command = "/usr/bin/mysqldump --no-tablespaces --host={$server} --user={$user} --password={$password} {$database} > {$dbfile}";
-            //echo "$command \n";
-            exec($command, $output, $result);
-            //$result = shell_exec($command);
-            $results[] = "$alias resultado: $result"; // 0:ok, 1:error
-        }//forach
-
-        $this->log($results,"dbbackupservice.run.results");
-        $this->logpr("END","dbbackupservice.run");
+        }//foreach this->config
+        
+        $this->log($results,"dbreplicator.run.results");
+        $this->logpr("END","dbreplicator");
     }
 
-}//class CronDbbackup
+}//class DbReplicatorService
