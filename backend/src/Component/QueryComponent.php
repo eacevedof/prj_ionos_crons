@@ -73,6 +73,7 @@ class QueryComponent
         ORDER BY db, t, irows desc, mb DESC;
         ";
         $r = $this->db->query($sql);
+        pr($sql,"get_tables");
         return $r;
     }
 
