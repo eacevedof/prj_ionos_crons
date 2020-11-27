@@ -5,7 +5,6 @@ class HelpService extends AbstractService
 {
     private function _get_projects()
     {
-        parent::_construct();
         $r = array_keys($this->projects);
         sort($r);
         return $r;
