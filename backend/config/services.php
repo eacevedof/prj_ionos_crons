@@ -17,4 +17,5 @@ return [
     "help"                      => "App\\Services\\Command\\HelpService",
     "excludeip"                 => "App\\Services\\Command\\ExcludeIpService",
     "cleanrequest"              => "App\\Services\\Command\\CleanRequestService",
+    "check-dbconn"              => "App\\Services\\Command\\CheckDbconnService",
 ];
