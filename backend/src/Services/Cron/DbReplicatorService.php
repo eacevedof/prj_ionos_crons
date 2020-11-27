@@ -77,9 +77,12 @@ final class DbReplicatorService extends AbstractService
         array_splice($arcontent,-11);
         array_splice($arcontent,17);
         $content = implode("\n",$arcontent);
+
         $this->tmpdump = "tmp_".uniqid().".sql";
         $this->tmpdump = self::$PATH_DUMPSDS.$this->tmpdump;
-        file_put_contents($path,$content);
+        $r = file_put_contents($path, $content);
+        $this->logpr($content,"content");
+        $this->logpr($r, "file_put_contents.r");
         sleep(1);
     }
 
