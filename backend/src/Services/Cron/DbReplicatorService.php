@@ -86,7 +86,7 @@ final class DbReplicatorService extends AbstractService
     public function run()
     {
         $this->logpr("START","dbreplicator");
-        $this->_check_intime();
+        //$this->_check_intime();
 
         $results = [];
         $output = [];
