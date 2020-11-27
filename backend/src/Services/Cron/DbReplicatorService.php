@@ -93,21 +93,27 @@ final class DbReplicatorService extends AbstractService
 
         foreach ($this->config as $ctxfrom => $arto)
         {
+            $this->logpr($ctxfrom,"ctxfrom");
             $arproject = $this->projects[$ctxfrom] ?? "";
+            $this->logpr($arproject,"project from");
             if(!$arproject) continue;
 
             $dblocal = $arproject["dblocal"];
+            $this->logpr($dblocal,"dblocal");
             $prefix = "cron_{$dblocal}_";
             $filename = $this->_get_lastdump($prefix);
+            $this->logpr($filename,"temp filename");
             if(!$filename) continue;
 
             foreach ($arto as $ctxto)
             {
                 $arproject = $this->projects[$ctxto] ?? "";
+                $this->logpr($arproject,"project to");
                 if(!$arproject) continue;
 
                 list($dblocal, $server, $port, $database, $user, $password) = array_values($arproject);
                 $this->_create_tmpdump($filename);
+                $this->logpr($this->tmpdump,"tmpdump");
                 if(!is_file($this->tmpdump)) continue;
                 
                 $command = "/usr/bin/mysql --host={$server} --user={$user} --password={$password} {$database} < $this->tmpdump";
