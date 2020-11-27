@@ -46,12 +46,11 @@ class QueryComponent
 
     public function is_table($tablename)
     {
-        $database = $this->_get_config()["database"] ?? "";
         $sql = "
         SELECT t.TABLE_NAME AS t
         FROM information_schema.TABLES as t
         WHERE 1
-        AND t.TABLE_SCHEMA='$database' -- la bd seleccionada
+        AND TABLE_SCHEMA=DATABASE() -- la bd seleccionada
         AND t.TABLE_NAME='$tablename'        
         ";
         $table = $this->db->query($sql,0,0);
@@ -60,7 +59,6 @@ class QueryComponent
 
     public function get_tables()
     {
-        $database = $this->_get_config()["database"] ?? "";
         $sql = "
         SELECT table_schema AS db,
         TABLE_NAME AS t,
@@ -68,7 +66,6 @@ class QueryComponent
         ROUND(SUM(COALESCE(data_length,0) + COALESCE(index_length,0)) / 1024 / 1024, 2) AS mb
         FROM information_schema.TABLES 
         WHERE 1
-        -- AND TABLE_SCHEMA='$database'
         AND TABLE_SCHEMA=DATABASE()
         GROUP BY db, t
         ORDER BY db, t, irows DESC, mb DESC
@@ -80,12 +77,11 @@ class QueryComponent
 
     public function is_conn()
     {
-        $database = $this->_get_config()["database"] ?? "";
         $sql = "
         SELECT t.TABLE_NAME AS t
         FROM information_schema.TABLES as t
         WHERE 1
-        AND t.TABLE_SCHEMA='$database'
+        AND TABLE_SCHEMA=DATABASE()
         LIMIT 1
         ";
 
