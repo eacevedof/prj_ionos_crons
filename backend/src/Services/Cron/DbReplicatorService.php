@@ -77,10 +77,12 @@ final class DbReplicatorService extends AbstractService
         $this->logpr($content,"content 1");
         $arcontent = explode("\n",$content);
         $ilines = count($arcontent);
-        //elimina las ultimas 11 lineas
-        array_splice($arcontent,$ilines - 10);
-        //elimina las 17 primeras
-        array_splice($arcontent,-17);
+
+        //elimina las 11 ultimas
+        array_splice($arcontent,-11);
+
+        //elimina las primeras 20 (desde la pos 0 contar 20 posiciones)
+        array_splice($arcontent,0,20);
 
         $content = implode("\n",$arcontent);
 
