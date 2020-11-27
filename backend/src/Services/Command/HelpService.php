@@ -6,10 +6,12 @@ class HelpService extends AbstractService
     private function get_commands()
     {
         $params = include(PATH_CONFIG.DS."services.php");
+        /*
         $cmds = array_filter($params, function($item){
             return strstr($item,"\\Command\\");
         });
-        return $cmds;
+        */
+        return $params;
     }
 
     public function run()
