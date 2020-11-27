@@ -97,6 +97,7 @@ final class DbReplicatorService extends AbstractService
 
     private function _logtables($context)
     {
+        $config = $this->projects[$context];
         $r = Db::get($context)->get_tables();
         $this->logpr($r, "tables of $context");
     }
