@@ -79,7 +79,7 @@ final class DbReplicatorService extends AbstractService
         $ilines = count($arcontent);
 
         //elimina las 11 ultimas
-        array_splice($arcontent,-11);
+        array_splice($arcontent,-12);
 
         //elimina las primeras 20 (desde la pos 0 contar 20 posiciones)
         array_splice($arcontent,0,20);
