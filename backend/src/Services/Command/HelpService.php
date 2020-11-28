@@ -25,7 +25,7 @@ class HelpService extends ACommandService
         foreach ($cmds as $cmd => $class){
             $echo[] = "$cmd:\n\t$class";
         }
-        $echo[] = "\n\nprojects:\n";
+        $echo[] = "\n\nprojects:";
         $prjs = $this->_get_projects();
         foreach ($prjs as $prj)
             $echo[] = "\t$prj";
