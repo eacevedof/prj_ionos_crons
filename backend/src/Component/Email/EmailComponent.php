@@ -103,7 +103,7 @@ class EmailComponent extends AEmail
 
     private function _send_smtp()
     {
-        $this->logpr("send_pear");
+        $this->logpr("send_smtp");
         try
         {
             $this->_load_smtp_libs()
@@ -189,7 +189,7 @@ class EmailComponent extends AEmail
     
     private function _send_nosmtp()
     {
-        $this->log("_send_nosmtp()",__CLASS__);
+        $this->log("_send_nosmtp()");
         if($this->emails_to)
         {
             $this->_nosmtp_header_mime()
@@ -220,10 +220,6 @@ class EmailComponent extends AEmail
         return $this;
     }
 
-    /**
-     * Utiliza la funcion mail. Se puede recuperar el error con $this->get_error_message();
-     * @return boolean TRUE if error occurred
-     */
     public function send()
     {
         if($this->issmtp)
