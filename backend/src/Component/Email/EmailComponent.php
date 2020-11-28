@@ -87,8 +87,13 @@ class EmailComponent extends AEmail
         $this->headers["To"] = implode(", ",$this->emails_to);
         if($this->emails_cc)
             $this->headers["Cc"] = implode(", ",$this->emails_cc);
+
+        //creo que esto no va
+        //if($this->emails_bcc) $this->headers["Bcc"] = implode( ", ", $this->emails_bcc);
+
         $this->headers["Subject"] = $this->subject;
         $this->headers["From"] = $this->email_from;
+        //$this->headers["Replay-To"] = $this->emails_to;
         $this->logpr($this->headers,"smtpheaderrs");
     }
 
