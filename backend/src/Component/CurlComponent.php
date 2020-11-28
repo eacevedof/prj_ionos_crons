@@ -1,7 +1,10 @@
 <?php
+/**
+ * customized 2020-11-28 14:14
+ */
 namespace App\Component;
 
-use \App\Traits\Log;
+use \App\Traits\LogTrait as Log;
 
 class CurlComponent
 {
@@ -79,16 +82,16 @@ class CurlComponent
         }
     }//load_curl
 
-    private function curl_execute($arOptions,$sMethod="")
+    private function _curl_execute($arOptions,$sMethod="")
     {
-        $this->logd($arOptions,"curl.curl_execute.options");
+        $this->logd($arOptions,"curl._curl_execute.options");
         $oCurl = curl_init();
         curl_setopt_array($oCurl,$arOptions);
         $this->sResponse = curl_exec($oCurl);
         curl_close($oCurl);
         if($this->sResponse===FALSE)
             $this->add_error("$sMethod.Error Curl.request()");
-    }//curl_execute
+    }//_curl_execute
 
     public function request()
     {
@@ -109,7 +112,7 @@ class CurlComponent
             if($this->arOptions)
                 $arOptions = $this->arOptions;
 
-            $this->curl_execute($arOptions,"request");
+            $this->_curl_execute($arOptions,"request");
             $this->log_attribs("request");
         }
         catch(Exception $oEx)
@@ -140,7 +143,7 @@ class CurlComponent
                 //Devuelve TRUE en caso de éxito o FALSE en caso de error. Sin embargo,
                 //si la opción CURLOPT_RETURNTRANSFER está establecida, devolverá el
                 //resultado si se realizó con éxito, o FALSE si falló.
-                $this->curl_execute($arOptions,"request_get");
+                $this->_curl_execute($arOptions,"request_get");
                 $this->log_attribs("request_get");
             }
             else
@@ -152,6 +155,7 @@ class CurlComponent
         {
             $this->add_error("exception.post: {$oEx->getMessage()}");
         }
+        return $this;
     }//request_get
 
     public function request_fileget($isCleanGet=1)
@@ -200,7 +204,7 @@ class CurlComponent
                     CURLOPT_MAXREDIRS      => 10,    // stop after 10 redirects
                 );
 
-                $this->curl_execute($arOptions,"request_post");
+                $this->_curl_execute($arOptions,"request_post");
                 $this->log_attribs("request_post");
             }
             else
@@ -241,7 +245,7 @@ class CurlComponent
                     CURLOPT_MAXREDIRS      => 10,    // stop after 10 redirects
                 );
 
-                $this->curl_execute($arOptions,"request_postrd");
+                $this->_curl_execute($arOptions,"request_postrd");
                 $this->log_attribs("request_postrd");
                 //pr($this->sResponse);die;
                 //m (PCRE_MULTILINE) trata el string multilinea como una sola linea
@@ -352,19 +356,19 @@ class CurlComponent
 
     //SETS
     public function is_logdebug($isOn=TRUE){$this->isLogDebug=$isOn;}
-    public function add_option($sOption,$sValue){$this->arOptions[$sOption]=$sValue;}
-    public function set_options($arOptions){$this->arOptions=$arOptions;}
+    public function add_option($sOption,$sValue){$this->arOptions[$sOption]=$sValue; return $this;}
+    public function set_options($arOptions){$this->arOptions=$arOptions; return $this;}
 
-    public function add_post($sKey,$sValue){$this->arPost[$sKey]=$sValue;}
-    public function set_post($mxValue){$this->set_array($this->arPost,$mxValue);}
+    public function add_post($sKey,$sValue){$this->arPost[$sKey]=$sValue; return $this;}
+    public function set_post($mxValue){$this->set_array($this->arPost,$mxValue); return $this;}
 
-    public function add_get($sKey,$sValue){$this->arGet[$sKey]=$sValue;}
-    public function set_get($mxValue){$this->set_array($this->arGet,$mxValue);}
+    public function add_get($sKey,$sValue){$this->arGet[$sKey]=$sValue; return $this;}
+    public function set_get($mxValue){$this->set_array($this->arGet,$mxValue); return $this;}
 
     protected function add_error($sMessage){$this->isError=TRUE;$this->arErrors[]=$sMessage;
         $this->log($sMessage,"Curl.error");}
     protected function add_status($sResponse,$sMessage){$this->sResponse=$sResponse;$this->sMessage=$sMessage;}
 
-    public function set_urlget_single($sUrl){$this->sUrlGet=$sUrl;}
-    public function set_urlget_final($sUrl){$this->sUrlGetCurl=$sUrl;}
+    public function set_urlget_single($sUrl){$this->sUrlGet=$sUrl; return $this;}
+    public function set_urlget_final($sUrl){$this->sUrlGetCurl=$sUrl; return $this;}
 }
