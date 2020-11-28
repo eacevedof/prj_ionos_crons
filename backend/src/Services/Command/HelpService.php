@@ -28,7 +28,7 @@ class HelpService extends ACommandService
         $echo[] = "\n\nprojects:\n";
         $prjs = $this->_get_projects();
         foreach ($prjs as $prj)
-            $echo[] = "$prj";
+            $echo[] = "\t$prj";
         $echo[] = "\n";
         echo implode("\n",$echo);
     }
