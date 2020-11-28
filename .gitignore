@@ -5,6 +5,8 @@
 /backend/logs/
 /backend/public/*_custom.log
 .idea
+
+/backend/.env
 /backend/.env.local
 /backend/vendor
 /backend/.phpunit.result.cache
