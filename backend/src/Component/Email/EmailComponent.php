@@ -220,9 +220,6 @@ class EmailComponent extends AEmail
         return $this->_send_nosmtp();
     }
 
-    //**********************************
-    //             SETS
-    //**********************************
     public function set_subject($subject){$this->subject = $subject; return $this;}
 
     public function set_from($stremail){$this->email_from = $stremail; return $this;}
@@ -232,7 +229,6 @@ class EmailComponent extends AEmail
     public function add_bcc($stremail){$this->emails_bcc[]=$stremail; return $this;}
     public function set_nosmtp_header($header){$this->header = $header; return $this;}
     public function set_content($mxcontent){(is_array($mxcontent))? $this->content=implode(PHP_EOL,$mxcontent): $this->content = $mxcontent; return $this;}
-
 
     /**
      *  Required
@@ -247,8 +243,6 @@ class EmailComponent extends AEmail
      *
      * @param string $header Cualquer linea anterior
      */
-    public function add_header(string $header){$this->headers[] = $header; return $this;}
-    public function clear_headers(){$this->headers=[]; return $this;}
+    public function add_nosmtp_header(string $header){$this->headers[] = $header; return $this;}
 
-
-}//ComponentMail
+}
