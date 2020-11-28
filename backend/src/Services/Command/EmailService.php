@@ -26,7 +26,7 @@ class EmailService extends ACommandService
         $mail = $smtp->send($to, $headers, $email_body);
 
 
-        if (PEAR::isError($mail)) {
+        if (\PEAR::isError($mail)) {
             echo("<p>" . $mail->getMessage() . "</p>");
         } else {
             echo("<p>Message successfully sent!</p>");
