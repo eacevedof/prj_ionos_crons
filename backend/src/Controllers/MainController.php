@@ -11,13 +11,13 @@ abstract class MainController
 
     protected $argv;
     protected $request = [];
-    protected $servicemapper = [];
+    protected $services = [];
 
     public function __construct()
     {
         $this->argv = $_REQUEST;
         $this->request = (new Console($this->argv))->get_request();
-        $this->servicemapper = get_config("services");
+        $this->services = get_config("services");
     }
 
     protected function get_param($key) {return $this->request[$key] ?? null;}
