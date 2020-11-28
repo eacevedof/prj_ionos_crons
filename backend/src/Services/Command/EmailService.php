@@ -88,7 +88,7 @@ class EmailService extends ACommandService
         $this->logpr("START EMAILSERVICE");
         $emails = get_config("emails");
         $this->logpr($emails,"emails");
-        $r = (new EmailComponent($emails["config"][0]))
+        $r = (new EmailComponent($emails["config"][0]["email"]))
             ->set_from($emails["contacts"][2])
             ->add_to($emails["contacts"][0])
             ->set_subject("esto es un simple asunto")
