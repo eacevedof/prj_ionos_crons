@@ -50,7 +50,7 @@ class EmailComponent extends AEmail
 
     private function _load_smtp($config)
     {
-        $this->logpr($config,"CCCONNNF");
+        $this->logpr($config,"_load_smtp");
         if($config)
         {
             $this->issmtp               = true;
@@ -59,6 +59,7 @@ class EmailComponent extends AEmail
             $this->arsmtp["auth"]       = $config["auth"] ?? true;;
             $this->arsmtp["username"]   = $config["username"] ?? "";
             $this->arsmtp["password"]   = $config["password"] ?? "";
+            $this->arsmtp["debug"]      = $config["debug"] ?? false;
         }
         return $this;
     }
