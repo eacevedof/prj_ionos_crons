@@ -21,4 +21,5 @@ return [
     "cleanrequest"              => "App\\Services\\Command\\CleanRequestService",
     "check-dbconn"              => "App\\Services\\Command\\CheckDbConnService",
     "env"                       => "App\\Services\\Command\\EnvService",
+    "email"                     => "App\\Services\\Command\\EmailService",
 ];
