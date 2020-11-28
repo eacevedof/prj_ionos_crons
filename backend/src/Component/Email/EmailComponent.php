@@ -1,16 +1,12 @@
 <?php
-/**
- * @author Eduardo Acevedo Farje.
- * @link www.eduardoaf.com
- * @version 2.0.0
- * @name \App\Component\EmailComponent
- * @date 28-11-2020 15:38 (SPAIN)
- */
-namespace App\Component;
+namespace App\Component\Email;
 
+use App\Traits\LogTrait as Log;
 
-class EmailComponent
+class EmailComponent extends AEmail
 {
+    use Log;
+    
     private $sFromTitle;
     private $sEmailFrom;
     private $mxEmailsTo;
@@ -34,9 +30,9 @@ class EmailComponent
 
     /**
      *
-     * @param string|array $mxEmailTo array tipo array(email1,email2...)
+     * @param string|array $mxEmailTo array tipo array[email1,email2...)
      * @param string $sSubject
-     * @param string|array $mxContent array tipo $arLines = array("line text 1","line text 2"..) or string
+     * @param string|array $mxContent array tipo $arLines = array["line text 1","line text 2"..) or string
      */
     public function __construct($mxEmailTo="",$sSubject="",$mxContent="")
     {
@@ -50,8 +46,8 @@ class EmailComponent
         if(defined("APP_MAIL_SMTP_PASSW")) $this->sSmtpPassw = APP_MAIL_SMTP_PASSW;
         if($this->sSmtpUser) $this->sEmailFrom = $this->sSmtpUser;
 
-        $this->mxEmailsTo = array();
-        $this->arHeaders = array();
+        $this->mxEmailsTo = [];
+        $this->arHeaders = [];
         $this->arHeaders[] = "MIME-Version: 1.0";
         //$this->arHeaders[] = "Content-Type: text/html; charset=ISO-8859-1";
         $this->arHeaders[] = "Content-Type: text/html; charset=UTF-8";
@@ -87,7 +83,7 @@ class EmailComponent
 
     private function send_pear()
     {
-        $this->log_email("send_pear()",__CLASS__);
+        $this->log("send_pear()",__CLASS__);
         //errorson();
         //necesita tener instalado:
         // PEAR https://pear.php.net/manual/en/installation.checking.php
@@ -98,7 +94,7 @@ class EmailComponent
         require_once("Mail.php");
         require_once("Mail/mime.php");
 
-        $arSmtp = array();
+        $arSmtp = [];
         $arSmtp["host"] = $this->sSmtpHost;
         $arSmtp["port"] = $this->sSmtpPort;
         $arSmtp["auth"] = $this->isSmtpAuth;
@@ -108,9 +104,9 @@ class EmailComponent
         //bug($arSmtp,"arSmtp");die;
         try
         {
-            $oSmtp = Mail::factory("smtp",$arSmtp);
+            $oSmtp = \Mail::factory("smtp",$arSmtp);
 
-            $arHeaders = array();
+            $arHeaders = [];
             $arHeaders["Content-Type"] = "text/html; charset=UTF-8";
             //$arHeaders["From"] = $this->sEmailFrom;
             if(is_array($this->mxEmailsTo))
@@ -122,19 +118,19 @@ class EmailComponent
             //bug($arHeaders);die;
             $arHeaders["From"] = $this->sEmailFrom;
 
-            $oMime = new Mail_mime(array("eol"=>PHP_EOL));
+            $oMime = new \Mail_mime(["eol"=>PHP_EOL]);
             //$oMime->setTXTBody("texto body"); //texto sin html
             $oMime->setHTMLBody($this->sContent); //texto con html
 
             if($this->sPathAttachment)
                 $oMime->addAttachment($this->sPathAttachment,"text/plain");
 
-            $arMime = array(
+            $arMime = [
                 "text_encoding" => "7bit",
                 "text_charset" => "UTF-8",
                 "html_charset" => "UTF-8",
                 "head_charset" => "UTF-8"
-            );
+            ];
 
             //do not ever try to call these lines in reverse order
             $sContent = $oMime->get($arMime);
@@ -163,14 +159,14 @@ class EmailComponent
      */
     private function send_nosmtp()
     {
-        $this->log_email("send_nosmtp()",__CLASS__);
+        $this->log("send_nosmtp()",__CLASS__);
         $this->build_header_from();
         $this->build_header_cc();//crea header: Cc
         $this->build_header_bcc();//crea header: Bcc
         //crea los header en $this->_header
         $this->build_header();
 
-        $this->log_email("mailsto:$this->mxEmailsTo,subject:$this->sSubject,header:$this->sHeader",__CLASS__."send_nosmtp()");
+        $this->log("mailsto:$this->mxEmailsTo,subject:$this->sSubject,header:$this->sHeader",__CLASS__."send_nosmtp()");
         if($this->mxEmailsTo)
         {
             if(is_array($this->mxEmailsTo))
@@ -182,10 +178,10 @@ class EmailComponent
             220 eduardosvc ESMTP Sendmail 8.14.4/8.14.4/Debian-4.1ubuntu1; Thu, 25 Feb 2016 10:47:44 +0100; 
             (No UCE/UBE) logging access from: caser.loc(OK)-caser.loc [127.0.0.1]
             */
-            $this->log_email("antes de llamar a funcion mail",__CLASS__);
-            //$this->log_email("mailsto:$this->mxEmailsTo,subject:$this->sSubject,content:$this->sContent,header:$this->sHeader");
+            $this->log("antes de llamar a funcion mail",__CLASS__);
+            //$this->log("mailsto:$this->mxEmailsTo,subject:$this->sSubject,content:$this->sContent,header:$this->sHeader");
             $mxStatus = mail($this->mxEmailsTo,$this->sSubject,$this->sContent,$this->sHeader);
-            $this->log_email($mxStatus,__CLASS__." status mail(..)");
+            $this->log($mxStatus,__CLASS__." status mail(..)");
             if($mxStatus == FALSE)
             {
                 $this->add_error("Error sending email!");
@@ -267,7 +263,7 @@ class EmailComponent
      * @param string $sHeader Cualquer linea anterior
      */
     public function add_header($sHeader){$this->arHeaders[] = $sHeader;}
-    public function clear_headers(){$this->arHeaders=array();}
+    public function clear_headers(){$this->arHeaders=[];}
 
     public function set_smtp_use($isOn=TRUE){$this->isSmtpUse=$isOn;}
     public function set_smtp_host($sValue){$this->sSmtpHost=$sValue;}
