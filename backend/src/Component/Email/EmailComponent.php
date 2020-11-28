@@ -88,6 +88,7 @@ class EmailComponent extends AEmail
         //if($this->emails_bcc) $bcc = ", ".implode(", ",$this->emails_bcc);
         $this->headers["Subject"] = $this->subject;
         $this->headers["From"] = $this->email_from;
+        $this->logpr($this->headers,"smtpheaderrs");
     }
 
     private function _get_smtp_mime()
@@ -100,8 +101,9 @@ class EmailComponent extends AEmail
         ];
     }
 
-    private function _send_pear()
+    private function _send_smtp()
     {
+        $this->logpr("send_pear");
         try
         {
             $this->_load_smtp_libs()
@@ -109,6 +111,7 @@ class EmailComponent extends AEmail
             ;
 
             $objmime = new \Mail_mime(["eol"=>PHP_EOL]);
+
             //$objmime->setTXTBody("texto body"); //texto sin html
             $objmime->setHTMLBody($this->content); //texto con html
 
@@ -119,7 +122,8 @@ class EmailComponent extends AEmail
             $armime = $this->_get_smtp_mime();
             $content = $objmime->get($armime);
             $headers = $objmime->headers($this->headers);
-            
+
+            $this->logpr($headers,"headers 222");
             //la única forma de enviar con copia oculta es añadirlo a los receptores
             $stremailsto = $headers["To"].", ".$this->headers["Cc"];
 
@@ -223,7 +227,7 @@ class EmailComponent extends AEmail
     public function send()
     {
         if($this->issmtp)
-            return $this->_send_pear();
+            return $this->_send_smtp();
         return $this->_send_nosmtp();
     }
 
