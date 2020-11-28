@@ -50,7 +50,7 @@ class EmailComponent extends AEmail
 
     private function _load_smtp($config)
     {
-        $this->logpr($config,"_load_smtp");
+        $this->logpr($config,"_load_smtp.config");
         if($config)
         {
             $this->issmtp               = true;
