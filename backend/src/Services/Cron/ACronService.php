@@ -1,6 +1,6 @@
 <?php
 namespace App\Services\Cron;
-
+use function App\Functions\get_config;
 use App\Traits\LogTrait;
 
 abstract class ACronService implements ICronable
@@ -8,10 +8,12 @@ abstract class ACronService implements ICronable
     use LogTrait;
 
     protected $projects;
+    protected $services;
 
     public function __construct()
     {
-        $this->projects = include_once(PATH_CONFIG.DS."projects.php");
+        $this->projects = get_config("projects");
+        $this->services = get_config("services");
     }
 
     protected function _get_env($key){ return getenv($key);}

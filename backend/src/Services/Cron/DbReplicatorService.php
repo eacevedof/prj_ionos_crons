@@ -103,9 +103,8 @@ final class DbReplicatorService extends ACronService
 
     public function run()
     {
-        $this->logpr("START","dbreplicator");
+        $this->logpr("START DBREPLICATOR");
         //$this->_check_intime();
-
         $results = [];
         $output = [];
 
@@ -147,7 +146,7 @@ final class DbReplicatorService extends ACronService
         }//foreach this->config
         
         $this->log($results,"dbreplicator.run.results");
-        $this->logpr("END","dbreplicator");
+        $this->logpr("END DBREPLICATOR");
     }
 
 }//class DbReplicatorService

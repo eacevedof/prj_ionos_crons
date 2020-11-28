@@ -12,19 +12,17 @@ class HelpService extends ACommandService
         return $r;
     }
 
-    private function _get_commands()
-    {
-        $params = get_config("services");
-        return $params;
-    }
-
     public function run()
     {
-        $cmds = $this->_get_commands();
+        $cmds = $this->services;
+
         $echo[] = "";
-        foreach ($cmds as $cmd => $class){
+        $echo[] = "\t\tHELP MENU";
+        foreach ($cmds as $cmd => $class)
+        {
             $echo[] = "$cmd:\n\t$class";
         }
+
         $echo[] = "\n\nprojects:";
         $prjs = $this->_get_projects();
         foreach ($prjs as $prj)

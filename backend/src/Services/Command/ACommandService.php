@@ -8,10 +8,12 @@ abstract class ACommandService implements ICommand
     use LogTrait;
 
     protected $projects;
+    protected $services;
 
     public function __construct()
     {
         $this->projects = get_config("projects");
+        $this->services = get_config("services");
     }
 
     protected function _get_param($key){return $_REQUEST[$key] ?? "";}
