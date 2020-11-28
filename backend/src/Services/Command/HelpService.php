@@ -1,7 +1,7 @@
 <?php
 namespace App\Services\Command;
 
-use function \App\Functions\config;
+use function \App\Functions\get_config;
 
 class HelpService extends AbstractService
 {
@@ -14,7 +14,7 @@ class HelpService extends AbstractService
 
     private function _get_commands()
     {
-        $params = include(PATH_CONFIG.DS."services.php");
+        $params = get_config("services");
         /*
         $cmds = array_filter($params, function($item){
             return strstr($item,"\\Command\\");
@@ -25,7 +25,7 @@ class HelpService extends AbstractService
 
     public function run()
     {
-        $r = config("domains");
+        $r = get_config("domains");
         print_r($r); die;
         $cmds = $this->_get_commands();
         $echo[] = "";

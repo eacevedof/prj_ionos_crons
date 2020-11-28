@@ -1,8 +1,9 @@
 <?php
 namespace App\Controllers;
-
 use App\Component\ConsoleComponent as Console;
+use function App\Functions\get_config;
 use App\Traits\LogTrait;
+
 
 abstract class MainController
 {
@@ -16,7 +17,7 @@ abstract class MainController
     {
         $this->argv = $_REQUEST;
         $this->request = (new Console($this->argv))->get_request();
-        $this->servicemapper = include(PATH_CONFIG.DS."services.php");
+        $this->servicemapper = get_config("services");
     }
 
     protected function get_param($key) {return $this->request[$key] ?? null;}

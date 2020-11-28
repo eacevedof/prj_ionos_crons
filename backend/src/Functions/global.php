@@ -1,7 +1,7 @@
 <?php
 namespace App\Functions;
 
-function config($filename)
+function get_config($filename)
 {
     $pathfile = PATH_CONFIGDS.$filename.".php";
     return include($pathfile);

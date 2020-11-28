@@ -1,6 +1,6 @@
 <?php
 namespace App\Services\Command;
-
+use function App\Functions\get_config;
 use App\Traits\LogTrait;
 
 abstract class AbstractService implements ICommand
@@ -11,7 +11,7 @@ abstract class AbstractService implements ICommand
 
     public function __construct()
     {
-        $this->projects = include(PATH_CONFIG.DS."projects.php");
+        $this->projects = get_config("projects");
     }
 
     protected function _get_param($key){return $_REQUEST[$key] ?? "";}
