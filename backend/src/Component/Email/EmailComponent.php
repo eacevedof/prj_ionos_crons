@@ -22,7 +22,7 @@ class EmailComponent extends AEmail
     private $issmtp;
     private $arsmtp;
 
-    private $sPathAttachment;
+    private $attachments;
 
     /**
      * @param string|array $mxEmailTo array tipo array[email1,email2...)
@@ -33,7 +33,6 @@ class EmailComponent extends AEmail
     {
         $this->_load_primitives()
             ->_load_smtp($smtp)
-            ->_load_headers()
         ;
 
     }//__construct
@@ -45,19 +44,6 @@ class EmailComponent extends AEmail
         $this->emails_to = [];
         $this->subject = "";
         $this->content = "";
-        return $this;
-    }
-
-    private function _load_headers()
-    {
-        $this->headers = [
-            "MIME-Version: 1.0",
-            //"Content-Type: text/html; charset=ISO-8859-1";
-            "Content-Type: text/html; charset=UTF-8",
-
-            //add boundary string and mime type specification
-            "Content-Transfer-Encoding: 8bit",
-        ];
         return $this;
     }
 
@@ -75,7 +61,7 @@ class EmailComponent extends AEmail
         return $this;
     }
 
-    private function _load_pear()
+    private function _load_pear_libs()
     {
         //errorson();
         //necesita tener instalado:
@@ -93,28 +79,28 @@ class EmailComponent extends AEmail
     {
         try
         {
-            $this->_load_pear();
-            $objsmtp = \Mail::factory("smtp",$this->arsmtp);
+            $this->_load_pear_libs();
 
             $headers = [];
             $headers["Content-Type"] = "text/html; charset=UTF-8";
+
             if(is_array($this->emails_to))
                 $this->emails_to = implode(", ",$this->emails_to);
             $headers["To"] = $this->emails_to;
+
             if($this->emails_cc) $headers["Cc"] = implode(", ",$this->emails_cc);
             if($this->emails_bcc) $bcc = ", ".implode(", ",$this->emails_bcc);
             $headers["Subject"] = $this->subject;
-            //bug($headers);die;
             $headers["From"] = $this->email_from;
 
             $objmime = new \Mail_mime(["eol"=>PHP_EOL]);
             //$objmime->setTXTBody("texto body"); //texto sin html
             $objmime->setHTMLBody($this->content); //texto con html
 
-            if($this->sPathAttachment)
-                $objmime->addAttachment($this->sPathAttachment,"text/plain");
+            foreach ($this->attachments as $ardata)
+                $objmime->addAttachment($ardata["path"], $ardata["mime"]);
 
-            $arMime = [
+            $armime = [
                 "text_encoding" => "7bit",
                 "text_charset" => "UTF-8",
                 "html_charset" => "UTF-8",
@@ -122,11 +108,13 @@ class EmailComponent extends AEmail
             ];
 
             //do not ever try to call these lines in reverse order
-            $content = $objmime->get($arMime);
+            $content = $objmime->get($armime);
             $headers = $objmime->headers($headers);
             //la única forma de enviar con copia oculta es añadirlo a los receptores
             $stremailsto = $headers["To"].$bcc;
-            //->send es igual a: mail($recipients, $subject,$body,$text_headers);
+
+            $objsmtp = \Mail::factory("smtp",$this->arsmtp);
+            //->send es igual a: mail($recipients, $subject, $body, $headers);
             $objemail = $objsmtp->send($stremailsto, $headers, $content);
 
             if(\PEAR::iserror($objemail))
@@ -138,7 +126,20 @@ class EmailComponent extends AEmail
         }
 
         return $this;
-    }//send_smtp
+    }
+
+    private function _nosmtp_header_mime()
+    {
+        $this->headers = [
+            "MIME-Version: 1.0",
+            //"Content-Type: text/html; charset=ISO-8859-1";
+            "Content-Type: text/html; charset=UTF-8",
+
+            //add boundary string and mime type specification
+            "Content-Transfer-Encoding: 8bit",
+        ];
+        return $this;
+    }
 
     private function _nosmtp_header_from()
     {
@@ -170,17 +171,14 @@ class EmailComponent extends AEmail
         $header = implode(PHP_EOL,$this->headers);
         $this->header = $header;
     }
-
-    /**
-     * uses function mail(...)
-     * @return boolean
-     */
+    
     private function _send_nosmtp()
     {
         $this->log("_send_nosmtp()",__CLASS__);
         if($this->emails_to)
         {
-            $this->_nosmtp_header_from()
+            $this->_nosmtp_header_mime()
+                ->_nosmtp_header_from()
                 ->_nosmtp_header_cc()
                 ->_nosmtp_header_bcc()
                 ->_nomstp_header()
@@ -205,9 +203,7 @@ class EmailComponent extends AEmail
             $this->_add_error("No target emails!");
         }
         return $this;
-
-    }//_send_nosmtp
-
+    }
 
     /**
      * Utiliza la funcion mail. Se puede recuperar el error con $this->get_error_message();
@@ -229,6 +225,7 @@ class EmailComponent extends AEmail
     public function add_bcc($stremail){$this->emails_bcc[]=$stremail; return $this;}
     public function set_nosmtp_header($header){$this->header = $header; return $this;}
     public function set_content($mxcontent){(is_array($mxcontent))? $this->content=implode(PHP_EOL,$mxcontent): $this->content = $mxcontent; return $this;}
+    public function add_attachment($arattach=["path"=>"","mime"=>"","as-file"=>""]){$this->attachments[] = $arattach; return $this;}
 
     /**
      *  Required
