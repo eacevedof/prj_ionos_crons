@@ -35,6 +35,7 @@ class EmailService extends ACommandService
 
     private function _send()
     {
+        error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_STRICT);
         // Varios destinatarios
         $para  = 'xxx@yahoo.es';// . ', '; // atención a la coma
         //$para .= 'wez@example.com';
@@ -83,8 +84,8 @@ class EmailService extends ACommandService
     {
         $this->logpr("START EMAILSERVICE");
         //$email = new EmailComponent();
-        //$this->_send();
-        $this->_pear();
+        $this->_send();
+        //$this->_pear();
         $this->logpr("END EMAILSERVICE");
     }
 }
