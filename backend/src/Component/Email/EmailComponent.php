@@ -61,7 +61,7 @@ class EmailComponent extends AEmail
         return $this;
     }
 
-    private function _load_pear_libs()
+    private function _load_smtp_libs()
     {
         //errorson();
         //necesita tener instalado:
@@ -75,23 +75,38 @@ class EmailComponent extends AEmail
         return $this;
     }
 
+    private function _smtp_headers()
+    {
+        $this->headers = [];
+        $this->headers["Content-Type"] = "text/html; charset=UTF-8";
+
+        if(is_array($this->emails_to))
+            $this->emails_to = implode(", ",$this->emails_to);
+        $this->headers["To"] = $this->emails_to;
+
+        if($this->emails_cc) $this->headers["Cc"] = implode(", ",$this->emails_cc);
+        //if($this->emails_bcc) $bcc = ", ".implode(", ",$this->emails_bcc);
+        $this->headers["Subject"] = $this->subject;
+        $this->headers["From"] = $this->email_from;
+    }
+
+    private function _get_smtp_mime()
+    {
+        return [
+            "text_encoding" => "7bit",
+            "text_charset" => "UTF-8",
+            "html_charset" => "UTF-8",
+            "head_charset" => "UTF-8"
+        ];
+    }
+
     private function _send_pear()
     {
         try
         {
-            $this->_load_pear_libs();
-
-            $headers = [];
-            $headers["Content-Type"] = "text/html; charset=UTF-8";
-
-            if(is_array($this->emails_to))
-                $this->emails_to = implode(", ",$this->emails_to);
-            $headers["To"] = $this->emails_to;
-
-            if($this->emails_cc) $headers["Cc"] = implode(", ",$this->emails_cc);
-            if($this->emails_bcc) $bcc = ", ".implode(", ",$this->emails_bcc);
-            $headers["Subject"] = $this->subject;
-            $headers["From"] = $this->email_from;
+            $this->_load_smtp_libs()
+                ->_smtp_headers()
+            ;
 
             $objmime = new \Mail_mime(["eol"=>PHP_EOL]);
             //$objmime->setTXTBody("texto body"); //texto sin html
@@ -100,18 +115,13 @@ class EmailComponent extends AEmail
             foreach ($this->attachments as $ardata)
                 $objmime->addAttachment($ardata["path"], $ardata["mime"]);
 
-            $armime = [
-                "text_encoding" => "7bit",
-                "text_charset" => "UTF-8",
-                "html_charset" => "UTF-8",
-                "head_charset" => "UTF-8"
-            ];
-
             //do not ever try to call these lines in reverse order
+            $armime = $this->_get_smtp_mime();
             $content = $objmime->get($armime);
-            $headers = $objmime->headers($headers);
+            $headers = $objmime->headers($this->headers);
+            
             //la única forma de enviar con copia oculta es añadirlo a los receptores
-            $stremailsto = $headers["To"].$bcc;
+            $stremailsto = $headers["To"].", ".$this->headers["Cc"];
 
             $objsmtp = \Mail::factory("smtp",$this->arsmtp);
             //->send es igual a: mail($recipients, $subject, $body, $headers);
@@ -232,11 +242,11 @@ class EmailComponent extends AEmail
     "MIME-Version: 1.0"
     "Content-type: text/html; charset=iso-8859-1"
     Optional
-     *  "From: Recordatorio <cumples@example.com>"
+    "From: Recordatorio <cumples@example.com>"
     "To: Mary <mary@example.com>, Kelly <kelly@example.com>"
     "Cc: birthdayarchive@example.com"
     "Bcc: birthdaycheck@example.com"
-     * mail($to,$subject,$message,$headers);
+    mail($to,$subject,$message,$headers);
      *
      * @param string $header Cualquer linea anterior
      */
