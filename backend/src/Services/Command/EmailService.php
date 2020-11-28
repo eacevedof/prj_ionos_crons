@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Command;
 use App\Component\Email\EmailComponent;
+use function App\Functions\get_config;
 
 class EmailService extends ACommandService
 {
@@ -84,6 +85,16 @@ class EmailService extends ACommandService
     public function run()
     {
         $this->logpr("START EMAILSERVICE");
+        $emails = get_config("emails");
+        $this->logpr($emails,"emails");
+        (new EmailComponent($emails["config"][0]))
+            ->set_from($emails["contacts"][2])
+            ->add_to($emails["contacts"][0])
+            ->set_subject("esto es un simple asunto")
+            ->set_content("un contenido x")
+            ->send();
+        ;
+
         //$email = new EmailComponent();
         //$this->_send();
         //$this->_pear();
