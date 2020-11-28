@@ -44,6 +44,7 @@ class EmailComponent extends AEmail
         $this->emails_to = [];
         $this->subject = "";
         $this->content = "";
+        $this->attachments = [];
         return $this;
     }
 
@@ -81,8 +82,7 @@ class EmailComponent extends AEmail
         $this->headers = [];
         $this->headers["Content-Type"] = "text/html; charset=UTF-8";
 
-        if(is_array($this->emails_to))
-            $this->emails_to = implode(", ",$this->emails_to);
+        $this->emails_to = implode(", ",$this->emails_to);
         $this->headers["To"] = $this->emails_to;
 
         if($this->emails_cc) $this->headers["Cc"] = implode(", ",$this->emails_cc);
