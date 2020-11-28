@@ -1,25 +1,27 @@
 <?php
 namespace App\Component\Email;
 
-use App\Traits\LogTrait as Log;
+
 
 class EmailComponent extends AEmail
 {
-    use Log;
+    
     
     private $sFromTitle;
-    private $sEmailFrom;
-    private $mxEmailsTo;
+    private $emailfrom;
+    private $mxemails_to;
     private $arEmailsCc;
     private $arEmailsBcc;
 
-    private $sSubject;
+    private $subject;
     private $sContent;
     private $sHeader;
 
-    private $arHeaders;
+    private $headers;
 
-    private $isSmtpUse;
+    private $issmtp;
+    private $smtp;
+
     private $sSmtpHost;
     private $sSmtpPort;
     private $isSmtpAuth;
@@ -28,58 +30,52 @@ class EmailComponent extends AEmail
 
     private $sPathAttachment;
 
+
+
+
     /**
      *
      * @param string|array $mxEmailTo array tipo array[email1,email2...)
-     * @param string $sSubject
+     * @param string $subject
      * @param string|array $mxContent array tipo $arLines = array["line text 1","line text 2"..) or string
      */
-    public function __construct($mxEmailTo="",$sSubject="",$mxContent="")
+    public function __construct($smtp=[])
     {
         parent::__construct();
+        $this->_load_smtp($smtp);
+        
         $this->sFromTitle = "";
-        if(defined("APP_MAIL_ISSMTP") && APP_MAIL_ISSMTP!=="") $this->isSmtpUse = APP_MAIL_ISSMTP;
-        if(defined("APP_MAIL_SMTP_HOST") && APP_MAIL_SMTP_HOST!=="") $this->sSmtpHost = APP_MAIL_SMTP_HOST;
-        if(defined("APP_MAIL_SMTP_PORT") && APP_MAIL_SMTP_PORT!=="") $this->sSmtpPort = APP_MAIL_SMTP_PORT;
-        if(defined("APP_MAIL_SMTP_AUTH") && APP_MAIL_SMTP_AUTH!=="") $this->isSmtpAuth = APP_MAIL_SMTP_AUTH;
-        if(defined("APP_MAIL_SMTP_USER") && APP_MAIL_SMTP_USER!=="") $this->sSmtpUser = APP_MAIL_SMTP_USER;
-        if(defined("APP_MAIL_SMTP_PASSW")) $this->sSmtpPassw = APP_MAIL_SMTP_PASSW;
-        if($this->sSmtpUser) $this->sEmailFrom = $this->sSmtpUser;
 
-        $this->mxEmailsTo = [];
-        $this->arHeaders = [];
-        $this->arHeaders[] = "MIME-Version: 1.0";
-        //$this->arHeaders[] = "Content-Type: text/html; charset=ISO-8859-1";
-        $this->arHeaders[] = "Content-Type: text/html; charset=UTF-8";
+        $this->emailfrom = $this->sSmtpUser;
+        
+        $this->mxemails_to = [];
+        $this->headers = [];
+        $this->headers[] = "MIME-Version: 1.0";
+        //$this->headers[] = "Content-Type: text/html; charset=ISO-8859-1";
+        $this->headers[] = "Content-Type: text/html; charset=UTF-8";
         //add boundary string and mime type specification
         $this->_header[] = "Content-Transfer-Encoding: 8bit";
-        if($mxEmailTo) $this->mxEmailsTo[] = $mxEmailTo;
-        $this->sSubject = $sSubject;
+        if($mxEmailTo) $this->mxemails_to[] = $mxEmailTo;
+        $this->subject = $subject;
 
         if(is_array($mxContent))
             $mxContent = implode(PHP_EOL,$mxContent);
         $this->sContent = $mxContent;
 
-        //esto recupera datos de: AppComponentExtconfig 
-        if(class_exists("AppComponentExtconfig"))
-        {
-            /*   ray(  "host" => "smtp.packprotecciononline.es",
-                    "port" => "587",
-                    "email_username" => "noreply@packprotecciononline.es",
-                    "email_password" =>  "q4hHJ3R1",
-                    "email_source" => "noreply@packprotecciononline.es",
-                    'mailer'=>'smtp',
-                    'smtppauth'=>true,
-                    'smtpsecure' => 'tls'*/
-            $this->sSmtpHost = AppComponentExtconfig::get_emailzurich1("host");
-            $this->sSmtpUser = AppComponentExtconfig::get_emailzurich1("email_username");
-            $this->sSmtpPassw = AppComponentExtconfig::get_emailzurich1("email_password");
-            $this->sSmtpProtocol = AppComponentExtconfig::get_emailzurich1("mailer");
-            $this->sSmtpPort = AppComponentExtconfig::get_emailzurich1("port");
-            $this->isSmtpAuth = AppComponentExtconfig::get_emailzurich1("smtppauth");
-            $this->sSmtpSecure = AppComponentExtconfig::get_emailzurich1("smtpsecure");
-        }
     }//__construct
+
+    private function _load_smtp($config)
+    {
+        if($config)
+        {
+            $this->issmtp     = true;
+            $this->sSmtpHost  = $config["host"] ?? "";
+            $this->sSmtpPort  = $config["port"] ?? "25";
+            $this->isSmtpAuth = $config["auth"] ?? "";;
+            $this->sSmtpUser  = $config["user"] ?? "";
+            $this->sSmtpPassw = $config["password"] ?? "";
+        }
+    }
 
     private function _send_pear()
     {
@@ -106,17 +102,17 @@ class EmailComponent extends AEmail
         {
             $oSmtp = \Mail::factory("smtp",$arSmtp);
 
-            $arHeaders = [];
-            $arHeaders["Content-Type"] = "text/html; charset=UTF-8";
-            //$arHeaders["From"] = $this->sEmailFrom;
-            if(is_array($this->mxEmailsTo))
-                $this->mxEmailsTo = implode(", ",$this->mxEmailsTo);
-            $arHeaders["To"] = $this->mxEmailsTo;
-            if($this->arEmailsCc) $arHeaders["Cc"] = implode(", ",$this->arEmailsCc);
+            $headers = [];
+            $headers["Content-Type"] = "text/html; charset=UTF-8";
+            //$headers["From"] = $this->emailfrom;
+            if(is_array($this->mxemails_to))
+                $this->mxemails_to = implode(", ",$this->mxemails_to);
+            $headers["To"] = $this->mxemails_to;
+            if($this->arEmailsCc) $headers["Cc"] = implode(", ",$this->arEmailsCc);
             if($this->arEmailsBcc) $sBcc = ", ".implode(", ",$this->arEmailsBcc);
-            $arHeaders["Subject"] = $this->sSubject;
-            //bug($arHeaders);die;
-            $arHeaders["From"] = $this->sEmailFrom;
+            $headers["Subject"] = $this->subject;
+            //bug($headers);die;
+            $headers["From"] = $this->emailfrom;
 
             $oMime = new \Mail_mime(["eol"=>PHP_EOL]);
             //$oMime->setTXTBody("texto body"); //texto sin html
@@ -134,23 +130,23 @@ class EmailComponent extends AEmail
 
             //do not ever try to call these lines in reverse order
             $sContent = $oMime->get($arMime);
-            $arHeaders = $oMime->headers($arHeaders);
+            $headers = $oMime->headers($headers);
             //la única forma de enviar con copia oculta es añadirlo a los receptores
-            $sEmailsTo = $arHeaders["To"].$sBcc;
+            $stremailsTo = $headers["To"].$sBcc;
             //->send es igual a: mail($recipients, $subject,$body,$text_headers);
-            $oEmail = $oSmtp->send($sEmailsTo,$arHeaders,$sContent);
+            $objemail = $oSmtp->send($stremailsTo,$headers,$sContent);
 
-            if(PEAR::isError($oEmail))
+            if(PEAR::iserror($objemail))
             {
-                $this->add_error($oEmail->getMessage());
+                $this->_add_error($objemail->getMessage());
             }
         }
         catch(Exception $oEx)
         {
-            $this->add_error($oEx->getMessage());
+            $this->_add_error($oEx->getMessage());
         }
         //bug($this->arErrorMessages);die;
-        return $this->isError;
+        return $this->iserror;
     }//send_smtp
 
     /**
@@ -166,11 +162,11 @@ class EmailComponent extends AEmail
         //crea los header en $this->_header
         $this->_build_header();
 
-        $this->log("mailsto:$this->mxEmailsTo,subject:$this->sSubject,header:$this->sHeader",__CLASS__."_send_nosmtp()");
-        if($this->mxEmailsTo)
+        $this->log("mailsto:$this->mxemails_to,subject:$this->subject,header:$this->sHeader",__CLASS__."_send_nosmtp()");
+        if($this->mxemails_to)
         {
-            if(is_array($this->mxEmailsTo))
-                $this->mxEmailsTo = implode(", ",$this->mxEmailsTo);
+            if(is_array($this->mxemails_to))
+                $this->mxemails_to = implode(", ",$this->mxemails_to);
 
             //TRUE if success
             /*
@@ -179,19 +175,19 @@ class EmailComponent extends AEmail
             (No UCE/UBE) logging access from: caser.loc(OK)-caser.loc [127.0.0.1]
             */
             $this->log("antes de llamar a funcion mail",__CLASS__);
-            //$this->log("mailsto:$this->mxEmailsTo,subject:$this->sSubject,content:$this->sContent,header:$this->sHeader");
-            $mxStatus = mail($this->mxEmailsTo,$this->sSubject,$this->sContent,$this->sHeader);
-            $this->log($mxStatus,__CLASS__." status mail(..)");
-            if($mxStatus == FALSE)
+            //$this->log("mailsto:$this->mxemails_to,subject:$this->subject,content:$this->sContent,header:$this->sHeader");
+            $r = mail($this->mxemails_to,$this->subject,$this->sContent,$this->sHeader);
+            $this->log($r,__CLASS__." status mail(..)");
+            if($r == FALSE)
             {
-                $this->add_error("Error sending email!");
+                $this->_add_error("Error sending email!");
             }
         }
         else
         {
-            $this->add_error("No target emails!");
+            $this->_add_error("No target emails!");
         }
-        return $this->isError;
+        return $this->iserror;
     }//_send_nosmtp
 
 
@@ -201,50 +197,50 @@ class EmailComponent extends AEmail
      */
     public function send()
     {
-        if($this->isSmtpUse)
+        if($this->issmtp)
             return $this->_send_pear();
         return $this->_send_nosmtp();
     }
 
     private function _build_header()
     {
-        $sHeader = implode(PHP_EOL,$this->arHeaders);
+        $sHeader = implode(PHP_EOL,$this->headers);
         $this->sHeader = $sHeader;
     }
 
     private function _build_header_from()
     {
-        if($this->sEmailFrom)
+        if($this->emailfrom)
         {
-            $this->arHeaders[] = "From: $this->sFromTitle <$this->sEmailFrom>";
-            $this->arHeaders[] = "Return-Path: <$this->sEmailFrom>";
-            $this->arHeaders[] = "X-Sender: $this->sEmailFrom";
+            $this->headers[] = "From: $this->sFromTitle <$this->emailfrom>";
+            $this->headers[] = "Return-Path: <$this->emailfrom>";
+            $this->headers[] = "X-Sender: $this->emailfrom";
         }
     }
 
     private function _build_header_cc()
     {
         if($this->arEmailsCc)
-            $this->arHeaders[] = "Cc: ".implode(", ",$this->arEmailsCc);
+            $this->headers[] = "Cc: ".implode(", ",$this->arEmailsCc);
     }
 
     private function _build_header_bcc()
     {
         if($this->arEmailsBcc)
-            $this->arHeaders[] = "Bcc: ".implode(", ",$this->arEmailsBcc);
+            $this->headers[] = "Bcc: ".implode(", ",$this->arEmailsBcc);
     }
 
     //**********************************
     //             SETS
     //**********************************
-    public function set_subject($sSubject){$this->sSubject = $sSubject;}
-    public function set_email_from($sEmail){$this->sEmailFrom = $sEmail;}
-    public function set_emails_to($mxEmails){$this->mxEmailsTo = $mxEmails;}
-    public function add_email_to($sEmail){$this->mxEmailsTo[]=$sEmail;}
+    public function set_subject($subject){$this->subject = $subject;}
+    public function set_email_from($stremail){$this->emailfrom = $stremail;}
+    public function set_emails_to($mxEmails){$this->mxemails_to = $mxEmails;}
+    public function add_email_to($stremail){$this->mxemails_to[]=$stremail;}
     public function set_emails_cc($arEmails){$this->arEmailsCc = $arEmails;}
-    public function add_email_cc($sEmail){$this->arEmailsCc[]=$sEmail;}
+    public function add_email_cc($stremail){$this->arEmailsCc[]=$stremail;}
     public function set_emails_bcc($arEmails){$this->arEmailsBcc = $arEmails;}
-    public function add_email_bcc($sEmail){$this->arEmailsBcc[]=$sEmail;}
+    public function add_email_bcc($stremail){$this->arEmailsBcc[]=$stremail;}
     public function set_header($sHeader){$this->sHeader = $sHeader;}
     public function set_content($mxContent){(is_array($mxContent))? $this->sContent=implode(PHP_EOL,$mxContent): $this->sContent = $mxContent;}
     public function set_title_from($sTitle){$this->sFromTitle = $sTitle;}
@@ -262,17 +258,15 @@ class EmailComponent extends AEmail
      *
      * @param string $sHeader Cualquer linea anterior
      */
-    public function add_header($sHeader){$this->arHeaders[] = $sHeader;}
-    public function clear_headers(){$this->arHeaders=[];}
+    public function add_header($sHeader){$this->headers[] = $sHeader;}
+    public function clear_headers(){$this->headers=[];}
 
-    public function set_smtp_use($isOn=TRUE){$this->isSmtpUse=$isOn;}
+    public function set_smtp_use($isOn=TRUE){$this->issmtp=$isOn;}
     public function set_smtp_host($sValue){$this->sSmtpHost=$sValue;}
     public function set_smtp_port($sValue){$this->sSmtpPort=$sValue;}
     public function set_smtp_auth($isOn=TRUE){$this->isSmtpAuth=$isOn;}
     public function set_smtp_user($sValue){$this->sSmtpUser=$sValue;}
     public function set_smtp_passw($sValue){$this->sSmtpPassw=$sValue;}
-    //**********************************
-    //             GETS
-    //**********************************
+
 
 }//ComponentMail
