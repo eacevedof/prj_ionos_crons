@@ -1,6 +1,6 @@
 <?php
 namespace App\Services\Command;
-use App\Component\EmailComponent;
+use App\Component\Email\EmailComponent;
 
 class EmailService extends ACommandService
 {
@@ -15,8 +15,9 @@ class EmailService extends ACommandService
         $username = "tucorreo@example.com";
         $password = "la contraseña de tu correo";
         $port = "465";
-        $to = "correo_destinatario@example.com";
         $email_from = "tucorreo@example.com";
+
+        $to = "correo_destinatario@example.com";
         $email_subject = "Línea de asunto aquí:";
         $email_body = "Lo que tu quieras";
         $email_address = "responder-a@example.com";
@@ -84,7 +85,7 @@ class EmailService extends ACommandService
     {
         $this->logpr("START EMAILSERVICE");
         //$email = new EmailComponent();
-        $this->_send();
+        //$this->_send();
         //$this->_pear();
         $this->logpr("END EMAILSERVICE");
     }
