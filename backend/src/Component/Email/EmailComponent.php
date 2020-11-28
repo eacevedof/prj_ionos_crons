@@ -127,6 +127,7 @@ class EmailComponent extends AEmail
             //->send es igual a: mail($recipients, $subject, $body, $headers);
             $objemail = $objsmtp->send($stremailsto, $headers, $content);
 
+            $this->logpr($objemail,"objmail");
             if(\PEAR::iserror($objemail))
                 $this->_add_error($objemail->getMessage());
         }
