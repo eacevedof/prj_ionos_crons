@@ -15,4 +15,6 @@ abstract class AEmail implements IEmail
         $this->errors[] = $msg;
         return $this;
     }
+
+    public function get_errors(){return $this->errors;}
 }
