@@ -29,4 +29,4 @@ final class DomainStatusService extends ACronService
         $this->logpr("END DOMAINSTATUS");
     }
 
-}//class DOMAINSTATUSService
+}
