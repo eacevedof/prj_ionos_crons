@@ -8,8 +8,8 @@ class EmailService extends ACommandService
     private function _send()
     {
         // Varios destinatarios
-        $para  = 'aidan@example.com' . ', '; // atención a la coma
-        $para .= 'wez@example.com';
+        $para  = 'aidan@example.com';// . ', '; // atención a la coma
+        //$para .= 'wez@example.com';
 
         // título
         $título = 'Recordatorio de cumpleaños para Agosto';
@@ -44,8 +44,8 @@ class EmailService extends ACommandService
         // Cabeceras adicionales
         $cabeceras .= 'To: Mary <mary@example.com>, Kelly <kelly@example.com>' . "\r\n";
         $cabeceras .= 'From: Recordatorio <cumples@example.com>' . "\r\n";
-        $cabeceras .= 'Cc: birthdayarchive@example.com' . "\r\n";
-        $cabeceras .= 'Bcc: birthdaycheck@example.com' . "\r\n";
+        //$cabeceras .= 'Cc: birthdayarchive@example.com' . "\r\n";
+        //$cabeceras .= 'Bcc: birthdaycheck@example.com' . "\r\n";
 
         // Enviarlo
         mail($para, $título, $mensaje, $cabeceras);
