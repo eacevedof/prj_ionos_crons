@@ -20,4 +20,5 @@ return [
     "excludeip"                 => "App\\Services\\Command\\ExcludeIpService",
     "cleanrequest"              => "App\\Services\\Command\\CleanRequestService",
     "check-dbconn"              => "App\\Services\\Command\\CheckDbConnService",
+    "env"                       => "App\\Services\\Command\\EnvService",
 ];
