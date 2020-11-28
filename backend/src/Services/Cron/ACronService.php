@@ -3,7 +3,7 @@ namespace App\Services\Cron;
 
 use App\Traits\LogTrait;
 
-abstract class AbstractService implements ICronable
+abstract class ACronService implements ICronable
 {
     use LogTrait;
 

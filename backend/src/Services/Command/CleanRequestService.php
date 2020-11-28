@@ -3,7 +3,7 @@ namespace App\Services\Command;
 
 use App\Factories\Db as db;
 
-class CleanRequestService extends AbstractService
+class CleanRequestService extends ACommandService
 {
     private $ip;
 

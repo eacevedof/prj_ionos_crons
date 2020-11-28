@@ -3,7 +3,7 @@ namespace App\Services\Command;
 
 use function \App\Functions\get_config;
 
-class HelpService extends AbstractService
+class HelpService extends ACommandService
 {
     private function _get_projects()
     {
@@ -15,18 +15,11 @@ class HelpService extends AbstractService
     private function _get_commands()
     {
         $params = get_config("services");
-        /*
-        $cmds = array_filter($params, function($item){
-            return strstr($item,"\\Command\\");
-        });
-        */
         return $params;
     }
 
     public function run()
     {
-        $r = get_config("domains");
-        print_r($r); die;
         $cmds = $this->_get_commands();
         $echo[] = "";
         foreach ($cmds as $cmd => $class){

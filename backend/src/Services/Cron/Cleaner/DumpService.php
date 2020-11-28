@@ -4,9 +4,9 @@
  */
 namespace App\Services\Cron\Cleaner;
 
-use App\Services\Cron\AbstractService;
+use App\Services\Cron\ACronService;
 
-final class DumpService extends AbstractService
+final class DumpService extends ACronService
 {
     private static $PATH_DUMPSDS = "";
     private const KEEP_LIMIT = 15;

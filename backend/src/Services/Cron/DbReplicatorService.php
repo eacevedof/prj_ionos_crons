@@ -7,7 +7,7 @@ namespace App\Services\Cron;
 
 use App\Factories\Db;
 
-final class DbReplicatorService extends AbstractService
+final class DbReplicatorService extends ACronService
 {
     /**
      * @var string

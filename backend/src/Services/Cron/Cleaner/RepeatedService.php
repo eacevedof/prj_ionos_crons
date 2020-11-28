@@ -4,10 +4,10 @@
  */
 namespace App\Services\Cron\Cleaner;
 
-use App\Services\Cron\AbstractService;
+use App\Services\Cron\ACronService;
 use App\Component\DumpComponent;
 
-final class RepeatedService extends AbstractService
+final class RepeatedService extends ACronService
 {
     private static $PATH_DUMPSDS = "";
 

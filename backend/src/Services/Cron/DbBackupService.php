@@ -7,7 +7,7 @@
  */
 namespace App\Services\Cron;
 
-final class DbBackupService extends AbstractService
+final class DbBackupService extends ACronService
 {
     private $exclude;
     

@@ -3,7 +3,7 @@ namespace App\Services\Command;
 use function App\Functions\get_config;
 use App\Traits\LogTrait;
 
-abstract class AbstractService implements ICommand
+abstract class ACommandService implements ICommand
 {
     use LogTrait;
 
