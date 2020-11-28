@@ -84,6 +84,7 @@ class EmailService extends ACommandService
 
     public function run()
     {
+        error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_STRICT);
         $this->logpr("START EMAILSERVICE");
         $emails = get_config("emails");
         $this->logpr($emails,"emails");
