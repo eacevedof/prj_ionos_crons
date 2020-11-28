@@ -22,7 +22,7 @@ class EmailService extends ACommandService
         $email_address = "responder-a@example.com";
 
         $headers = array ('From' => $email_from, 'To' => $to, 'Subject' => $email_subject, 'Reply-To' => $email_address);
-        $smtp = Mail::factory('smtp', array ('host' => $host, 'port' => $port, 'auth' => true, 'username' => $username, 'password' => $password));
+        $smtp = \Mail::factory('smtp', array ('host' => $host, 'port' => $port, 'auth' => true, 'username' => $username, 'password' => $password));
         $mail = $smtp->send($to, $headers, $email_body);
 
 
