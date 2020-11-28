@@ -1,0 +1,3 @@
+<?php
+//emails.php
+return [];

@@ -1,5 +1,6 @@
 /backend/config/projects.php
 /backend/config/domains.php
+/backend/config/emails.php
 /backend/config/logs.php
 
 /backend/logs/
