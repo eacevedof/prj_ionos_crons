@@ -42,6 +42,8 @@ class EmailComponent extends AEmail
         $this->title_from = "";
         $this->email_from = "";
         $this->emails_to = [];
+        $this->emails_cc = [];
+        $this->emails_bcc = [];
         $this->subject = "";
         $this->content = "";
         $this->attachments = [];
