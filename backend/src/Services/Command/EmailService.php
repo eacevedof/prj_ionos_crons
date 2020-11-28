@@ -4,11 +4,39 @@ use App\Component\EmailComponent;
 
 class EmailService extends ACommandService
 {
+    private function _pear()
+    {
+
+        error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_STRICT);
+
+        require_once "Mail.php";
+
+        $host = "ssl://smtp.dreamhost.com";
+        $username = "tucorreo@example.com";
+        $password = "la contraseña de tu correo";
+        $port = "465";
+        $to = "correo_destinatario@example.com";
+        $email_from = "tucorreo@example.com";
+        $email_subject = "Línea de asunto aquí:";
+        $email_body = "Lo que tu quieras";
+        $email_address = "responder-a@example.com";
+
+        $headers = array ('From' => $email_from, 'To' => $to, 'Subject' => $email_subject, 'Reply-To' => $email_address);
+        $smtp = Mail::factory('smtp', array ('host' => $host, 'port' => $port, 'auth' => true, 'username' => $username, 'password' => $password));
+        $mail = $smtp->send($to, $headers, $email_body);
+
+
+        if (PEAR::isError($mail)) {
+            echo("<p>" . $mail->getMessage() . "</p>");
+        } else {
+            echo("<p>Message successfully sent!</p>");
+        }
+    }
 
     private function _send()
     {
         // Varios destinatarios
-        $para  = 'aidan@example.com';// . ', '; // atención a la coma
+        $para  = 'xxx@yahoo.es';// . ', '; // atención a la coma
         //$para .= 'wez@example.com';
 
         // título
@@ -55,7 +83,8 @@ class EmailService extends ACommandService
     {
         $this->logpr("START EMAILSERVICE");
         //$email = new EmailComponent();
-        $this->_send();
+        //$this->_send();
+        $this->_pear();
         $this->logpr("END EMAILSERVICE");
     }
 }
