@@ -10,7 +10,7 @@ final class DispatcherController extends MainController
         {
             $service = $this->get_param("service");
             if(!$service) $service = $this->get_param(1);
-            if(!$service) throw new \Exception("Missing service name");
+            if(!$service) $service = "help";
 
             $class = $this->servicemapper[$service] ?? "";
             if(!$this->_is_service($class)) throw new \Exception("Class \"$class\" not found for service or command $service");
