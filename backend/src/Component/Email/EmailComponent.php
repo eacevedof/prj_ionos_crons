@@ -14,7 +14,6 @@ class EmailComponent extends AEmail
     private $subject;
     private $content;
 
-
     //no smtp
     private $headers;
     private $header;
@@ -92,11 +91,9 @@ class EmailComponent extends AEmail
 
     private function _send_pear()
     {
-        $this->log("_send_pear()",__CLASS__);
-        $this->_load_pear();
-        
         try
         {
+            $this->_load_pear();
             $objsmtp = \Mail::factory("smtp",$this->arsmtp);
 
             $headers = [];
@@ -140,7 +137,7 @@ class EmailComponent extends AEmail
             $this->_add_error($oEx->getMessage());
         }
 
-        return $this->iserror;
+        return $this;
     }//send_smtp
 
     private function _nosmtp_header_from()
@@ -181,17 +178,15 @@ class EmailComponent extends AEmail
     private function _send_nosmtp()
     {
         $this->log("_send_nosmtp()",__CLASS__);
-
-        $this->_nosmtp_header_from()
-            ->_nosmtp_header_cc()
-            ->_nosmtp_header_bcc()
-            ->_build_header()
-        ;
-        
         if($this->emails_to)
         {
-            if(is_array($this->emails_to))
-                $this->emails_to = implode(", ",$this->emails_to);
+            $this->_nosmtp_header_from()
+                ->_nosmtp_header_cc()
+                ->_nosmtp_header_bcc()
+                ->_build_header()
+            ;
+
+            $this->emails_to = implode(", ",$this->emails_to);
 
             //TRUE if success
             /*
@@ -199,20 +194,18 @@ class EmailComponent extends AEmail
             220 eduardosvc ESMTP Sendmail 8.14.4/8.14.4/Debian-4.1ubuntu1; Thu, 25 Feb 2016 10:47:44 +0100; 
             (No UCE/UBE) logging access from: caser.loc(OK)-caser.loc [127.0.0.1]
             */
-            $this->log("antes de llamar a funcion mail",__CLASS__);
-            //$this->log("mailsto:$this->emails_to,subject:$this->subject,content:$this->content,header:$this->header");
-            $r = mail($this->emails_to,$this->subject,$this->content,$this->header);
-            $this->log($r,__CLASS__." status mail(..)");
-            if($r == FALSE)
-            {
+            $this->log("antes de llamar a funcion mail");
+            $r = mail($this->emails_to, $this->subject, $this->content, $this->header);
+            $this->log($r,"email result");
+            if($r===false)
                 $this->_add_error("Error sending email!");
-            }
         }
         else
         {
             $this->_add_error("No target emails!");
         }
-        return $this->iserror;
+        return $this;
+
     }//_send_nosmtp
 
 
@@ -231,16 +224,15 @@ class EmailComponent extends AEmail
     //             SETS
     //**********************************
     public function set_subject($subject){$this->subject = $subject; return $this;}
-    public function set_email_from($stremail){$this->email_from = $stremail; return $this;}
-    public function set_emails_to($mxEmails){$this->emails_to = $mxEmails; return $this;}
-    public function add_email_to($stremail){$this->emails_to[]=$stremail; return $this;}
-    public function set_emails_cc($arEmails){$this->emails_cc = $arEmails; return $this;}
-    public function add_email_cc($stremail){$this->emails_cc[]=$stremail; return $this;}
-    public function set_emails_bcc($arEmails){$this->emails_bcc = $arEmails; return $this;}
-    public function add_email_bcc($stremail){$this->emails_bcc[]=$stremail; return $this;}
-    public function set_header($header){$this->header = $header; return $this;}
-    public function set_content($mxcontent){(is_array($mxcontent))? $this->content=implode(PHP_EOL,$mxcontent): $this->content = $mxcontent; return $this;}
+
+    public function set_from($stremail){$this->email_from = $stremail; return $this;}
     public function set_title_from(string $title){$this->title_from = $title; return $this;}
+    public function add_to($stremail){$this->emails_to[]=$stremail; return $this;}
+    public function add_cc($stremail){$this->emails_cc[]=$stremail; return $this;}
+    public function add_bcc($stremail){$this->emails_bcc[]=$stremail; return $this;}
+    public function set_nosmtp_header($header){$this->header = $header; return $this;}
+    public function set_content($mxcontent){(is_array($mxcontent))? $this->content=implode(PHP_EOL,$mxcontent): $this->content = $mxcontent; return $this;}
+
 
     /**
      *  Required
