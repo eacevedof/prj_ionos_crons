@@ -32,7 +32,7 @@ trait LogTrait
     private function _pr($mxvar,$title="")
     {
         $now = date("Ymd H:i:s");
-        echo "\n$now";
+        echo "\n$now\n";
         if($title) echo "\n$title:\n";
         print_r($mxvar);
         echo "\n";
