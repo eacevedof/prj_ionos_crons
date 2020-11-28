@@ -44,14 +44,21 @@ final class RepeatedService extends AbstractService
         $this->prefixes = array_unique($r);
     }
 
+    private function _match_prefix($prefix,$filename)
+    {
+        $pattern = "#{$prefix}_[\d]{14}.sql#";
+        preg_match_all($pattern,$filename,$r);
+        $r = $r[0][0] ?? "";
+        return $r;
+    }
+
     private function _get_by_prefix($prefix)
     {
         $r = [];
         foreach ($this->files as $filename)
-        {
-            if(strpos($filename,$prefix)===0)
+            if($this->_match_prefix($prefix,$filename))
                 $r[] = $filename;
-        }
+
         return $r;
     }
 
@@ -60,13 +67,15 @@ final class RepeatedService extends AbstractService
         sort($files);
         $r = [];
         //buscar
-        foreach($files as $file1){
+        foreach($files as $file1)
+        {
             //si ya está en repetidos se comprueba el sig
             if(in_array($file1,$r)) continue;
 
             $path1 = self::$PATH_DUMPSDS.$file1;
 
-            foreach ($files as $file2){
+            foreach ($files as $file2)
+            {
                 if($file1 == $file2) continue;
 
                 $path2 = self::$PATH_DUMPSDS.$file2;

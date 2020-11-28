@@ -7,8 +7,10 @@
  */
 namespace App\Services\Cron;
 
-final class DbbackupService extends AbstractService
+final class DbBackupService extends AbstractService
 {
+    private $exclude;
+    
     private function _check_intime()
     {
         $now = date("YmdHis");
@@ -22,22 +24,27 @@ final class DbbackupService extends AbstractService
         ];
     }
 
-    private function _get_previous_backup()
+    public function _load_exclude()
     {
-
+        $this->exclude = [
+            "ipblocker-ro"
+        ];
     }
 
     public function run()
     {
         $this->logpr("START","dbbackupservice.run");
+        $this->_load_exclude();
         $r = $this->_check_intime();
         $min = $r["min"];
 
         $results = [];
         $output = [];
 
-        foreach($this->projects as $alias => $arproject)
+        foreach($this->projects as $context => $arproject)
         {
+            if(in_array($context,$this->exclude)) continue;
+            
             if(!$arproject) continue;
 
             list($dblocal, $server, $port, $database, $user, $password) = array_values($arproject);
@@ -49,8 +56,9 @@ final class DbbackupService extends AbstractService
             //echo "$command \n";
             exec($command, $output, $result);
             //$result = shell_exec($command);
-            $results[] = "$alias resultado: $result"; // 0:ok, 1:error
-        }//forach
+            $results[] = "$context resultado: $result"; // 0:ok, 1:error
+
+        }//foreach this->projects
 
         $this->log($results,"dbbackupservice.run.results");
         $this->logpr("END","dbbackupservice.run");

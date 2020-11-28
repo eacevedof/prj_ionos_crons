@@ -7,7 +7,8 @@
             "App\\": "src/"
         },
         "files": [
-            "src/boot/appbootstrap.php"
+            "src/boot/appbootstrap.php",
+            "src/Functions/global.php"
         ]
     },
     "autoload-dev": {

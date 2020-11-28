@@ -3,7 +3,7 @@ namespace App\Services\Command;
 
 use App\Factories\Db as db;
 
-class CheckDbconnService extends AbstractService
+class CheckDbConnService extends AbstractService
 {
     private $context;
     private $result;

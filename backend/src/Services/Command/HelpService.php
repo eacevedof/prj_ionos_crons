@@ -1,6 +1,8 @@
 <?php
 namespace App\Services\Command;
 
+use function \App\Functions\config;
+
 class HelpService extends AbstractService
 {
     private function _get_projects()
@@ -23,6 +25,8 @@ class HelpService extends AbstractService
 
     public function run()
     {
+        $r = config("domains");
+        print_r($r); die;
         $cmds = $this->_get_commands();
         $echo[] = "";
         foreach ($cmds as $cmd => $class){

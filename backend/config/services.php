@@ -10,7 +10,7 @@ mapping:
     <command-alias> => <namespace-class>
 */
 return [
-    "cron.dbbackup"             => "App\\Services\\Cron\\DbbackupService",
+    "cron.dbbackup"             => "App\\Services\\Cron\\DbBackupService",
     "cron.dbreplicator"         => "App\\Services\\Cron\\DbReplicatorService",
 
     "cron.cleaner.dump"         => "App\\Services\\Cron\\Cleaner\\DumpService",
@@ -19,5 +19,5 @@ return [
     "help"                      => "App\\Services\\Command\\HelpService",
     "excludeip"                 => "App\\Services\\Command\\ExcludeIpService",
     "cleanrequest"              => "App\\Services\\Command\\CleanRequestService",
-    "check-dbconn"              => "App\\Services\\Command\\CheckDbconnService",
+    "check-dbconn"              => "App\\Services\\Command\\CheckDbConnService",
 ];

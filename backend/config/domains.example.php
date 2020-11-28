@@ -1,0 +1,3 @@
+<?php
+//domains.php
+return [];

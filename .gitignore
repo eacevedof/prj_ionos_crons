@@ -1,4 +1,7 @@
 /backend/config/projects.php
+/backend/config/domains.php
+/backend/config/logs.php
+
 /backend/logs/
 /backend/public/*_custom.log
 .idea

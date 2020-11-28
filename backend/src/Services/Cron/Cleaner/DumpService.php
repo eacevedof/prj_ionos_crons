@@ -44,14 +44,21 @@ final class DumpService extends AbstractService
         $this->prefixes = array_unique($r);
     }
 
+    private function _match_prefix($prefix,$filename)
+    {
+        $pattern = "#{$prefix}_[\d]{14}.sql#";
+        preg_match_all($pattern,$filename,$r);
+        $r = $r[0][0] ?? "";
+        return $r;
+    }
+
     private function _get_by_prefix($prefix)
     {
         $r = [];
         foreach ($this->files as $filename)
-        {
-            if(strpos($filename,$prefix)===0)
+            if($this->_match_prefix($prefix,$filename))
                 $r[] = $filename;
-        }
+
         return $r;
     }
 
@@ -59,10 +66,9 @@ final class DumpService extends AbstractService
     {
         $r = [];
         foreach ($files as $i=>$filename)
-        {
             if($i>=self::KEEP_LIMIT)
                 $r[] = $filename;
-        }
+
         return $r;
     }
 
@@ -94,8 +100,7 @@ final class DumpService extends AbstractService
             $this->logpr($prefix,"prefix");
             //if($prefix!=="cron_db_tinymarket") continue;
             $files = $this->_get_by_prefix($prefix);
-            if(count($files)<=self::KEEP_LIMIT)
-                continue;
+            if(count($files)<=self::KEEP_LIMIT) continue;
             $filesrmv = $this->_get_remanent($files);
             $this->logpr($filesrmv,"files to remove");
             $this->_remove($filesrmv);
