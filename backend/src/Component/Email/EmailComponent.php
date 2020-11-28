@@ -81,9 +81,9 @@ class EmailComponent extends AEmail
         }
     }//__construct
 
-    private function send_pear()
+    private function _send_pear()
     {
-        $this->log("send_pear()",__CLASS__);
+        $this->log("_send_pear()",__CLASS__);
         //errorson();
         //necesita tener instalado:
         // PEAR https://pear.php.net/manual/en/installation.checking.php
@@ -157,16 +157,16 @@ class EmailComponent extends AEmail
      * uses function mail(...)
      * @return boolean
      */
-    private function send_nosmtp()
+    private function _send_nosmtp()
     {
-        $this->log("send_nosmtp()",__CLASS__);
-        $this->build_header_from();
-        $this->build_header_cc();//crea header: Cc
-        $this->build_header_bcc();//crea header: Bcc
+        $this->log("_send_nosmtp()",__CLASS__);
+        $this->_build_header_from();
+        $this->_build_header_cc();//crea header: Cc
+        $this->_build_header_bcc();//crea header: Bcc
         //crea los header en $this->_header
-        $this->build_header();
+        $this->_build_header();
 
-        $this->log("mailsto:$this->mxEmailsTo,subject:$this->sSubject,header:$this->sHeader",__CLASS__."send_nosmtp()");
+        $this->log("mailsto:$this->mxEmailsTo,subject:$this->sSubject,header:$this->sHeader",__CLASS__."_send_nosmtp()");
         if($this->mxEmailsTo)
         {
             if(is_array($this->mxEmailsTo))
@@ -192,7 +192,7 @@ class EmailComponent extends AEmail
             $this->add_error("No target emails!");
         }
         return $this->isError;
-    }//send_nosmtp
+    }//_send_nosmtp
 
 
     /**
@@ -202,17 +202,17 @@ class EmailComponent extends AEmail
     public function send()
     {
         if($this->isSmtpUse)
-            return $this->send_pear();
-        return $this->send_nosmtp();
+            return $this->_send_pear();
+        return $this->_send_nosmtp();
     }
 
-    private function build_header()
+    private function _build_header()
     {
         $sHeader = implode(PHP_EOL,$this->arHeaders);
         $this->sHeader = $sHeader;
     }
 
-    private function build_header_from()
+    private function _build_header_from()
     {
         if($this->sEmailFrom)
         {
@@ -222,13 +222,13 @@ class EmailComponent extends AEmail
         }
     }
 
-    private function build_header_cc()
+    private function _build_header_cc()
     {
         if($this->arEmailsCc)
             $this->arHeaders[] = "Cc: ".implode(", ",$this->arEmailsCc);
     }
 
-    private function build_header_bcc()
+    private function _build_header_bcc()
     {
         if($this->arEmailsBcc)
             $this->arHeaders[] = "Bcc: ".implode(", ",$this->arEmailsBcc);
