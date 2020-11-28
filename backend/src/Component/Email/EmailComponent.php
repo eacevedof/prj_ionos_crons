@@ -165,7 +165,7 @@ class EmailComponent extends AEmail
         return $this;
     }
 
-    private function _build_header()
+    private function _nomstp_header()
     {
         $header = implode(PHP_EOL,$this->headers);
         $this->header = $header;
@@ -183,7 +183,7 @@ class EmailComponent extends AEmail
             $this->_nosmtp_header_from()
                 ->_nosmtp_header_cc()
                 ->_nosmtp_header_bcc()
-                ->_build_header()
+                ->_nomstp_header()
             ;
 
             $this->emails_to = implode(", ",$this->emails_to);
