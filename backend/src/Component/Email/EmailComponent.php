@@ -127,6 +127,7 @@ class EmailComponent extends AEmail
             //do not ever try to call these lines in reverse order
             $armime = $this->_get_smtp_mime();
             $content = $objmime->get($armime);
+            $this->logpr($content,"content");
             $headers = $objmime->headers($this->headers);
 
             $this->logpr($headers,"headers");
