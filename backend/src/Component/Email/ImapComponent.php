@@ -1,7 +1,7 @@
 <?php
 namespace App\Component\Email;
 
-final class SmtpComponent extends AEmail
+final class ImapComponent extends AEmail
 {
     public function send()
     {
