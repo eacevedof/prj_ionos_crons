@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Component;
+namespace Tests\Unit\Component;
 
 use PHPUnit\Framework\TestCase;
 use App\Component\EmailComponent;
