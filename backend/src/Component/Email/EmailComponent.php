@@ -183,14 +183,15 @@ class EmailComponent extends AEmail
 
     private function _nosmtp_header_mime()
     {
+        $NL = "\r\n";
         $uid = uniqid();
         $this->headers = [
             "MIME-Version: 1.0",
-            //"Content-Type: text/html; charset=ISO-8859-1";
-            "Content-Type: multipart/mixed; boundary=\"$uid\"",
+            //"Content-Type: multipart/mixed; boundary=\"$uid\"",
             "This is a MIME encoded message.",
-            "--$uid",
+            //"--$uid",
 
+            //"Content-Type: text/html; charset=ISO-8859-1";
             "Content-Type: text/html; charset=UTF-8",
             //add boundary string and mime type specification
             "Content-Transfer-Encoding: 7bit",
@@ -272,7 +273,7 @@ class EmailComponent extends AEmail
                 foreach ($this->attachments as $arattach)
                     $this->content .= $this->_get_nosmtp_attachment($arattach);
 
-                $r = mail($this->emails_to, $this->subject, $this->content, $this->header);
+                $r = mail($this->emails_to, $this->subject, $this->content, $this->header, );
                 if($r===false)
                     $this->_add_error("Error sending email!");
             }
