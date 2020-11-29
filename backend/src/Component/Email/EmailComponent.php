@@ -132,7 +132,7 @@ class EmailComponent extends AEmail
         if(!is_file($pathfile)) return "";
 
         $mime = $arattach["mime"] ?? "application/octet-stream";
-        $alias = $arattach["alias"] ?? basename($pathfile);
+        $alias = $arattach["filename"] ?? basename($pathfile);
         $objmime->addAttachment($pathfile, $mime, $alias);
     }
 
@@ -232,7 +232,7 @@ class EmailComponent extends AEmail
         if(!is_file($pathfile)) return "";
 
         $mime = $arattach["mime"] ?? "application/octet-stream";
-        $alias = $arattach["alias"] ?? basename($pathfile);
+        $alias = $arattach["filename"] ?? basename($pathfile);
 
         $content = file_get_contents($pathfile);
         if(!$content) return "";
@@ -302,7 +302,7 @@ class EmailComponent extends AEmail
     public function add_bcc($stremail){$this->emails_bcc[]=$stremail; return $this;}
     public function set_nosmtp_header($header){$this->header = $header; return $this;}
     public function set_content($mxcontent){(is_array($mxcontent))? $this->content=implode(PHP_EOL,$mxcontent): $this->content = $mxcontent; return $this;}
-    public function add_attachment($arattach=["path"=>"","mime"=>"","alias"=>""]){$this->attachments[] = $arattach; return $this;}
+    public function add_attachment($arattach=["path"=>"","mime"=>"","filename"=>""]){$this->attachments[] = $arattach; return $this;}
 
     /**
      *  Required
