@@ -6,19 +6,47 @@ use function App\Functions\get_config;
 class EmailService extends ACommandService
 {
     private $emails;
-
+    private $data;
+    
     public function __construct()
     {
         $this->emails = get_config("emails");
+        $this->_load_params();
     }
 
+    private function _load_params()
+    {
+        $this->data["subject"] = $this->_get_param("s");
+        $this->data["content"] = $this->_get_param("c");
+        $this->data["path"] = $this->_get_param("p");
+    }
 
+    private function _send()
+    {
+        $this->logpr("emailservice._send");
+
+        $config = $this->emails["configs"][0];
+        $now = date("Y-m-d H:i:s");
+
+        $r = (new EmailComponent($config))
+            ->set_from($config["email"])
+            ->add_to($this->emails["contacts"][0])  //gmail
+            ->set_subject($this->data["subject"])
+            ->set_content($this->data["content"])
+            ->add_attachment([
+                "path"=>$this->data["path"],
+            ])
+            ->send()
+            ->get_errors()
+        ;
+        $this->logpr($r, "error?");
+    }
+    
     public function run()
     {
         $this->logpr("START EMAILSERVICE");
-        error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_STRICT);
-        //$this->_send_smtp();  //todo ok con 1 solo attach
-        $this->_send_phpmail();
+        //error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_STRICT);
+        $this->_send();
         $this->logpr("END EMAILSERVICE");
     }
 }
