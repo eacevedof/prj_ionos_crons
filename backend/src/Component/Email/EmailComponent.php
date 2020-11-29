@@ -281,8 +281,8 @@ class EmailComponent extends AEmail
             if($this->emails_to)
             {
                 $this->_phpmail_boundary()
-                    ->_phpmail_header_from()
                     ->_phpmail_header_mime()
+                    ->_phpmail_header_from()
                     ->_phpmail_header_cc()
                     ->_phpmail_header_bcc()
                     ->_phpmail_header()
