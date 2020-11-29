@@ -26,7 +26,7 @@ class ExampleTest extends TestCase
         print_r($result);
     }
 
-    public function test_key_value_sin_comillas_2()
+    public function est_key_value_sin_comillas_2()
     {
         $keypattern = self::KEY_PATTERN;
         $strkeyval = "ABCDEFFG=IKASF343080??DFK=MXDIYRHN=IUH";
