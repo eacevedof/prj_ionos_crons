@@ -271,9 +271,8 @@ class EmailComponent extends AEmail
         $body[] = "";
         $body[] = "--$separator";
         $body[] = "Content-Type: $mime; name=\"$alias\"";
-        $body[] = "Content-Disposition: attachment; ";
-        $body[] = "filename=\"$alias\"";
         $body[] = "Content-Transfer-Encoding: base64";
+        $body[] = "Content-Disposition: attachment; ";
         $body[] = $content;
         $body[] = "--$separator--";
         $body[] = "";
