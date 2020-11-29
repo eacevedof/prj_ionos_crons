@@ -5,24 +5,29 @@ use function App\Functions\get_config;
 
 class EmailService extends ACommandService
 {
+    private $emails;
+
+    public function __construct()
+    {
+        $this->emails = get_config("emails");
+    }
 
     private function _send_smtp()
     {
         $this->logpr("emailservice._send_smptp");
-        $emails = get_config("emails");
 
-        $config = $emails["configs"][0];
-        $contact = $emails["contacts"][0];
+        $config = $this->emails["configs"][0];
+        $now = date("Y-m-d H:i:s");
 
         $r = (new EmailComponent($config))
             //si no se pone from no se hace el envio, si se pone uno distinto aplica
             //el usuario en la config de smtp
-            ->set_from($emails["contacts"][1])
-            ->add_to($contact)                  //hotmail
-            ->add_cc($emails["contact"][0])     //gmail
-            ->add_bcc($emails["contacts"][2])   //yahoo
-            ->set_subject("PRUEBA SMTP 1")
-            ->set_content("PRUEBA CONTENT")
+            ->set_from($this->emails["contacts"][1])
+            ->add_to($this->emails["contacts"][0])      //hotmail
+            ->add_cc($this->emails["contacts"][1])      //gmail
+            ->add_bcc($this->emails["contacts"][2])     //yahoo
+            ->set_subject("PRUEBA SMTP 1 $now")
+            ->set_content("PRUEBA CONTENT 1 $now")
             ->send()
             ->get_errors()
         ;
@@ -33,7 +38,21 @@ class EmailService extends ACommandService
     private function _send_phpmail()
     {
         $this->logpr("emailservice._send_phpmail");
-        $this->logpr("emailservice._send_phpmail result");
+        $now = date("Y-m-d H:i:s");
+
+        $r = (new EmailComponent())
+            ->set_from($this->emails["contacts"][1])
+            ->set_title_from("No Relpy")
+            ->add_to($this->emails["contacts"][0])      //hotmail
+            ->add_cc($this->emails["contacts"][1])      //gmail
+            ->add_bcc($this->emails["contacts"][2])     //yahoo
+            ->set_subject("PRUEBA SMTP 1 $now")
+            ->set_content("PRUEBA CONTENT 1 $now")
+            ->send()
+            ->get_errors()
+        ;
+        if(!$r) $r = "OK";
+        $this->logpr($r,"emailservice._send_phpmail result");
     }
 
     public function run()
