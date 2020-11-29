@@ -20,4 +20,6 @@ abstract class ACommandService implements ICommand
     }
 
     protected function _get_param($key){return $this->argv[$key] ?? null;}
+
+    protected function _get_request($key){return $_REQUEST[$key] ?? null;}
 }
