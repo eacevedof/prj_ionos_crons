@@ -208,10 +208,32 @@ class EmailComponent extends AEmail
         $header = implode(PHP_EOL,$this->headers);
         $this->header = $header;
     }
-    
+
+    private function _nosmtp_attachment(array $arattach)
+    {
+        $pathfile = $arattach["path"];
+        $mime = $arattach["mime"];
+        $alias = $arattach["alias"];
+
+        $content = file_get_contents($pathfile);
+        $content = chunk_split(base64_encode($content));
+
+        // a random hash will be necessary to send mixed content
+        $separator = md5(time());
+
+        $body = "-- $separator" . PHP_EOL;
+        $body .= "Content-Type: $mime; name=\"$alias\"" . PHP_EOL;
+        $body .= "Content-Transfer-Encoding: base64" . PHP_EOL;
+        $body .= "Content-Disposition: attachment" . PHP_EOL;
+        $body .= $content . PHP_EOL;
+        $body .= "--$separator--";
+
+        return $body;
+    }
+
     private function _send_nosmtp()
     {
-        $this->log("_send_nosmtp()");
+        //$this->log("_send_nosmtp()");
         if($this->emails_to)
         {
             $this->_nosmtp_header_mime()
@@ -222,13 +244,6 @@ class EmailComponent extends AEmail
             ;
 
             $this->emails_to = implode(", ",$this->emails_to);
-
-            //TRUE if success
-            /*
-            telnet 127.0.0.1 25
-            220 eduardosvc ESMTP Sendmail 8.14.4/8.14.4/Debian-4.1ubuntu1; Thu, 25 Feb 2016 10:47:44 +0100; 
-            (No UCE/UBE) logging access from: caser.loc(OK)-caser.loc [127.0.0.1]
-            */
             $this->log("antes de llamar a funcion mail");
             $r = mail($this->emails_to, $this->subject, $this->content, $this->header);
             $this->log($r,"email result");
@@ -258,7 +273,7 @@ class EmailComponent extends AEmail
     public function add_bcc($stremail){$this->emails_bcc[]=$stremail; return $this;}
     public function set_nosmtp_header($header){$this->header = $header; return $this;}
     public function set_content($mxcontent){(is_array($mxcontent))? $this->content=implode(PHP_EOL,$mxcontent): $this->content = $mxcontent; return $this;}
-    public function add_attachment($arattach=["path"=>"","mime"=>"","as-file"=>""]){$this->attachments[] = $arattach; return $this;}
+    public function add_attachment($arattach=["path"=>"","mime"=>"","alias"=>""]){$this->attachments[] = $arattach; return $this;}
 
     /**
      *  Required
