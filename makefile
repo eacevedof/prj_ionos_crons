@@ -5,7 +5,7 @@ ifeq ($(OS),Darwin)
 else ifeq ($(OS),Linux)
 	phpexe := "/usr/bin/php7.4-cli"
 else
-
+	#windows
 endif
 
 server:
