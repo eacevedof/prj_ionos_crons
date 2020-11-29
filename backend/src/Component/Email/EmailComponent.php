@@ -116,6 +116,7 @@ class EmailComponent extends AEmail
         if(trim($this->headers["Bcc"] ?? "")!=="")
             $to[] = $this->headers["Bcc"];
 
+        unset($this->headers["Bcc"]);
         $r = implode(", ",$to);
         return $r;
     }
