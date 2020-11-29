@@ -18,8 +18,9 @@ class EmailService extends ACommandService
             //si no se pone from no se hace el envio, si se pone uno distinto aplica
             //el usuario en la config de smtp
             ->set_from($emails["contacts"][1])
-            ->add_to($contact)  //hotmail
-            ->add_bcc($emails["contacts"][2]) //yahoo
+            ->add_to($contact)                  //hotmail
+            ->add_cc($emails["contact"][0])     //gmail
+            ->add_bcc($emails["contacts"][2])   //yahoo
             ->set_subject("PRUEBA SMTP 1")
             ->set_content("PRUEBA CONTENT")
             ->send()

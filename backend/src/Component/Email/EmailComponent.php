@@ -97,7 +97,6 @@ class EmailComponent extends AEmail
         $this->headers["Subject"] = $this->subject;
 
         //$this->headers["Replay-To"] = $this->emails_to;
-        //$this->logpr($this->headers,"smtpheaderrs");
     }
 
     private function _get_smtp_mime()
