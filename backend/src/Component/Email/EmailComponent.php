@@ -209,7 +209,7 @@ class EmailComponent extends AEmail
         $this->header = $header;
     }
 
-    private function _nosmtp_attachment(array $arattach)
+    private function _get_nosmtp_attachment(array $arattach)
     {
         //https://stackoverflow.com/questions/12301358/send-attachments-with-php-mail
         $pathfile = $arattach["path"];
@@ -250,7 +250,7 @@ class EmailComponent extends AEmail
 
                 $this->emails_to = implode(", ",$this->emails_to);
                 foreach ($this->attachments as $arattach)
-                    $this->content .= $this->_nosmtp_attachment($arattach);
+                    $this->content .= $this->_get_nosmtp_attachment($arattach);
 
                 $r = mail($this->emails_to, $this->subject, $this->content, $this->header);
                 if($r===false)
