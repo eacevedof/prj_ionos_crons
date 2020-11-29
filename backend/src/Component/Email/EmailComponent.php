@@ -194,7 +194,7 @@ class EmailComponent extends AEmail
             //"Content-Type: text/html; charset=ISO-8859-1";
             "Content-Type: text/html; charset=UTF-8",
             //add boundary string and mime type specification
-            "Content-Transfer-Encoding: 7bit",
+            "Content-Transfer-Encoding: 8bit",
         ];
         return $this;
     }
