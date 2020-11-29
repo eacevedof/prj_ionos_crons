@@ -16,9 +16,8 @@ abstract class ACommandService implements ICommand
     {
         $this->projects = get_config("projects");
         $this->services = get_config("services");
-        $this->argv =( new Console($_REQUEST))->get_request();
+        $this->argv = (new Console($_REQUEST))->get_request();
     }
 
     protected function _get_param($key){return $this->argv[$key] ?? null;}
-
 }
