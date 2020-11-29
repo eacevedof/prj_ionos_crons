@@ -241,7 +241,7 @@ class EmailComponent extends AEmail
     private function _get_phpmail_multipart()
     {
         if(!$this->boundary) return "";
-        $content[] = $this->boundary;
+        $content[] = "--$this->boundary";
         $content[] = "Content-Type:text/html; charset=\"utf-8\"";
         $content[] = "Content-Transfer-Encoding: 8bit";
         return implode(PHP_EOL, $content);
