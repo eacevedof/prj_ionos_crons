@@ -203,12 +203,9 @@ class EmailComponent extends AEmail
 
     private function _phpmail_header_from()
     {
-        if($this->email_from)
-        {
-            $this->headers[] = "From: $this->title_from <$this->email_from>";
-            $this->headers[] = "Return-Path: <$this->email_from>";
-            $this->headers[] = "X-Sender: $this->email_from";
-        }
+        $this->headers[] = "From: $this->title_from <$this->email_from>";
+        $this->headers[] = "Return-Path: <$this->email_from>";
+        $this->headers[] = "X-Sender: $this->email_from";
         return $this;
     }
 
@@ -279,7 +276,7 @@ class EmailComponent extends AEmail
     private function _send_phpmail()
     {
         try {
-            if($this->emails_to)
+            if($this->email_from && $this->emails_to)
             {
                 $this->_phpmail_boundary()
                     ->_phpmail_header_from()
