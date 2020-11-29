@@ -20,6 +20,7 @@ return [
     "excludeip"                 => "App\\Services\\Command\\ExcludeIpService",
     "cleanrequest"              => "App\\Services\\Command\\CleanRequestService",
     "check-dbconn"              => "App\\Services\\Command\\CheckDbConnService",
+    "check-domain"              => "App\\Services\\Command\\CheckDomainService",
     "env"                       => "App\\Services\\Command\\EnvService",
     "email"                     => "App\\Services\\Command\\EmailService",
 ];

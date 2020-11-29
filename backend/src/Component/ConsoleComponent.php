@@ -18,11 +18,11 @@ final class ConsoleComponent
     private function _get_key($strkeyval)
     {
         //https://regex101.com/
-        $result = [];
+        $status = [];
         $keypattern = self::KEY_PATTERN;
-        preg_match_all("#$keypattern#sim", $strkeyval,$result);
-        #print_r($result);
-        return $result[0][0] ?? "";
+        preg_match_all("#$keypattern#sim", $strkeyval,$status);
+        #print_r($status);
+        return $status[0][0] ?? "";
     }
 
     private function _get_keycleaned($key)
@@ -64,5 +64,16 @@ final class ConsoleComponent
             $this->request[$param["key"]] = $param["value"];
         }
         return $this->request;
+    }
+    
+    public static function exec($cmd)
+    {
+        $output = null;
+        $status = null;
+        exec($cmd, $output, $status);
+        return [
+            "output" => $output,
+            "status" => $status===0 ? "ok" : "nok",
+        ];
     }
 }
