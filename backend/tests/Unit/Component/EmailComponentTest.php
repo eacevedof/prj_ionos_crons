@@ -2,7 +2,7 @@
 namespace Tests\Unit\Component;
 
 use PHPUnit\Framework\TestCase;
-use App\Component\EmailComponent;
+use App\Component\Email\EmailComponent;
 use function App\Functions\get_config;
 use App\Traits\LogTrait as Log;
 
