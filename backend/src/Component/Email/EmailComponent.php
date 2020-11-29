@@ -273,8 +273,8 @@ class EmailComponent extends AEmail
                 foreach ($this->attachments as $arattach)
                     $this->content .= $this->_get_nosmtp_attachment($arattach);
 
-                $this->logpr($this->content,"content");
-                $this->logpr($this->header, "header");
+                $this->logpr($this->content,"BODY ->");
+                $this->logpr($this->header, "HEADER ->");
                 $r = mail($this->emails_to, $this->subject, $this->content, $this->header);
                 if(!$r)
                     $this->_add_error("Error sending email!");
