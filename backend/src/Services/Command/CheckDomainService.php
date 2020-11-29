@@ -46,7 +46,7 @@ final class CheckDomainService extends ACommandService
                 $r = Console::exec($cmd);
                 $this->logpr($r,$domain);
                 sleep(1);
-                $this->result[] = $r;
+                $this->result[$domain] = $r;
             }
         }
         $this->_send();
