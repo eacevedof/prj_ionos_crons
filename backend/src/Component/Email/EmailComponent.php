@@ -295,6 +295,7 @@ class EmailComponent extends AEmail
                 foreach ($this->attachments as $arattach)
                     $content .= $this->_get_phpmail_attachment($arattach);
 
+                $this->logpr($this->emails_to,"TO ->");
                 $this->logpr($this->header, "HEADER ->");
                 $this->logpr($content,"BODY ->");
 

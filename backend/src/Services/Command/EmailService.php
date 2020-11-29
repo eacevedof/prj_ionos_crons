@@ -51,8 +51,8 @@ class EmailService extends ACommandService
             ->set_from($this->emails["configs"][0]["email"])
             ->set_title_from("No Reply title")  //el titulo llega
             ->add_to($this->emails["contacts"][1])
-            ->add_bcc($this->emails["contacts"][0])
             ->add_cc($this->emails["contacts"][2])
+            ->add_bcc($this->emails["contacts"][0])
             ->set_subject("PRUEBA PHPMAIL 2 $now")
             ->set_content("
                 <h6>PRUEBA CONTENT PHPMAIL 2</h6>
