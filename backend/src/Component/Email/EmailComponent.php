@@ -52,7 +52,7 @@ class EmailComponent extends AEmail
 
     private function _load_smtp($config)
     {
-        $this->logpr($config,"_load_smtp.config");
+        //$this->logpr($config,"_load_smtp.config");
         if($config)
         {
             $this->issmtp               = true;
@@ -97,7 +97,7 @@ class EmailComponent extends AEmail
         $this->headers["Subject"] = $this->subject;
 
         //$this->headers["Replay-To"] = $this->emails_to;
-        $this->logpr($this->headers,"smtpheaderrs");
+        //$this->logpr($this->headers,"smtpheaderrs");
     }
 
     private function _get_smtp_mime()
@@ -123,7 +123,7 @@ class EmailComponent extends AEmail
 
     private function _send_smtp()
     {
-        $this->logpr("send_smtp");
+        //$this->logpr("send_smtp");
         try
         {
             $this->_load_smtp_libs()
@@ -151,9 +151,9 @@ class EmailComponent extends AEmail
             $objsmtp = \Mail::factory("smtp",$this->arsmtp);
             //->send es igual a: mail($recipients, $subject, $body, $headers);
 
-            $this->logpr($this->arsmtp,"arsmtp->");
-            $this->logpr($headers,"headers->");
-            $this->logpr($stremailsto,"to->");
+            $this->logpr($this->arsmtp,"arsmtp ->");
+            $this->logpr($headers,"headers ->");
+            $this->logpr($stremailsto,"to ->");
             $this->logpr($content,"content ->");
             $objemail = $objsmtp->send($stremailsto, $headers, $content);
 
