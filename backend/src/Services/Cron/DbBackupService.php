@@ -18,7 +18,9 @@ final class DbBackupService extends ACronService
         $today = date("Ymd");
         $min = "{$today}030000";
         $max = "{$today}040000";
-        if($now<$min || $now>$max) die("Out of time");
+        if(!$this->_get_param("force"))
+            if($now<$min || $now>$max) die("Out of time");
+
         return [
             "min"=>$min, "max"=>$max
         ];
