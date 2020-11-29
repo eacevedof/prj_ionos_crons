@@ -141,13 +141,10 @@ class EmailComponent extends AEmail
             //do not ever try to call these lines in reverse order
             $armime = $this->_get_smtp_mime();
             $content = $objmime->get($armime);
-            //$this->logpr($content,"content");
-            $headers = $objmime->headers($this->headers);
 
-            //$this->logpr($headers,"headers");
             //la única forma de enviar con copia oculta es añadirlo a los receptores
             $stremailsto = $this->_get_smtp_to();
-
+            $headers = $objmime->headers($this->headers);
             $objsmtp = \Mail::factory("smtp",$this->arsmtp);
             //->send es igual a: mail($recipients, $subject, $body, $headers);
 
