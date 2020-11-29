@@ -184,12 +184,7 @@ class EmailComponent extends AEmail
     {
         $this->headers = [
             "MIME-Version: 1.0",
-            //"Content-Type: multipart/mixed; boundary=\"$uid\"",
-            //"This is a MIME encoded message.",
-            //"--$uid",
-            //"Content-Type: text/html; charset=ISO-8859-1";
             "Content-Type: text/html; charset=UTF-8",
-            //add boundary string and mime type specification
             "Content-Transfer-Encoding: 8bit",
         ];
 
@@ -198,7 +193,7 @@ class EmailComponent extends AEmail
             $this->headers = [
                 "MIME-Version: 1.0",
                 "Content-Type: multipart/mixed; boundary=\"$this->boundary\"",
-                "Content-Transfer-Encoding: 7bit",
+                "Content-Transfer-Encoding: 8bit",
                 "This is a MIME encoded message."
             ];
         }
