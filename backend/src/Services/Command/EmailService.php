@@ -52,7 +52,7 @@ class EmailService extends ACommandService
             ->set_title_from("No Reply title")  //el titulo llega
             ->add_to($this->emails["contacts"][0])      //hotmail
             ->add_cc($this->emails["contacts"][1])      //gmail
-            ->add_bcc($this->emails["contacts"][2])     //yahoo
+            ->add_cc($this->emails["contacts"][2])     //yahoo
             ->set_subject("PRUEBA PHPMAIL 2 $now")
             ->set_content("
                 <h6>PRUEBA CONTENT PHPMAIL 2</h6>
