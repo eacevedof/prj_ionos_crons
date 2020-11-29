@@ -194,7 +194,7 @@ class EmailComponent extends AEmail
             $headers = [
                 "MIME-Version: 1.0",
                 "Content-Type: multipart/mixed; boundary=\"$this->boundary\"",
-                "Content-Transfer-Encoding: 8bit",
+                "Content-Transfer-Encoding: 7bit",
                 "This is a MIME encoded message."
             ];
         }
