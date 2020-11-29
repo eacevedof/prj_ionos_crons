@@ -10,23 +10,24 @@ class EmailService extends ACommandService
     
     public function __construct()
     {
+        parent::__construct();
         $this->emails = get_config("emails");
         $this->_load_params();
     }
 
     private function _load_params()
     {
-        $this->data["subject"] = $this->_get_param("s");
-        $this->data["content"] = $this->_get_param("c");
-        $this->data["path"] = $this->_get_param("p");
+        $this->data["subject"] = $this->_get_arg("s");
+        $this->data["content"] = $this->_get_arg("c");
+        $this->data["path"] = $this->_get_arg("p");
     }
 
     private function _send()
     {
         $this->logpr("emailservice._send");
+        $this->logpr($this->data,"data");die;
 
         $config = $this->emails["configs"][0];
-        $now = date("Y-m-d H:i:s");
 
         $r = (new EmailComponent($config))
             ->set_from($config["email"])
