@@ -34,7 +34,25 @@ final class CheckDomainService extends ACommandService
         ;
         $this->logpr($r,"is error?");
     }
-    
+
+    private function _clean_ok()
+    {
+        $noks = [];
+        $errors = ["HTTP/1.1 403 Forbidden","HTTP/1.1 404 Not Found","HTTP/1.1 301 Moved Permanently"];
+        foreach ($this->result as $domain=>$result)
+        {
+            if($result["status"] === "nok")
+            {
+                $noks[$domain] = $result;
+            }
+            elseif (!$result["output"][0] || in_array($result["output"][0],$errors))
+            {
+                $noks[$domain] = $result;
+            }
+        }
+        $this->result = $noks;
+    }
+
     public function run()
     {
         $this->_loader();
@@ -42,13 +60,15 @@ final class CheckDomainService extends ACommandService
         {
             foreach ($domains as $domain)
             {
-                $cmd = "curl -I $domain";
+                $url = "$prot://$domain";
+                $cmd = "curl -I $url";
                 $r = Console::exec($cmd);
-                $this->logpr($r,$domain);
+                $this->logpr($r,$cmd);
                 sleep(1);
                 $this->result[$domain] = $r;
             }
         }
+        $this->_clean_ok();
         $this->_send();
     }
 }
