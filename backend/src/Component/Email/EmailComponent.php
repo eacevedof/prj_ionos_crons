@@ -188,7 +188,7 @@ class EmailComponent extends AEmail
         $this->headers = [
             "MIME-Version: 1.0",
             //"Content-Type: multipart/mixed; boundary=\"$uid\"",
-            "This is a MIME encoded message.",
+            //"This is a MIME encoded message.",
             //"--$uid",
 
             //"Content-Type: text/html; charset=ISO-8859-1";
