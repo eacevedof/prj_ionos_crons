@@ -198,6 +198,8 @@ class EmailComponent extends AEmail
             $this->headers = [
                 "MIME-Version: 1.0",
                 "Content-Type: multipart/mixed; boundary=\"$this->boundary\"",
+                "Content-Transfer-Encoding: 7bit",
+                "This is a MIME encoded message."
             ];
         }
         return $this;
@@ -238,8 +240,17 @@ class EmailComponent extends AEmail
     private function _phpmail_boundary()
     {
         if($this->attachments)
-            $this->boundary = "==Multipart_Boundary_x".md5(uniqid())."x";
+            $this->boundary = md5(uniqid());
         return $this;
+    }
+
+    private function _get_phpmail_multipart()
+    {
+        if(!$this->boundary) return "";
+        $content[] = $this->boundary;
+        $content[] = "Content-Type:text/html; charset=\"utf-8\"";
+        $content[] = "Content-Transfer-Encoding: 8bit";
+        return implode(PHP_EOL, $content);
     }
 
     private function _get_phpmail_attachment(array $arattach)
@@ -264,29 +275,21 @@ class EmailComponent extends AEmail
         $body[] = "filename=\"$alias\"";
         $body[] = "Content-Transfer-Encoding: base64";
         $body[] = $content;
-        $body[] = "--$separator";
+        $body[] = "--$separator--";
         $body[] = "";
 
         return implode(PHP_EOL, $body);
     }
 
-    private function _get_phpmail_multipart()
-    {
-        if(!$this->boundary) return "";
-        $content[] = "This is a multi-part message in MIME format.".PHP_EOL;
-        $content[] = $this->boundary;
-        $content[] = "Content-Type:text/html; charset=\"UTF-8\"";
-        $content[] = "Content-Transfer-Encoding: 7bit";
-        return implode(PHP_EOL, $content);
-    }
+
     private function _send_phpmail()
     {
         try {
             if($this->emails_to)
             {
                 $this->_phpmail_boundary()
-                    ->_phpmail_header_mime()
                     ->_phpmail_header_from()
+                    ->_phpmail_header_mime()
                     ->_phpmail_header_cc()
                     ->_phpmail_header_bcc()
                     ->_phpmail_header()
@@ -303,8 +306,10 @@ class EmailComponent extends AEmail
 
                 $this->emails_to = implode(", ",$this->emails_to);
                 $r = mail($this->emails_to, $this->subject, $content, $this->header);
-                if(!$r)
+                if(!$r) {
                     $this->_add_error("Error sending email!");
+                    $this->_add_error(error_get_last());
+                }
             }
             else
             {
