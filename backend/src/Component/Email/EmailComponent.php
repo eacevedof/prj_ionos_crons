@@ -232,6 +232,7 @@ class EmailComponent extends AEmail
 
     private function _get_nosmtp_attachment(array $arattach)
     {
+        return "";
         //https://stackoverflow.com/questions/12301358/send-attachments-with-php-mail
         $pathfile = $arattach["path"];
         if(!is_file($pathfile)) return "";
@@ -246,6 +247,7 @@ class EmailComponent extends AEmail
         // a random hash will be necessary to send mixed content
         $separator = md5(time());
 
+        $body[] = "";
         $body[] = "-- $separator";
         $body[] = "Content-Type: $mime; name=\"$alias\"";
         $body[] = "Content-Transfer-Encoding: base64";
@@ -276,7 +278,7 @@ class EmailComponent extends AEmail
                 $this->logpr($this->content,"content");
                 $this->logpr($this->header, "header");
                 $r = mail($this->emails_to, $this->subject, $this->content, $this->header);
-                if($r===false)
+                if(!$r)
                     $this->_add_error("Error sending email!");
             }
             else
