@@ -58,7 +58,7 @@ class EmailComponent extends AEmail
             $this->issmtp               = true;
             $this->arsmtp["host"]       = $config["host"] ?? "";
             $this->arsmtp["port"]       = $config["port"] ?? "25";
-            $this->arsmtp["auth"]       = $config["auth"] ?? true;;
+            $this->arsmtp["auth"]       = false;//$config["auth"] ?? true;;
             $this->arsmtp["username"]   = $config["username"] ?? "";
             $this->arsmtp["password"]   = $config["password"] ?? "";
             $this->arsmtp["debug"]      = $config["debug"] ?? false;
@@ -127,15 +127,18 @@ class EmailComponent extends AEmail
             //do not ever try to call these lines in reverse order
             $armime = $this->_get_smtp_mime();
             $content = $objmime->get($armime);
-            $this->logpr($content,"content");
+            //$this->logpr($content,"content");
             $headers = $objmime->headers($this->headers);
 
-            $this->logpr($headers,"headers");
+            //$this->logpr($headers,"headers");
             //la única forma de enviar con copia oculta es añadirlo a los receptores
             $stremailsto = $headers["To"]; //.", ".implode(",",$this->emails_bcc);
 
             $objsmtp = \Mail::factory("smtp",$this->arsmtp);
             //->send es igual a: mail($recipients, $subject, $body, $headers);
+
+            $this->logpr($this->arsmtp,"arsmtp->");
+            $this->logpr($headers,"headers->");
             $this->logpr($stremailsto,"to->");
             $this->logpr($content,"content ->");
             $objemail = $objsmtp->send($stremailsto, $headers, $content);
