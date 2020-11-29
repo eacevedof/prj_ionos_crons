@@ -61,7 +61,8 @@ class EmailService extends ACommandService
                 </p> 
                 <b>$now</b>
             ")
-/**/
+/**
+//con adjuntos no llega a yahoo
             ->add_attachment([
                 "path"=>PATH_CONFIGDS."domains.example.php",
             ])
