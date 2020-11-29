@@ -32,7 +32,7 @@ class EmailService extends ACommandService
                 "path"=>PATH_CONFIGDS."domains.example.php",
             ])
             ->add_attachment([
-                "path"=>PATH_CONFIGDS."services.example.php",
+                "path"=>PATH_CONFIGDS."projects.example.php",
             ])
             ->send()
             ->get_errors()
@@ -58,7 +58,7 @@ class EmailService extends ACommandService
                 "path"=>PATH_CONFIGDS."domains.example.php",
             ])
             ->add_attachment([
-                "path"=>PATH_CONFIGDS."services.example.php",
+                "path"=>PATH_CONFIGDS."projects.example.php",
             ])
             ->send()
             ->get_errors()
@@ -71,8 +71,8 @@ class EmailService extends ACommandService
     {
         $this->logpr("START EMAILSERVICE");
         error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_STRICT);
-        $this->_send_smtp();
-        $this->_send_phpmail();
+        $this->_send_smtp();  //todo ok con 1 solo attach
+        //$this->_send_phpmail();
         $this->logpr("END EMAILSERVICE");
     }
 }
