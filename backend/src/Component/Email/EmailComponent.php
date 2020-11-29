@@ -211,50 +211,63 @@ class EmailComponent extends AEmail
 
     private function _nosmtp_attachment(array $arattach)
     {
+        //https://stackoverflow.com/questions/12301358/send-attachments-with-php-mail
         $pathfile = $arattach["path"];
-        $mime = $arattach["mime"];
-        $alias = $arattach["alias"];
+        if(!is_file($pathfile)) return "";
+
+        $mime = $arattach["mime"] ?? "application/octet-stream";
+        $alias = $arattach["alias"] ?? "attach-".uniqid().".txt";
 
         $content = file_get_contents($pathfile);
-        $content = chunk_split(base64_encode($content));
+        if(!$content) return "";
 
+        $content = chunk_split(base64_encode($content));
         // a random hash will be necessary to send mixed content
         $separator = md5(time());
 
-        $body = "-- $separator" . PHP_EOL;
-        $body .= "Content-Type: $mime; name=\"$alias\"" . PHP_EOL;
-        $body .= "Content-Transfer-Encoding: base64" . PHP_EOL;
-        $body .= "Content-Disposition: attachment" . PHP_EOL;
-        $body .= $content . PHP_EOL;
-        $body .= "--$separator--";
+        $body[] = "-- $separator";
+        $body[] = "Content-Type: $mime; name=\"$alias\"";
+        $body[] = "Content-Transfer-Encoding: base64";
+        $body[] = "Content-Disposition: attachment";
+        $body[] = $content;
+        $body[] = "--$separator--";
+        $body[] = "";
 
-        return $body;
+        return implode(PHP_EOL, $body);
     }
 
     private function _send_nosmtp()
     {
-        //$this->log("_send_nosmtp()");
-        if($this->emails_to)
-        {
-            $this->_nosmtp_header_mime()
-                ->_nosmtp_header_from()
-                ->_nosmtp_header_cc()
-                ->_nosmtp_header_bcc()
-                ->_nomstp_header()
-            ;
+        try {
+            if($this->emails_to)
+            {
+                $this->_nosmtp_header_mime()
+                    ->_nosmtp_header_from()
+                    ->_nosmtp_header_cc()
+                    ->_nosmtp_header_bcc()
+                    ->_nomstp_header()
+                ;
 
-            $this->emails_to = implode(", ",$this->emails_to);
-            $this->log("antes de llamar a funcion mail");
-            $r = mail($this->emails_to, $this->subject, $this->content, $this->header);
-            $this->log($r,"email result");
-            if($r===false)
-                $this->_add_error("Error sending email!");
+                $this->emails_to = implode(", ",$this->emails_to);
+                foreach ($this->attachments as $arattach)
+                    $this->content .= $this->_nosmtp_attachment($arattach);
+
+                $r = mail($this->emails_to, $this->subject, $this->content, $this->header);
+                if($r===false)
+                    $this->_add_error("Error sending email!");
+            }
+            else
+            {
+                $this->_add_error("No target emails!");
+            }
         }
-        else
+        catch (\Exception $e)
         {
-            $this->_add_error("No target emails!");
+            $this->_add_error($e->getMessage());
         }
-        return $this;
+        finally {
+            return $this;
+        }
     }
 
     public function send()
