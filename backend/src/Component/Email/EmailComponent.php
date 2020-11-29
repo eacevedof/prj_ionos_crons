@@ -243,7 +243,7 @@ class EmailComponent extends AEmail
 
         $content = chunk_split(base64_encode($content));
         // a random hash will be necessary to send mixed content
-        $separator = md5(time());
+        $separator = md5(uniqid());
 
         $body[] = "";
         $body[] = "--$separator";
