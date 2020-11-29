@@ -58,7 +58,7 @@ class EmailComponent extends AEmail
             $this->issmtp               = true;
             $this->arsmtp["host"]       = $config["host"] ?? "";
             $this->arsmtp["port"]       = $config["port"] ?? "25";
-            $this->arsmtp["auth"]       = false;//$config["auth"] ?? true;;
+            $this->arsmtp["auth"]       = $config["auth"] ?? true;;
             $this->arsmtp["username"]   = $config["username"] ?? "";
             $this->arsmtp["password"]   = $config["password"] ?? "";
             $this->arsmtp["debug"]      = $config["debug"] ?? false;
