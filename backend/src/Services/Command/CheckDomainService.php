@@ -24,7 +24,11 @@ final class CheckDomainService extends ACommandService
             ->set_from($config["email"])
             ->add_to($this->emails["contacts"][0])  //gmail
             ->set_subject("Check Doamin Service $now")
-            ->set_content(print_r($this->result,1))
+            ->set_content(
+                "<pre>".
+                print_r($this->result,1)
+                ."</pre>"
+            )
             ->send()
             ->get_errors()
         ;
@@ -34,13 +38,16 @@ final class CheckDomainService extends ACommandService
     public function run()
     {
         $this->_loader();
-        foreach ($this->domains as $domain)
+        foreach ($this->domains as $prot => $domains)
         {
-            $cmd = "curl -I $domain";
-            $r = Console::exec($cmd);
-            $this->logpr($r,$domain);
-            sleep(1);
-            $this->result[] = $r;
+            foreach ($domains as $domain)
+            {
+                $cmd = "curl -I $domain";
+                $r = Console::exec($cmd);
+                $this->logpr($r,$domain);
+                sleep(1);
+                $this->result[] = $r;
+            }
         }
         $this->_send();
     }
