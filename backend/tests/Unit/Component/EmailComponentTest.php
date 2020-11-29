@@ -76,6 +76,7 @@ class EmailComponentTest extends TestCase
             ->send()
             ->get_errors()
         ;
+        $this->logpr($r, "test_phpmail");
         $this->assertEmpty($r);
     }
 
