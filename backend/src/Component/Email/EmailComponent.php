@@ -231,7 +231,6 @@ class EmailComponent extends AEmail
 
     private function _get_nosmtp_attachment(array $arattach)
     {
-        return "";
         //https://stackoverflow.com/questions/12301358/send-attachments-with-php-mail
         $pathfile = $arattach["path"];
         if(!is_file($pathfile)) return "";
