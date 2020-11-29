@@ -242,7 +242,7 @@ class EmailComponent extends AEmail
     {
         if(!$this->boundary) return "";
         $content[] = "--$this->boundary";
-        $content[] = "Content-Type:text/html; charset=\"utf-8\"";
+        $content[] = "Content-Type: text/html; charset=UTF-8";
         $content[] = "Content-Transfer-Encoding: 8bit";
         return implode(PHP_EOL, $content);
     }
