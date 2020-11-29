@@ -3,9 +3,7 @@ namespace App\Component\Email;
 
 class EmailComponent extends AEmail
 {
-
-    private $title_from;
-    private $email_from;
+    private $headers;
 
     private $emails_to;
     private $emails_cc;
@@ -14,9 +12,11 @@ class EmailComponent extends AEmail
     private $subject;
     private $content;
 
-    //no smtp
-    private $headers;
+    //php-mail
+    private $title_from;
+    private $email_from;
     private $header;
+    private $boundary;
 
     //smtp
     private $issmtp;
@@ -223,9 +223,9 @@ class EmailComponent extends AEmail
         return $this;
     }
 
-    private function _nomstp_header()
+    private function _nosmtp_header()
     {
-        $header = implode(PHP_EOL,$this->headers);
+        $header = implode(PHP_EOL, $this->headers);
         $this->header = $header;
     }
 
@@ -266,7 +266,7 @@ class EmailComponent extends AEmail
                     ->_nosmtp_header_from()
                     ->_nosmtp_header_cc()
                     ->_nosmtp_header_bcc()
-                    ->_nomstp_header()
+                    ->_nosmtp_header()
                 ;
 
                 $this->emails_to = implode(", ",$this->emails_to);
