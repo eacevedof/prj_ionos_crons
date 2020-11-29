@@ -42,7 +42,7 @@ class EmailService extends ACommandService
 
         $r = (new EmailComponent())
             ->set_from($this->emails["contacts"][1])
-            ->set_title_from("No Relpy")
+            ->set_title_from("No Reply title")
             ->add_to($this->emails["contacts"][0])      //hotmail
             ->add_cc($this->emails["contacts"][1])      //gmail
             ->add_bcc($this->emails["contacts"][2])     //yahoo
