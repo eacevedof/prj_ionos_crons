@@ -28,6 +28,12 @@ class EmailService extends ACommandService
             ->add_bcc($this->emails["contacts"][2])     //yahoo
             ->set_subject("PRUEBA SMTP 1 $now")
             ->set_content("PRUEBA CONTENT 1 $now")
+            ->add_attachment([
+                "path"=>PATH_CONFIGDS."domains.example.php",
+            ])
+            ->add_attachment([
+                "path"=>PATH_CONFIGDS."services.example.php",
+            ])
             ->send()
             ->get_errors()
         ;
@@ -41,13 +47,19 @@ class EmailService extends ACommandService
         $now = date("Y-m-d H:i:s");
 
         $r = (new EmailComponent())
-            ->set_from($this->emails["contacts"][1])
-            ->set_title_from("No Reply title")
+            ->set_from($this->emails["contacts"][1]) //aqui si se disfraza
+            ->set_title_from("No Reply title")  //el titulo llega
             ->add_to($this->emails["contacts"][0])      //hotmail
             ->add_cc($this->emails["contacts"][1])      //gmail
             ->add_bcc($this->emails["contacts"][2])     //yahoo
             ->set_subject("PRUEBA PHPMAIL 2 $now")
             ->set_content("PRUEBA CONTENT PHPMAIL 2 $now")
+            ->add_attachment([
+                "path"=>PATH_CONFIGDS."domains.example.php",
+            ])
+            ->add_attachment([
+                "path"=>PATH_CONFIGDS."services.example.php",
+            ])
             ->send()
             ->get_errors()
         ;

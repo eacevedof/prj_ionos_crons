@@ -120,6 +120,22 @@ class EmailComponent extends AEmail
         return $r;
     }
 
+    private function _smtp_attachment($arattach, $objmime)
+    {
+        /*
+        https://pear.php.net/manual/en/package.mail.mail-mime.addattachment.php
+        boolean addAttachment (1 string $file , 2 string $c_type = 'application/octet-stream' , 3 string $name = '' , 4 boolean $isfile = true ,
+        5 string $encoding = 'base64' , 6 string $disposition = 'attachment' , 7 string $charset = '' , 8 string $language = '' , 9 string $location = '' ,
+        10 string $n_encoding = null , 11 string $f_encoding = null , 12 string $description = '' , 13 string $h_charset = null )
+        */
+        $pathfile = $arattach["path"];
+        if(!is_file($pathfile)) return "";
+
+        $mime = $arattach["mime"] ?? "application/octet-stream";
+        $alias = $arattach["alias"] ?? "attach-".uniqid().".txt";
+        $objmime->addAttachment($pathfile, $mime, $alias);
+    }
+
     private function _send_smtp()
     {
         //$this->logpr("send_smtp");
@@ -135,7 +151,7 @@ class EmailComponent extends AEmail
             $objmime->setHTMLBody($this->content); //texto con html
 
             foreach ($this->attachments as $ardata)
-                $objmime->addAttachment($ardata["path"], $ardata["mime"]);
+                $this->_smtp_attachment($ardata, $objmime);
 
             //do not ever try to call these lines in reverse order
             $armime = $this->_get_smtp_mime();
