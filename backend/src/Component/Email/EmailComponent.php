@@ -183,13 +183,17 @@ class EmailComponent extends AEmail
 
     private function _nosmtp_header_mime()
     {
+        $uid = uniqid();
         $this->headers = [
             "MIME-Version: 1.0",
             //"Content-Type: text/html; charset=ISO-8859-1";
-            "Content-Type: text/html; charset=UTF-8",
+            "Content-Type: multipart/mixed; boundary=\"$uid\"",
+            "This is a MIME encoded message.",
+            "--$uid",
 
+            "Content-Type: text/html; charset=UTF-8",
             //add boundary string and mime type specification
-            "Content-Transfer-Encoding: 8bit",
+            "Content-Transfer-Encoding: 7bit",
         ];
         return $this;
     }
