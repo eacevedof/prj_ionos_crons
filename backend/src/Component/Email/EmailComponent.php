@@ -190,7 +190,6 @@ class EmailComponent extends AEmail
             //"Content-Type: multipart/mixed; boundary=\"$uid\"",
             //"This is a MIME encoded message.",
             //"--$uid",
-
             //"Content-Type: text/html; charset=ISO-8859-1";
             "Content-Type: text/html; charset=UTF-8",
             //add boundary string and mime type specification
