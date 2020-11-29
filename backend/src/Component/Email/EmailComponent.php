@@ -185,7 +185,7 @@ class EmailComponent extends AEmail
     {
         $headers = [
             "MIME-Version: 1.0",
-            "Content-Type: text/html; charset=UTF-8",
+            "Content-Type: text/html; charset=\"UTF-8\"",
             "Content-Transfer-Encoding: 8bit",
         ];
 
