@@ -84,15 +84,18 @@ class EmailComponent extends AEmail
     {
         $this->headers = [];
         $this->headers["Content-Type"] = "text/html; charset=UTF-8";
+        $this->headers["From"] = $this->email_from;
+
         $this->headers["To"] = implode(", ",$this->emails_to);
         if($this->emails_cc)
             $this->headers["Cc"] = implode(", ",$this->emails_cc);
 
         //creo que esto no va
-        //if($this->emails_bcc) $this->headers["Bcc"] = implode( ", ", $this->emails_bcc);
+        if($this->emails_bcc)
+            $this->headers["Bcc"] = implode( ", ", $this->emails_bcc);
 
         $this->headers["Subject"] = $this->subject;
-        $this->headers["From"] = $this->email_from;
+
         //$this->headers["Replay-To"] = $this->emails_to;
         $this->logpr($this->headers,"smtpheaderrs");
     }
@@ -105,6 +108,16 @@ class EmailComponent extends AEmail
             "html_charset" => "UTF-8",
             "head_charset" => "UTF-8"
         ];
+    }
+
+    private function _get_smtp_to()
+    {
+        $to[] = $this->headers["To"] ?? "";
+        if(trim($this->headers["Bcc"] ?? "")!=="")
+            $to[] = $this->headers["Bcc"];
+
+        $r = implode(", ",$to);
+        return $r;
     }
 
     private function _send_smtp()
@@ -132,7 +145,7 @@ class EmailComponent extends AEmail
 
             //$this->logpr($headers,"headers");
             //la única forma de enviar con copia oculta es añadirlo a los receptores
-            $stremailsto = $headers["To"]; //.", ".implode(",",$this->emails_bcc);
+            $stremailsto = $this->_get_smtp_to();
 
             $objsmtp = \Mail::factory("smtp",$this->arsmtp);
             //->send es igual a: mail($recipients, $subject, $body, $headers);
