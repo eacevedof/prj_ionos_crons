@@ -145,7 +145,7 @@ class EmailComponent extends AEmail
                 ->_smtp_headers()
             ;
 
-            $objmime = new \Mail_mime(["eol"=>PHP_EOL]);
+            $objmime = new \Mail_mime(PHP_EOL);
 
             //$objmime->setTXTBody("texto body"); //texto sin html
             $objmime->setHTMLBody($this->content); //texto con html
