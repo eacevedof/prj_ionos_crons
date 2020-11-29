@@ -132,7 +132,7 @@ class EmailComponent extends AEmail
         if(!is_file($pathfile)) return "";
 
         $mime = $arattach["mime"] ?? "application/octet-stream";
-        $alias = $arattach["alias"] ?? "attach-".uniqid().".txt";
+        $alias = $arattach["alias"] ?? basename($pathfile);
         $objmime->addAttachment($pathfile, $mime, $alias);
     }
 
@@ -232,7 +232,7 @@ class EmailComponent extends AEmail
         if(!is_file($pathfile)) return "";
 
         $mime = $arattach["mime"] ?? "application/octet-stream";
-        $alias = $arattach["alias"] ?? "attach-".uniqid().".txt";
+        $alias = $arattach["alias"] ?? basename($pathfile);
 
         $content = file_get_contents($pathfile);
         if(!$content) return "";
