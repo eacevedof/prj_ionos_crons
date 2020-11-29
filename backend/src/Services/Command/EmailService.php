@@ -15,10 +15,10 @@ class EmailService extends ACommandService
         $contact = $emails["contacts"][0];
 
         $r = (new EmailComponent($config))
-            ->set_from($contact)
-            ->add_to($emails["contacts"][0])
-            ->set_subject("esto es un simple asunto")
-            ->set_content("un contenido x")
+            ->set_from($emails["contacts"][1])
+            ->add_to($contact)
+            ->set_subject("PRUEBA SMTP 1")
+            ->set_content("PRUEBA CONTENT")
             ->send()
             ->get_errors()
         ;
