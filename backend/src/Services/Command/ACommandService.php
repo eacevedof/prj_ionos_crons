@@ -19,8 +19,6 @@ abstract class ACommandService implements ICommand
         $this->argv =( new Console($_REQUEST))->get_request();
     }
 
-    protected function _get_request($key){return $_REQUEST[$key] ?? "";}
     protected function _get_param($key){return $this->argv[$key] ?? null;}
 
-    protected function _get_env($key){ return getenv($key);}
 }

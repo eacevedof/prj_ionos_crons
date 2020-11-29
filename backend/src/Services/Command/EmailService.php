@@ -17,9 +17,9 @@ class EmailService extends ACommandService
 
     private function _load_params()
     {
-        $this->data["subject"] = $this->_get_param("s");
-        $this->data["content"] = $this->_get_param("c");
-        $this->data["path"] = $this->_get_param("p");
+        $this->data["subject"] = $this->_get_param("s") ?? "email service";
+        $this->data["content"] = $this->_get_param("c") ?? "<b>no content</b>";
+        $this->data["path"] = $this->_get_param("p") ?? "";
     }
 
     private function _send()

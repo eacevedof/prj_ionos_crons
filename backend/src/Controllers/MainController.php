@@ -10,7 +10,6 @@ abstract class MainController
     use LogTrait;
 
     protected $argv;
-    protected $request = [];
     protected $services = [];
 
     public function __construct()
