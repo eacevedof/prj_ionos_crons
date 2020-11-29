@@ -41,6 +41,7 @@ class EmailComponentTest extends TestCase
             ->send()
             ->get_errors()
         ;
+        $this->logpr($r, "test.r 1");
         $this->assertEmpty($r);
     }
 
