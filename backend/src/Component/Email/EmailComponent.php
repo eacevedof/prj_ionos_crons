@@ -213,14 +213,14 @@ class EmailComponent extends AEmail
     private function _phpmail_header_cc()
     {
         if($this->emails_cc)
-            $this->headers[] = "Cc: ".implode(", ",$this->emails_cc);
+            $this->headers[] = "cc: ".implode(", ",$this->emails_cc);
         return $this;
     }
 
     private function _phpmail_header_bcc()
     {
         if($this->emails_bcc)
-            $this->headers[] = "Bcc: ".implode(", ",$this->emails_bcc);
+            $this->headers[] = "bcc: ".implode(", ",$this->emails_bcc);
         return $this;
     }
 
@@ -281,9 +281,9 @@ class EmailComponent extends AEmail
             {
                 $this->_phpmail_boundary()
                     ->_phpmail_header_from()
-                    ->_phpmail_header_mime()
                     ->_phpmail_header_cc()
                     ->_phpmail_header_bcc()
+                    ->_phpmail_header_mime()
                     ->_phpmail_header()
                 ;
 
