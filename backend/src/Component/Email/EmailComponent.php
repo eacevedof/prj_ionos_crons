@@ -281,7 +281,6 @@ class EmailComponent extends AEmail
         return implode(PHP_EOL, $body);
     }
 
-
     private function _send_phpmail()
     {
         try {
