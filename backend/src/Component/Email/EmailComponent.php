@@ -273,7 +273,7 @@ class EmailComponent extends AEmail
     private function _get_phpmail_multipart()
     {
         if(!$this->boundary) return "";
-        $content[] = "This is a multi-part message in MIME format.\n";
+        $content[] = "This is a multi-part message in MIME format.".PHP_EOL;
         $content[] = $this->boundary;
         $content[] = "Content-Type:text/html; charset=\"UTF-8\"";
         $content[] = "Content-Transfer-Encoding: 7bit";
@@ -292,8 +292,8 @@ class EmailComponent extends AEmail
                     ->_phpmail_header()
                 ;
 
-                $content = $this->_get_phpmail_multipart();
-                $content .= $this->content;
+                $content = $this->_get_phpmail_multipart().PHP_EOL;
+                $content .= $this->content.PHP_EOL;
 
                 foreach ($this->attachments as $arattach)
                     $content .= $this->_get_phpmail_attachment($arattach);
