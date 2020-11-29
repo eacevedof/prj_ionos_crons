@@ -62,7 +62,7 @@ final class DbBackupService extends ACronService
 
         }//foreach this->projects
 
-        $this->log($results,"dbbackupservice.run.results");
+        $this->logpr($results,"dbbackupservice.run.results");
         $this->logpr("END","dbbackupservice.run");
     }
 
