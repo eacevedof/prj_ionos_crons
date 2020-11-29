@@ -181,10 +181,8 @@ class EmailComponent extends AEmail
         return $this;
     }
 
-    private function _nosmtp_header_mime()
+    private function _phpmail_header_mime()
     {
-        $NL = "\r\n";
-        $uid = uniqid();
         $this->headers = [
             "MIME-Version: 1.0",
             //"Content-Type: multipart/mixed; boundary=\"$uid\"",
@@ -195,10 +193,18 @@ class EmailComponent extends AEmail
             //add boundary string and mime type specification
             "Content-Transfer-Encoding: 8bit",
         ];
+
+        if($this->boundary == "xx")
+        {
+            $this->headers = [
+                "MIME-Version: 1.0",
+                "Content-Type: multipart/mixed; boundary=\"$this->boundary\"",
+            ];
+        }
         return $this;
     }
 
-    private function _nosmtp_header_from()
+    private function _phpmail_header_from()
     {
         if($this->email_from)
         {
@@ -209,27 +215,35 @@ class EmailComponent extends AEmail
         return $this;
     }
 
-    private function _nosmtp_header_cc()
+    private function _phpmail_header_cc()
     {
         if($this->emails_cc)
             $this->headers[] = "Cc: ".implode(", ",$this->emails_cc);
         return $this;
     }
 
-    private function _nosmtp_header_bcc()
+    private function _phpmail_header_bcc()
     {
         if($this->emails_bcc)
             $this->headers[] = "Bcc: ".implode(", ",$this->emails_bcc);
         return $this;
     }
 
-    private function _nosmtp_header()
+    private function _phpmail_header()
     {
         $header = implode(PHP_EOL, $this->headers);
         $this->header = $header;
+        return $this;
     }
 
-    private function _get_nosmtp_attachment(array $arattach)
+    private function _phpmail_boundary()
+    {
+        if($this->attachments)
+            $this->boundary = "==Multipart_Boundary_x".md5(uniqid())."x";
+        return $this;
+    }
+
+    private function _get_phpmail_attachment(array $arattach)
     {
         //https://stackoverflow.com/questions/12301358/send-attachments-with-php-mail
         $pathfile = $arattach["path"];
@@ -257,21 +271,22 @@ class EmailComponent extends AEmail
         return implode(PHP_EOL, $body);
     }
 
-    private function _send_nosmtp()
+    private function _send_phpmail()
     {
         try {
             if($this->emails_to)
             {
-                $this->_nosmtp_header_mime()
-                    ->_nosmtp_header_from()
-                    ->_nosmtp_header_cc()
-                    ->_nosmtp_header_bcc()
-                    ->_nosmtp_header()
+                $this->_phpmail_boundary()
+                    ->_phpmail_header_mime()
+                    ->_phpmail_header_from()
+                    ->_phpmail_header_cc()
+                    ->_phpmail_header_bcc()
+                    ->_phpmail_header()
                 ;
 
                 $this->emails_to = implode(", ",$this->emails_to);
                 foreach ($this->attachments as $arattach)
-                    $this->content .= $this->_get_nosmtp_attachment($arattach);
+                    $this->content .= $this->_get_phpmail_attachment($arattach);
 
                 $this->logpr($this->content,"BODY ->");
                 $this->logpr($this->header, "HEADER ->");
@@ -297,7 +312,7 @@ class EmailComponent extends AEmail
     {
         if($this->issmtp)
             return $this->_send_smtp();
-        return $this->_send_nosmtp();
+        return $this->_send_phpmail();
     }
 
     public function set_subject($subject){$this->subject = $subject; return $this;}
@@ -307,7 +322,7 @@ class EmailComponent extends AEmail
     public function add_to($stremail){$this->emails_to[]=$stremail; return $this;}
     public function add_cc($stremail){$this->emails_cc[]=$stremail; return $this;}
     public function add_bcc($stremail){$this->emails_bcc[]=$stremail; return $this;}
-    public function set_nosmtp_header($header){$this->header = $header; return $this;}
+    public function set_phpmail_header($header){$this->header = $header; return $this;}
     public function set_content($mxcontent){(is_array($mxcontent))? $this->content=implode(PHP_EOL,$mxcontent): $this->content = $mxcontent; return $this;}
     public function add_attachment($arattach=["path"=>"","mime"=>"","filename"=>""]){$this->attachments[] = $arattach; return $this;}
 
@@ -324,6 +339,6 @@ class EmailComponent extends AEmail
      *
      * @param string $header Cualquer linea anterior
      */
-    public function add_nosmtp_header(string $header){$this->headers[] = $header; return $this;}
+    public function add_phpmail_header(string $header){$this->headers[] = $header; return $this;}
 
 }
