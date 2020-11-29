@@ -25,9 +25,8 @@ class EmailComponent extends AEmail
     private $attachments;
 
     /**
-     * @param string|array $mxEmailTo array tipo array[email1,email2...)
-     * @param string $subject
-     * @param string|array $mxcontent array tipo $arLines = array["line text 1","line text 2"..) or string
+     * optional smtp config array in case of using PEAR
+     * @param array $smtp
      */
     public function __construct($smtp=[])
     {
@@ -194,7 +193,7 @@ class EmailComponent extends AEmail
             "Content-Transfer-Encoding: 8bit",
         ];
 
-        if($this->boundary == "xx")
+        if($this->boundary)
         {
             $this->headers = [
                 "MIME-Version: 1.0",
@@ -256,21 +255,30 @@ class EmailComponent extends AEmail
         if(!$content) return "";
 
         $content = chunk_split(base64_encode($content));
-        // a random hash will be necessary to send mixed content
-        $separator = md5(uniqid());
+        $separator = $this->boundary;
 
         $body[] = "";
         $body[] = "--$separator";
         $body[] = "Content-Type: $mime; name=\"$alias\"";
+        $body[] = "Content-Disposition: attachment; ";
+        $body[] = "filename=\"$alias\"";
         $body[] = "Content-Transfer-Encoding: base64";
-        $body[] = "Content-Disposition: attachment";
         $body[] = $content;
-        $body[] = "--$separator--";
+        $body[] = "--$separator";
         $body[] = "";
 
         return implode(PHP_EOL, $body);
     }
 
+    private function _get_phpmail_multipart()
+    {
+        if(!$this->boundary) return "";
+        $content[] = "This is a multi-part message in MIME format.\n";
+        $content[] = $this->boundary;
+        $content[] = "Content-Type:text/html; charset=\"UTF-8\"";
+        $content[] = "Content-Transfer-Encoding: 7bit";
+        return implode(PHP_EOL, $content);
+    }
     private function _send_phpmail()
     {
         try {
@@ -284,13 +292,17 @@ class EmailComponent extends AEmail
                     ->_phpmail_header()
                 ;
 
-                $this->emails_to = implode(", ",$this->emails_to);
-                foreach ($this->attachments as $arattach)
-                    $this->content .= $this->_get_phpmail_attachment($arattach);
+                $content = $this->_get_phpmail_multipart();
+                $content .= $this->content;
 
-                $this->logpr($this->content,"BODY ->");
+                foreach ($this->attachments as $arattach)
+                    $content .= $this->_get_phpmail_attachment($arattach);
+
                 $this->logpr($this->header, "HEADER ->");
-                $r = mail($this->emails_to, $this->subject, $this->content, $this->header);
+                $this->logpr($content,"BODY ->");
+
+                $this->emails_to = implode(", ",$this->emails_to);
+                $r = mail($this->emails_to, $this->subject, $content, $this->header);
                 if(!$r)
                     $this->_add_error("Error sending email!");
             }
