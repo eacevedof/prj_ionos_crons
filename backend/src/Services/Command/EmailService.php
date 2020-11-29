@@ -47,7 +47,8 @@ class EmailService extends ACommandService
         $now = date("Y-m-d H:i:s");
 
         $r = (new EmailComponent())
-            ->set_from($this->emails["contacts"][1]) //aqui si se disfraza
+            //->set_from($this->emails["contacts"][1]) //aqui si se disfraza
+            ->set_from($this->emails["configs"][0]["email"])
             ->set_title_from("No Reply title")  //el titulo llega
             ->add_to($this->emails["contacts"][0])      //hotmail
             ->add_cc($this->emails["contacts"][1])      //gmail
