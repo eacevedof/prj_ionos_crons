@@ -48,7 +48,7 @@ final class ConsoleComponent
         ];
     }
 
-    private function _get_param($strkeyval,$i)
+    private function _get_request($strkeyval,$i)
     {
         if(strstr($strkeyval,"=")){
             return $this->_get_splitted($strkeyval);
@@ -60,7 +60,7 @@ final class ConsoleComponent
     {
         $this->_load_file();
         foreach ($this->argv as $i=>$strkeyval){
-            $param = $this->_get_param($strkeyval, $i);
+            $param = $this->_get_request($strkeyval, $i);
             $this->request[$param["key"]] = $param["value"];
         }
         return $this->request;

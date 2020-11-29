@@ -34,7 +34,7 @@ class ExcludeIpService extends ACommandService
 
     private function _get_ip()
     {
-        $ip = $this->_get_param(2);
+        $ip = $this->_get_request(2);
         $ip = trim($ip);
         $ip = str_replace(",",".",$ip);
         return $ip;

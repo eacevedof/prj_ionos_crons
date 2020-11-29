@@ -17,15 +17,15 @@ class EmailService extends ACommandService
 
     private function _load_params()
     {
-        $this->data["subject"] = $this->_get_arg("s");
-        $this->data["content"] = $this->_get_arg("c");
-        $this->data["path"] = $this->_get_arg("p");
+        $this->data["subject"] = $this->_get_param("s");
+        $this->data["content"] = $this->_get_param("c");
+        $this->data["path"] = $this->_get_param("p");
     }
 
     private function _send()
     {
         $this->logpr("emailservice._send");
-        $this->logpr($this->data,"data");die;
+        $this->logpr($this->data,"data");
 
         $config = $this->emails["configs"][0];
 

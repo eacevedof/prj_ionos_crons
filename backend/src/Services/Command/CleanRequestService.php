@@ -22,7 +22,7 @@ class CleanRequestService extends ACommandService
 
     private function _get_ip()
     {
-        $ip = $this->_get_param(2);
+        $ip = $this->_get_request(2);
         if(!$ip) return "-1";
         $ip = trim($ip);
         $ip = str_replace(",",".",$ip);

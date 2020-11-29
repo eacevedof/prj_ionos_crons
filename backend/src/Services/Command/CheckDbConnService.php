@@ -17,7 +17,7 @@ class CheckDbConnService extends ACommandService
 
     private function _get_context()
     {
-        $context = $this->_get_param(2);
+        $context = $this->_get_request(2);
         $context = trim($context);
         return $context;
     }
