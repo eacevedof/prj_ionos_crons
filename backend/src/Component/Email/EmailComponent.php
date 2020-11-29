@@ -281,11 +281,13 @@ class EmailComponent extends AEmail
             {
                 $this->_phpmail_boundary()
                     ->_phpmail_header_from()
+                    ->_phpmail_header_mime()
                     ->_phpmail_header_cc()
                     ->_phpmail_header_bcc()
-                    ->_phpmail_header_mime()
                     ->_phpmail_header()
                 ;
+
+                //if($this->attachments)
 
                 $content = $this->_get_phpmail_multipart().PHP_EOL;
                 $content .= $this->content.PHP_EOL;
