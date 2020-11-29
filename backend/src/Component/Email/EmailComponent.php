@@ -182,7 +182,7 @@ class EmailComponent extends AEmail
 
     private function _phpmail_header_mime()
     {
-        $this->headers = [
+        $headers = [
             "MIME-Version: 1.0",
             "Content-Type: text/html; charset=UTF-8",
             "Content-Transfer-Encoding: 8bit",
@@ -190,13 +190,14 @@ class EmailComponent extends AEmail
 
         if($this->boundary)
         {
-            $this->headers = [
+            $headers = [
                 "MIME-Version: 1.0",
                 "Content-Type: multipart/mixed; boundary=\"$this->boundary\"",
                 "Content-Transfer-Encoding: 8bit",
                 "This is a MIME encoded message."
             ];
         }
+        $this->headers = array_merge($this->headers,$headers);
         return $this;
     }
 
@@ -281,10 +282,10 @@ class EmailComponent extends AEmail
             if($this->emails_to)
             {
                 $this->_phpmail_boundary()
-                    ->_phpmail_header_mime()
                     ->_phpmail_header_from()
                     ->_phpmail_header_cc()
                     ->_phpmail_header_bcc()
+                    ->_phpmail_header_mime()
                     ->_phpmail_header()
                 ;
 
