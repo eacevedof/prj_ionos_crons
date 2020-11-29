@@ -53,7 +53,7 @@ class EmailService extends ACommandService
             ->add_cc($this->emails["contacts"][1])      //gmail
             ->add_bcc($this->emails["contacts"][2])     //yahoo
             ->set_subject("PRUEBA PHPMAIL 2 $now")
-            ->set_content("PRUEBA CONTENT PHPMAIL 2 $now")
+            ->set_content("PRUEBA CONTENT PHPMAIL 2 <b>$now</b>")
             ->add_attachment([
                 "path"=>PATH_CONFIGDS."domains.example.php",
             ])
