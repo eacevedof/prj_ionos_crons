@@ -46,6 +46,7 @@ class EmailComponent extends AEmail
         $this->subject = "";
         $this->content = "";
         $this->attachments = [];
+        $this->headers =[];
         return $this;
     }
 
