@@ -136,6 +136,8 @@ class EmailComponent extends AEmail
 
             $objsmtp = \Mail::factory("smtp",$this->arsmtp);
             //->send es igual a: mail($recipients, $subject, $body, $headers);
+            $this->logpr($stremailsto,"to->");
+            $this->logpr($content,"content ->");
             $objemail = $objsmtp->send($stremailsto, $headers, $content);
 
             //$this->logpr($objemail,"objmail");
