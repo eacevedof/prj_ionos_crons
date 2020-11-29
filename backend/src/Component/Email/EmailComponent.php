@@ -287,8 +287,6 @@ class EmailComponent extends AEmail
                     ->_phpmail_header()
                 ;
 
-                //if($this->attachments)
-
                 $content = $this->_get_phpmail_multipart().PHP_EOL;
                 $content .= $this->content.PHP_EOL;
 

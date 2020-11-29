@@ -61,12 +61,14 @@ class EmailService extends ACommandService
                 </p> 
                 <b>$now</b>
             ")
+/*
             ->add_attachment([
                 "path"=>PATH_CONFIGDS."domains.example.php",
             ])
             ->add_attachment([
                 "path"=>PATH_CONFIGDS."projects.example.php",
             ])
+*/
             ->send()
             ->get_errors()
         ;
