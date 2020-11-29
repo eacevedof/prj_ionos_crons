@@ -25,6 +25,7 @@ class EmailService extends ACommandService
             ->send()
             ->get_errors()
         ;
+        if(!$r) $r = "OK";
         $this->logpr($r, "emailservice._send_smtp result");
     }
 
