@@ -17,7 +17,6 @@ abstract class AEmail implements IEmail
     protected $subject = "";
     protected $content = "";
 
-    protected $ispear = false;
     protected $errors = [];
     protected $iserror = false;
 
@@ -35,7 +34,6 @@ abstract class AEmail implements IEmail
     public function add_to($stremail){$this->emails_to[]=$stremail; return $this;}
     public function add_cc($stremail){$this->emails_cc[]=$stremail; return $this;}
     public function add_bcc($stremail){$this->emails_bcc[]=$stremail; return $this;}
-    public function set_phpmail_header($header){$this->header = $header; return $this;}
     public function set_content($mxcontent){(is_array($mxcontent))? $this->content=implode(PHP_EOL,$mxcontent): $this->content = $mxcontent; return $this;}
     public function add_attachment($arattach=["path"=>"","mime"=>"","filename"=>""]){$this->attachments[] = $arattach; return $this;}
 

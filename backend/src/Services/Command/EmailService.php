@@ -29,7 +29,7 @@ class EmailService extends ACommandService
 
         $config = $this->emails["configs"][0];
 
-        $r = (new EmailComponent($config))
+        $r = EmailComponent::get_by_pear($config)
             ->set_from($config["email"])
             ->add_to($this->emails["contacts"][0])  //gmail
             ->set_subject($this->data["subject"])
