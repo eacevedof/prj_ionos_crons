@@ -15,7 +15,8 @@ abstract class AEmail implements IEmail
 
     protected $subject = "";
     protected $content = "";
-    
+
+    protected $issmtp = false;
     protected $errors = [];
     protected $iserror = false;
 

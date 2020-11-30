@@ -3,19 +3,16 @@ namespace App\Component\Email;
 
 final class PearEmail extends AEmail
 {
-
-    //smtp
-    private $issmtp;
-    private $arsmtp;
+    private $arconfig;
 
     /**
      * optional smtp config array in case of using PEAR
-     * @param array $smtp
+     * @param array $arconfig
      */
-    public function __construct($smtp=[])
+    public function __construct($arconfig=[])
     {
         $this->_load_primitives()
-            ->_load_smtp($smtp)
+            ->_load_smtp($arconfig)
         ;
 
     }//__construct
@@ -40,17 +37,17 @@ final class PearEmail extends AEmail
         if($config)
         {
             $this->issmtp               = true;
-            $this->arsmtp["host"]       = $config["host"] ?? "";
-            $this->arsmtp["port"]       = $config["port"] ?? "25";
-            $this->arsmtp["auth"]       = $config["auth"] ?? true;;
-            $this->arsmtp["username"]   = $config["username"] ?? "";
-            $this->arsmtp["password"]   = $config["password"] ?? "";
-            $this->arsmtp["debug"]      = $config["debug"] ?? false;
+            $this->arconfig["host"]       = $config["host"] ?? "";
+            $this->arconfig["port"]       = $config["port"] ?? "25";
+            $this->arconfig["auth"]       = $config["auth"] ?? true;;
+            $this->arconfig["username"]   = $config["username"] ?? "";
+            $this->arconfig["password"]   = $config["password"] ?? "";
+            $this->arconfig["debug"]      = $config["debug"] ?? false;
         }
         return $this;
     }
 
-    private function _load_smtp_libs()
+    private function _load_libs()
     {
         //errorson();
         //necesita tener instalado:
@@ -64,7 +61,7 @@ final class PearEmail extends AEmail
         return $this;
     }
 
-    private function _smtp_headers()
+    private function _headers()
     {
         $this->headers = [];
         $this->headers["Content-Type"] = "text/html; charset=UTF-8";
@@ -83,7 +80,7 @@ final class PearEmail extends AEmail
         //$this->headers["Replay-To"] = $this->emails_to;
     }
 
-    private function _get_smtp_mime()
+    private function _get_mime()
     {
         return [
             "text_encoding" => "7bit",
@@ -93,7 +90,7 @@ final class PearEmail extends AEmail
         ];
     }
 
-    private function _get_smtp_to()
+    private function _get_to()
     {
         $to[] = $this->headers["To"] ?? "";
         if(trim($this->headers["Bcc"] ?? "")!=="")
@@ -104,7 +101,7 @@ final class PearEmail extends AEmail
         return $r;
     }
 
-    private function _smtp_attachment($arattach, $objmime)
+    private function _attachment($arattach, $objmime)
     {
         /*
         https://pear.php.net/manual/en/package.mail.mail-mime.addattachment.php
@@ -125,8 +122,8 @@ final class PearEmail extends AEmail
         //$this->logpr("send_smtp");
         try
         {
-            $this->_load_smtp_libs()
-                ->_smtp_headers()
+            $this->_load_libs()
+                ->_headers()
             ;
 
             $objmime = new \Mail_mime(PHP_EOL);
@@ -135,19 +132,19 @@ final class PearEmail extends AEmail
             $objmime->setHTMLBody($this->content); //texto con html
 
             foreach ($this->attachments as $ardata)
-                $this->_smtp_attachment($ardata, $objmime);
+                $this->_attachment($ardata, $objmime);
 
             //do not ever try to call these lines in reverse order
-            $armime = $this->_get_smtp_mime();
+            $armime = $this->_get_mime();
             $content = $objmime->get($armime);
 
             //la única forma de enviar con copia oculta es añadirlo a los receptores
-            $stremailsto = $this->_get_smtp_to();
+            $stremailsto = $this->_get_to();
             $headers = $objmime->headers($this->headers);
-            $objsmtp = \Mail::factory("smtp",$this->arsmtp);
+            $objsmtp = \Mail::factory("smtp",$this->arconfig);
             //->send es igual a: mail($recipients, $subject, $body, $headers);
 
-            $this->logpr($this->arsmtp,"arsmtp ->");
+            $this->logpr($this->arconfig,"arconfig ->");
             $this->logpr($headers,"headers ->");
             $this->logpr($stremailsto,"to ->");
             $this->logpr($content,"content ->");
@@ -163,143 +160,6 @@ final class PearEmail extends AEmail
         }
 
         return $this;
-    }
-
-    private function _phpmail_header_mime()
-    {
-        $headers = [
-            "MIME-Version: 1.0",
-            "Content-Type: text/html; charset=\"UTF-8\"",
-            "Content-Transfer-Encoding: 8bit",
-        ];
-
-        if($this->boundary)
-        {
-            $headers = [
-                "MIME-Version: 1.0",
-                "Content-Type: multipart/mixed; boundary=\"$this->boundary\"",
-                "Content-Transfer-Encoding: 7bit",
-                "This is a MIME encoded message."
-            ];
-        }
-        $this->headers = array_merge($this->headers,$headers);
-        return $this;
-    }
-
-    private function _phpmail_header_from()
-    {
-        $this->headers[] = "From: $this->title_from <$this->email_from>";
-        $this->headers[] = "Return-Path: <$this->email_from>";
-        $this->headers[] = "X-Sender: $this->email_from";
-        return $this;
-    }
-
-    private function _phpmail_header_cc()
-    {
-        if($this->emails_cc)
-            $this->headers[] = "cc: ".implode(", ",$this->emails_cc);
-        return $this;
-    }
-
-    private function _phpmail_header_bcc()
-    {
-        if($this->emails_bcc)
-            $this->headers[] = "bcc: ".implode(", ",$this->emails_bcc);
-        return $this;
-    }
-
-    private function _phpmail_header()
-    {
-        $header = implode(PHP_EOL, $this->headers);
-        $this->header = $header;
-        return $this;
-    }
-
-    private function _phpmail_boundary()
-    {
-        if($this->attachments)
-            $this->boundary = md5(uniqid());
-        return $this;
-    }
-
-    private function _get_phpmail_multipart()
-    {
-        if(!$this->boundary) return "";
-        $content[] = "--$this->boundary";
-        $content[] = "Content-Type: text/html; charset=UTF-8";
-        $content[] = "Content-Transfer-Encoding: 8bit";
-        return implode(PHP_EOL, $content);
-    }
-
-    private function _get_phpmail_attachment(array $arattach)
-    {
-        //https://stackoverflow.com/questions/12301358/send-attachments-with-php-mail
-        $pathfile = $arattach["path"];
-        if(!is_file($pathfile)) return "";
-
-        $mime = $arattach["mime"] ?? "application/octet-stream";
-        $alias = $arattach["filename"] ?? basename($pathfile);
-
-        $content = file_get_contents($pathfile);
-        if(!$content) return "";
-
-        $content = chunk_split(base64_encode($content));
-        $separator = $this->boundary;
-
-        $body[] = "";
-        $body[] = "--$separator";
-        $body[] = "Content-Type: $mime; name=\"$alias\"";
-        $body[] = "Content-Transfer-Encoding: base64";
-        $body[] = "Content-Disposition: attachment; ";
-        $body[] = $content;
-        $body[] = "--$separator--";
-        $body[] = "";
-
-        return implode(PHP_EOL, $body);
-    }
-
-    private function _send_phpmail()
-    {
-        try {
-            if($this->email_from && $this->emails_to)
-            {
-                $this->_phpmail_boundary()
-                    ->_phpmail_header_from()
-                    ->_phpmail_header_mime()
-                    ->_phpmail_header_cc()
-                    ->_phpmail_header_bcc()
-                    ->_phpmail_header()
-                ;
-
-                $content = $this->_get_phpmail_multipart().PHP_EOL;
-                $content .= $this->content.PHP_EOL;
-
-                foreach ($this->attachments as $arattach)
-                    $content .= $this->_get_phpmail_attachment($arattach);
-
-                $this->logpr($this->emails_to,"TO ->");
-                $this->logpr($this->header, "HEADER ->");
-                $this->logpr($content,"BODY ->");
-
-                $this->emails_to = implode(", ",$this->emails_to);
-                $r = mail($this->emails_to, $this->subject, $content, $this->header);
-                if(!$r) {
-                    $this->_add_error("Error sending email!");
-                    $this->_add_error(error_get_last());
-                }
-            }
-            else
-            {
-                $this->_add_error("No target emails!");
-            }
-        }
-        catch (\Exception $e)
-        {
-            $this->_add_error($e->getMessage());
-        }
-        finally {
-            return $this;
-        }
     }
 
     public function send()
