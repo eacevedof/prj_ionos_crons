@@ -11,11 +11,8 @@ final class PearEmail extends AEmail
      */
     public function __construct($arconfig=[])
     {
-            $this->_load_config($arconfig)
-        ;
-
+        $this->_load_config($arconfig);
     }//__construct
-    
 
     private function _load_config($config)
     {
