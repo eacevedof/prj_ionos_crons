@@ -1,8 +1,14 @@
 <?php
 namespace App\Component\Email;
 
-final class PearMail extends AEmail
+final class FuncEmail extends AEmail
 {
+
+    //php-mail
+    private $title_from;
+    private $email_from;
+    private $header;
+    private $boundary;
 
     //smtp
     private $issmtp;
