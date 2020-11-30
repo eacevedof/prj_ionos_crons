@@ -3,9 +3,9 @@ namespace App\Component\Email;
 
 final class FuncEmail extends AEmail
 {
-    //php-mail
+
     private $title_from;
-    private $boundary;
+    private $boundary = "";
 
     private function _boundary()
     {
@@ -31,7 +31,7 @@ final class FuncEmail extends AEmail
                 "This is a MIME encoded message."
             ];
         }
-        $this->headers = array_merge($this->headers,$headers);
+        $this->headers = array_merge($this->headers, $headers);
         return $this;
     }
 
