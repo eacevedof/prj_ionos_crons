@@ -6,8 +6,18 @@ use App\Traits\LogTrait as Log;
 abstract class AEmail implements IEmail
 {
     use Log;
-    protected $errors;
-    protected $iserror;
+
+    protected $headers = [];
+    protected $emails_to = [];
+    protected $emails_cc = [];
+    protected $emails_bcc = [];
+    protected $attachments = [];
+
+    protected $subject = "";
+    protected $content = "";
+    
+    protected $errors = [];
+    protected $iserror = false;
 
     protected function _add_error($msg)
     {
