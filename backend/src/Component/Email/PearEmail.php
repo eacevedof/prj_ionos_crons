@@ -11,29 +11,15 @@ final class PearEmail extends AEmail
      */
     public function __construct($arconfig=[])
     {
-        $this->_load_primitives()
-            ->_load_smtp($arconfig)
+            $this->_load_config($arconfig)
         ;
 
     }//__construct
+    
 
-    private function _load_primitives()
+    private function _load_config($config)
     {
-        $this->title_from = "";
-        $this->email_from = "";
-        $this->emails_to = [];
-        $this->emails_cc = [];
-        $this->emails_bcc = [];
-        $this->subject = "";
-        $this->content = "";
-        $this->attachments = [];
-        $this->headers =[];
-        return $this;
-    }
-
-    private function _load_smtp($config)
-    {
-        //$this->logpr($config,"_load_smtp.config");
+        //$this->logpr($config,"_load_config.config");
         if($config)
         {
             $this->issmtp               = true;
@@ -169,16 +155,7 @@ final class PearEmail extends AEmail
         return $this->_send_phpmail();
     }
 
-    public function set_subject($subject){$this->subject = $subject; return $this;}
 
-    public function set_from($stremail){$this->email_from = $stremail; return $this;}
-    public function set_title_from(string $title){$this->title_from = $title; return $this;}
-    public function add_to($stremail){$this->emails_to[]=$stremail; return $this;}
-    public function add_cc($stremail){$this->emails_cc[]=$stremail; return $this;}
-    public function add_bcc($stremail){$this->emails_bcc[]=$stremail; return $this;}
-    public function set_phpmail_header($header){$this->header = $header; return $this;}
-    public function set_content($mxcontent){(is_array($mxcontent))? $this->content=implode(PHP_EOL,$mxcontent): $this->content = $mxcontent; return $this;}
-    public function add_attachment($arattach=["path"=>"","mime"=>"","filename"=>""]){$this->attachments[] = $arattach; return $this;}
 
     /**
      *  Required
