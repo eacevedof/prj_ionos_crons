@@ -60,7 +60,7 @@ final class FuncEmail extends AEmail
     private function _header()
     {
         $header = implode(PHP_EOL, $this->headers);
-
+        return $header;
     }
 
     private function _get_multipart()
@@ -105,7 +105,7 @@ final class FuncEmail extends AEmail
         {
             if($this->email_from && $this->emails_to)
             {
-                $this->_boundary()
+                $header = $this->_boundary()
                     ->_header_from()
                     ->_header_mime()
                     ->_header_cc()
@@ -120,11 +120,11 @@ final class FuncEmail extends AEmail
                     $content .= $this->_get_attachment($arattach);
 
                 $this->logpr($this->emails_to,"TO ->");
-                $this->logpr($this->header, "HEADER ->");
+                $this->logpr($this->headers, "HEADER ->");
                 $this->logpr($content,"BODY ->");
 
                 $this->emails_to = implode(", ",$this->emails_to);
-                $r = mail($this->emails_to, $this->subject, $content, $this->header);
+                $r = mail($this->emails_to, $this->subject, $content, $header);
                 if(!$r) {
                     $this->_add_error("Error sending email!");
                     $this->_add_error(error_get_last());
