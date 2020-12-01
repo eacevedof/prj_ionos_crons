@@ -16,14 +16,14 @@ class EmailComponentTest extends TestCase
         $this->emails = get_config("emails");
     }
 
-    public function test_smtp()
+    public function test_pear_mail()
     {
         $this->logpr("emailservice._send_smptp");
 
         $config = $this->emails["configs"][0];
         $now = date("Y-m-d H:i:s");
 
-        $r = (new EmailComponent($config))
+        $r = EmailComponent::get($config)
             //si no se pone from no se hace el envio, si se pone uno distinto aplica
             //el usuario en la config de smtp
             ->set_from($this->emails["contacts"][1])
@@ -45,12 +45,12 @@ class EmailComponentTest extends TestCase
         $this->assertEmpty($r);
     }
 
-    public function test_phpmail()
+    public function test_phpfunc_mail()
     {
         $this->logpr("emailservice._send_phpmail");
         $now = date("Y-m-d H:i:s");
 
-        $r = (new EmailComponent())
+        $r = EmailComponent::get()
             //->set_from($this->emails["contacts"][1]) //aqui si se disfraza
             ->set_from($this->emails["configs"][0]["email"])
             ->set_title_from("No Reply title")  //el titulo llega
