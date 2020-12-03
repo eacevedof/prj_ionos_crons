@@ -20,7 +20,7 @@ final class CheckDomainService extends ACommandService
     {
         $now = date("Y-m-d H:i:s");
         $config = $this->emails["configs"][0];
-        $r = (new EmailComponent($config))
+        $r = EmailComponent::get($config)
             ->set_from($config["email"])
             ->add_to($this->emails["contacts"][0])  //gmail
             ->set_subject("Check Doamin Service $now")
