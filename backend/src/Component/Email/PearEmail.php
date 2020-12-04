@@ -167,6 +167,6 @@ final class PearEmail extends AEmail
      *
      * @param string $header Cualquer linea anterior
      */
-    public function add_phpmail_header(string $header){$this->headers[] = $header; return $this;}
+    public function add_header(string $header){$this->headers[] = $header; return $this;}
 
 }
