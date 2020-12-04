@@ -17,6 +17,7 @@ return [
     "cron.cleaner.repeated"     => "App\\Services\\Cron\\Cleaner\\RepeatedService",
 
     "help"                      => "App\\Services\\Command\\HelpService",
+        "h"                     => "App\\Services\\Command\\HelpService",
     "excludeip"                 => "App\\Services\\Command\\ExcludeIpService",
     "cleanrequest"              => "App\\Services\\Command\\CleanRequestService",
     "check-dbconn"              => "App\\Services\\Command\\CheckDbConnService",
