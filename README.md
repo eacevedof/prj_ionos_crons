@@ -21,3 +21,4 @@ cmd() {
 - envio de alerta por exceso de peticiones maliciosas (wp)
     - comprobar datos de esta ip atacante: 2607:5300:203:42eb::
     - quizas debo de comprobar la media de peticiones por segundo para definir una normalidad
+    - cron de informes por ataques mensuales
