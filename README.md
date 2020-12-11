@@ -18,3 +18,5 @@ cmd() {
 - tests con bd y alarmas
 - tests de distiontso servicios
 - tests envio emails
+- envio de alerta por exceso de peticiones maliciosas (wp)
+    - comprobar datos de esta ip atacante: 2607:5300:203:42eb::
