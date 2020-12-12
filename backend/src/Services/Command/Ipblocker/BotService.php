@@ -13,8 +13,8 @@ class BotService extends ACommandService
 
     public function __construct()
     {
-        $this->_load_db();
-        $this->ip = $this->_get_ip();
+        $this->_load_db()
+            ->_load_ip();
     }
 
     private function _load_db()
@@ -24,15 +24,16 @@ class BotService extends ACommandService
             $this->db = db::get(self::CONTEXT_RO);
         else
             $this->db = db::get(self::CONTEXT);
+        return $this;
     }
     
-    private function _get_ip()
+    private function _load_ip()
     {
         $ip = $this->_get_request(2);
         if(!$ip) return "-1";
         $ip = trim($ip);
         $ip = str_replace(",",".",$ip);
-        return $ip;
+        $this->ip = $ip;
     }
 
     private function _get_bots()
