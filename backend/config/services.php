@@ -27,4 +27,5 @@ return [
     "env"                       => "App\\Services\\Command\\EnvService",
     "email"                     => "App\\Services\\Command\\EmailService",
     "get-useragent"             => "App\\Services\\Command\\Ipblocker\\UseragentService",
+    "get-bot"                   => "App\\Services\\Command\\Ipblocker\\BotService",
 ];
