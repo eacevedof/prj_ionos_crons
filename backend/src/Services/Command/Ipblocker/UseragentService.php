@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Command\Ipblocker;
 
+use App\Services\Command\ACommandService;
 use App\Factories\Db as db;
 
 class UseragentService extends ACommandService
