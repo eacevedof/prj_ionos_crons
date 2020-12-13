@@ -27,10 +27,11 @@ class UseragentService extends ACommandService
     private function _get_user_agents()
     {
         $sql = "
-        SELECT insert_date, remote_ip, user_agent, CONCAT(domain,request_uri) url 
+        SELECT insert_date, user_agent, CONCAT(domain,request_uri) url 
         FROM app_ip_request
         WHERE 1
         AND remote_ip='$this->ip'
+        AND COALESCE(TRIM(user_agent),'') != '' 
         ORDER BY insert_date DESC
         ";
 
