@@ -20,6 +20,7 @@ return [
     //commands
     "help"                      => "App\\Services\\Command\\HelpService",
         "h"                     => "App\\Services\\Command\\HelpService",
+    //params: <ip>
     "exclude-ip"                => "App\\Services\\Command\\ExcludeIpService",
     "clean-request"             => "App\\Services\\Command\\CleanRequestService",
     "check-dbconn"              => "App\\Services\\Command\\CheckDbConnService",
@@ -27,5 +28,7 @@ return [
     "env"                       => "App\\Services\\Command\\EnvService",
     "email"                     => "App\\Services\\Command\\EmailService",
     "get-useragent"             => "App\\Services\\Command\\Ipblocker\\UseragentService",
+
+    //params: all,
     "get-bot"                   => "App\\Services\\Command\\Ipblocker\\BotService",
 ];
