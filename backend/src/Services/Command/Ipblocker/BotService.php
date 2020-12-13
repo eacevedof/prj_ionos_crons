@@ -76,7 +76,8 @@ class BotService extends ACommandService
         FROM app_ip_request r
         WHERE 1
         AND r.user_agent LIKE '%bot%'
-        GROUP BY r.user_agent, m_lastdate DESC 
+        GROUP BY r.user_agent
+        ORDER BY r.user_agent, m_lastdate DESC 
         ";
 
         return $this->db->query($sql);
