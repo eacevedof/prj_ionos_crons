@@ -45,18 +45,23 @@ class BotService extends ACommandService
         return $this->db->query($sql);
     }
 
-    private function _get_top_10()
+    private function _get_top_15()
     {
         $sql = "
-        SELECT DISTINCT r.remote_ip, 
-        i.country, i.whois,
-        r.user_agent
-        FROM app_ip_request r
-        INNER  JOIN app_ip i
-        ON r.remote_ip = i.remote_ip
-        WHERE 1
-        AND r.user_agent LIKE '%bot%'
-        ORDER BY r.insert_date DESC
+        SELECT r.user_agent, r.remote_ip, i.country, m_reqs, m_lastdate
+        FROM app_ip i
+        INNER JOIN 
+        (
+            SELECT r.user_agent, r.remote_ip, COUNT(r.id) m_reqs, MAX(r.insert_date) m_lastdate
+            FROM app_ip_request r
+            WHERE 1
+            AND r.user_agent LIKE '%bot%'
+            GROUP BY r.user_agent, r.remote_ip
+            -- ORDER BY n.reqs DESC
+        ) met
+        ON i.remote_ip = met.remote_ip
+        ORDER BY m_reqs DESC, m_lastdate DESC
+        LIMIT 15
         ";
 
         return $this->db->query($sql);
@@ -71,7 +76,7 @@ class BotService extends ACommandService
         switch ($param)
         {
             case "all": return $this->_get_all();
-            case "top": return $this->_get_top_10();
+            case "top": return $this->_get_top_15();
             default: return [];
         }
     }
