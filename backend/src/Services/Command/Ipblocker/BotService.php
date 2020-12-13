@@ -92,7 +92,7 @@ class BotService extends ACommandService
         {
             case "all": return $this->_get_all();
             case "top": return $this->_get_top_15();
-            case "names": return $this->_get_names();
+            case "name": return $this->_get_names();
             default: return [];
         }
     }
