@@ -9,7 +9,7 @@ use function PHPUnit\Framework\stringEndsWith;
 class BotService extends ACommandService
 {
     private $db;
-    private $ip;
+    private $ctx;
     private const CONTEXT = "ipblocker";
     private const CONTEXT_RO = "ipblocker-ro";
 
@@ -21,10 +21,14 @@ class BotService extends ACommandService
     private function _load_db()
     {
         $ro = $this->_get_request(3);
-        if($ro)
+        if($ro) {
             $this->db = db::get(self::CONTEXT_RO);
-        else
+            $this->ctx = self::CONTEXT_RO;
+        }
+        else {
             $this->db = db::get(self::CONTEXT);
+            $this->ctx = self::CONTEXT;
+        }
         return $this;
     }
 
@@ -83,7 +87,7 @@ class BotService extends ACommandService
 
     public function run()
     {
-        $this->logpr("START BOT ".self::CONTEXT);
+        $this->logpr("START BOT CONTEXT:{$this->ctx}");
         print_r($this->_get_result());
         $this->logpr("END BOT");
     }
