@@ -50,7 +50,7 @@ class BotService extends ACommandService
     private function _get_top_15()
     {
         $sql = "
-        SELECT r.user_agent, r.remote_ip, i.country, m_reqs, m_lastdate
+        SELECT met.user_agent, met.remote_ip, i.country, met.m_reqs, met.m_lastdate
         FROM app_ip i
         INNER JOIN 
         (
@@ -62,7 +62,7 @@ class BotService extends ACommandService
             -- ORDER BY n.reqs DESC
         ) met
         ON i.remote_ip = met.remote_ip
-        ORDER BY m_reqs DESC, m_lastdate DESC
+        ORDER BY met.m_reqs DESC, met.m_lastdate DESC
         LIMIT 15
         ";
 
