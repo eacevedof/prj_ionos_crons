@@ -69,6 +69,19 @@ class BotService extends ACommandService
         return $this->db->query($sql);
     }
 
+    private function _get_names()
+    {
+        $sql = "
+        SELECT r.user_agent, MAX(r.insert_date) m_lastdate
+        FROM app_ip_request r
+        WHERE 1
+        AND r.user_agent LIKE '%bot%'
+        GROUP BY r.user_agent, m_lastdate DESC 
+        ";
+
+        return $this->db->query($sql);
+    }
+
     private function _get_result()
     {
         $param = $this->_get_request(2);
@@ -79,6 +92,7 @@ class BotService extends ACommandService
         {
             case "all": return $this->_get_all();
             case "top": return $this->_get_top_15();
+            case "names": return $this->_get_names();
             default: return [];
         }
     }
