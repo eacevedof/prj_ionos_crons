@@ -30,6 +30,6 @@ class ColorComponent
 
     public function pr()
     {
-        return $this->get();
+        echo $this->get();
     }
 }

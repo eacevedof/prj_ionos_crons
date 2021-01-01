@@ -1,6 +1,9 @@
 <?php
 namespace App\Controllers;
 
+use App\Component\ColorComponent;
+use App\Component\ConsoleComponent;
+
 final class DispatcherController extends MainController
 {
     public function __invoke()
@@ -8,6 +11,7 @@ final class DispatcherController extends MainController
         $this->log("dipsatcher.invoke");
         try
         {
+            (new ColorComponent())->add("hola","red-1")->pr();die;
             $service = $this->get_param("service");
             if(!$service) $service = $this->get_param(1);
             if(!$service) $service = "help";
