@@ -3,7 +3,7 @@
 namespace Tests\Unit\Component;
 
 use PHPUnit\Framework\TestCase;
-use App\Component\ColorComponent as c;
+use App\Component\ColorComponent as Color;
 use App\Traits\LogTrait as Log;
 
 class ColorComponentTest extends TestCase
@@ -12,7 +12,7 @@ class ColorComponentTest extends TestCase
 
     public function test_red()
     {
-        (new c())
+        (new Color())
             ->add("\n\nwhite\n","white")
             ->add("red\n","red")
             ->add("green\n","green")
