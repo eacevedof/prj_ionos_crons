@@ -1,9 +1,6 @@
 <?php
 namespace App\Controllers;
 
-use App\Component\ColorComponent;
-use App\Component\ConsoleComponent;
-
 final class DispatcherController extends MainController
 {
     public function __invoke()
