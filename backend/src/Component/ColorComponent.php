@@ -12,28 +12,26 @@ class ColorComponent
 
     private $texts = [];
 
-    private function _get_tagged()
-    {}
 
-    public function get_colored($text, $color="white-1"): string
+    public function get_colored(string $text, string $color="white-1"): string
     {
         $pre = $this->colors[$color];
         $def = $this->colors["default"];
         return "$pre$text$def";
     }
 
-    public function add($text, $color="white-1"): ColorComponent
+    public function add(string $text, string $color="white-1"): ColorComponent
     {
         $this->texts[] = $this->get_colored($text,$color);
         return $this;
     }
 
-    public function get()
+    public function get(): string
     {
         return implode("",$this->texts);
     }
 
-    public function pr()
+    public function pr(): void
     {
         echo $this->get();
     }
