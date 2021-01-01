@@ -6,10 +6,10 @@ class ColorComponent
 {
     //strreturn = "\033[{}m{}\033[00m".format(colcode,strval)
     private $colors = [
-        "default"   =>  "\033[39m",
-        "white-1"   =>  "\033[0m",
-        "red-1"     =>  "\033[31m",
-        "magenta"     =>  "\033[35m",
+        "default"       =>  "\033[39m",
+        "white-1"       =>  "\033[0m",
+        "red-1"         =>  "\033[31m",
+        "magenta"       =>  "\033[35m",
     ];
 
     private $texts = [];
