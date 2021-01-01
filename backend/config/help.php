@@ -32,12 +32,26 @@ return [
         "description"   => "Agrega la ip para evitar ser registrada en las peticiones y que se salte analytics",
         //"alias"         => ["h"]
         "params"        => ["ip"=>"segundo parametro"],
-        "examples"       => ["exclude-ip <ip>"]
+        "examples"      => ["exclude-ip <ip>"]
     ],
 
-    "clean-request"             => "App\\Services\\Command\\CleanRequestService",
-    "check-dbconn"              => "App\\Services\\Command\\CheckDbConnService",
-    "check-domain"              => "App\\Services\\Command\\CheckDomainService",
+    "clean-request"     => [
+        "description"   => "Limpia ipblocker de las peticiones de una ip y peticiones icon",
+        "params"        => ["ip"=>"segundo parametro"],
+        "examples"      => ["clean-request <ip>"]
+    ],
+
+    "check-dbconn"      => [
+        "description"   => "Comprueba las conexiones a la bd configuradas en projects.php",
+        //"params"        => ["ip"=>"segundo parametro"],
+        "examples"      => ["check-dbconn"]
+    ],
+
+    "check-domain"      => [
+        "description"   => "Comprueba las respuestas por curl de domains.php",
+        "examples"      => ["check-domain"]
+    ],
+
     "env"                       => "App\\Services\\Command\\EnvService",
     "email"                     => "App\\Services\\Command\\EmailService",
     "get-useragent"             => "App\\Services\\Command\\Ipblocker\\UseragentService",

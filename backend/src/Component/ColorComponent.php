@@ -50,4 +50,9 @@ class ColorComponent
     {
         echo $this->get();
     }
+
+    public static function text(string $text, string $color="default"): string
+    {
+        return (new self())->add($text,$color)->get();
+    }
 }

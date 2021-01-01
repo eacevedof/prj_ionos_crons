@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Command;
 
+use App\Component\ColorComponent as Color;
 use function \App\Functions\get_config;
 
 class HelpService extends ACommandService
@@ -17,10 +18,10 @@ class HelpService extends ACommandService
         $cmds = $this->services;
 
         $echo[] = "";
-        $echo[] = "\t\tHELP MENU";
+        $echo[] = Color::text("\t\tHELP MENU","green");
         foreach ($cmds as $cmd => $class)
         {
-            $echo[] = "$cmd:\n\t$class";
+            $echo[] = Color::text("$cmd:\n\t$class","yellow");
         }
 
         $echo[] = "\n\nprojects:";
