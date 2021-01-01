@@ -12,7 +12,6 @@ class ColorComponent
 
     private $texts = [];
 
-
     public function get_colored(string $text, string $color="white-1"): string
     {
         $pre = $this->colors[$color];
