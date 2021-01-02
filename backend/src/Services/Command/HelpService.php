@@ -75,7 +75,7 @@ class HelpService extends ACommandService
     {
         print_r($_REQUEST);
         print_r($this->argv);die;
-        $param = $this->_get_request(2);
+        $param = $this->_get_request(2) ?? "";
         $filter = $this->_get_param("f") ?? "";
 
         $this->echo[] = Color::text("\t\tHELP MENU",Color::LIGHT_GREEN);
@@ -91,7 +91,7 @@ class HelpService extends ACommandService
                 echo $this->_param_projects($filter);
             break;
             default:
-                echo Color::text("param not found",Color::LIGHT_YELLOW);
+                echo Color::text("param not found",Color::LIGHT_YELLOW)."\n";
         }
     }
 }
