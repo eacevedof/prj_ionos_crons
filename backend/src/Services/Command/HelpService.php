@@ -73,6 +73,8 @@ class HelpService extends ACommandService
 
     public function run()
     {
+        print_r($_REQUEST);
+        print_r($this->argv);die;
         $param = $this->_get_request(2);
         $filter = $this->_get_param("f") ?? "";
 
