@@ -74,7 +74,7 @@ class HelpService extends ACommandService
     public function run()
     {
         $param = $this->_get_request(2);
-        $filter = $this->_get_param("f");
+        $filter = $this->_get_param("f") ?? "";
 
         $this->echo[] = Color::text("\t\tHELP MENU",Color::LIGHT_GREEN);
         switch ($param)
