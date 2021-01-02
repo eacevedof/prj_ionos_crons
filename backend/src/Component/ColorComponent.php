@@ -4,46 +4,48 @@ namespace App\Component;
 
 class ColorComponent
 {
-    //strreturn = "\033[{}m{}\033[00m".format(colcode,strval)
-    private $colors = [
-        "default"       =>  "\033[39m",
-        "white"         =>  "\033[0m",
-        "red"           =>  "\033[31m",
-        "green"         =>  "\033[32m",
-        "yellow"        =>  "\033[33m",
-        "blue"          =>  "\033[34m",
-        "magenta"       =>  "\033[35m",
-        "cyan"          =>  "\033[36m",
-        "light-gray"    =>  "\033[37m",
+    public const DEFAULT        = 39;
+    public const WHITE          = 0;
 
-        "dark-gray"     =>  "\033[90m",
-        "light-red"     =>  "\033[91m",
-        "light-green"   =>  "\033[92m",
-        "light-yellow"  =>  "\033[93m",
-        "light-blue"    =>  "\033[94m",
-        "light-magenta" =>  "\033[95m",
-        "light-cyan"    =>  "\033[96m",
-        "light-white"   =>  "\033[97m",
-    ];
+    public const RED            = 31;
+    public const GREEN          = 32;
+    public const YELLOW         = 33;
+    public const BLUE           = 34;
+    public const MAGENTA        = 35;
+    public const CYAN           = 36;
+
+    public const LIGHT_GRAY     = 90;
+    public const LIGHT_RED      = 91;
+    public const LIGHT_GREEN    = 92;
+    public const LIGHT_YELLOW   = 93;
+    public const LIGHT_BLUE     = 94;
+    public const LIGHT_MAGENTA  = 95;
+    public const LIGHT_CYAN     = 96;
+    public const LIGHT_WHITE    = 97;
 
     private $texts = [];
 
-    public function get_colored(string $text, string $color="default"): string
+    private function _get_tag(int $code): string
     {
-        $pre = $this->colors[$color];
-        $def = $this->colors["default"];
+        return sprintf("\033[%s]m",$code);
+    }
+    
+    public function get_colored(string $text, int $color=self::DEFAULT): string
+    {
+        $pre = $this->_get_tag($color);
+        $def = $this->_get_tag(self::DEFAULT);
         return "$pre$text$def";
     }
 
-    public function add(string $text, string $color="default"): ColorComponent
+    public function add(string $text, int $color=self::DEFAULT): ColorComponent
     {
         $this->texts[] = $this->get_colored($text,$color);
         return $this;
     }
 
-    public function get(): string
+    public function get(string $glue=""): string
     {
-        return implode("",$this->texts);
+        return implode($glue, $this->texts);
     }
 
     public function pr(): void
@@ -51,7 +53,7 @@ class ColorComponent
         echo $this->get();
     }
 
-    public static function text(string $text, string $color="default"): string
+    public static function text(string $text, int $color=self::DEFAULT): string
     {
         return (new self())->add($text,$color)->get();
     }
