@@ -73,9 +73,8 @@ class HelpService extends ACommandService
 
     public function run()
     {
-        print_r($_REQUEST);
-        print_r($this->argv);die;
-        $param = $this->_get_request(2) ?? "";
+        $this->_debug();
+        $param = $this->_get_request(1) ?? ""; // h o vacio
         $filter = $this->_get_param("f") ?? "";
 
         $this->echo[] = Color::text("\t\tHELP MENU",Color::LIGHT_GREEN);

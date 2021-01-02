@@ -22,4 +22,11 @@ abstract class ACommandService implements ICommand
     protected function _get_param($key){return $this->argv[$key] ?? null;}
 
     protected function _get_request($key){return $_REQUEST[$key] ?? null;}
+
+    protected function _debug()
+    {
+        $data[] = "argv: \n".print_r($this->argv,1);
+        $data[] = "request: \n".print_r($_REQUEST,1);
+        echo implode("\n",$data);
+    }
 }
