@@ -52,7 +52,7 @@ class ColorComponent
         return implode($glue, $this->texts);
     }
 
-    public function pr(string $glue=""): void
+    public function print(string $glue=""): void
     {
         echo $this->get($glue);
     }

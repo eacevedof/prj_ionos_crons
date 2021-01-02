@@ -44,6 +44,6 @@ class ColorComponentTest extends TestCase
             ->add("light white\n",Color::LIGHT_WHITE)
 
             ->add("background\n",42)
-            ->pr("\t");
+            ->print("\t");
     }
 }
