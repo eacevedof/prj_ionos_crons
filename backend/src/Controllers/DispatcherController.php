@@ -1,5 +1,6 @@
 <?php
 namespace App\Controllers;
+use App\Component\ColorComponent as Color;
 
 final class DispatcherController extends MainController
 {
@@ -20,8 +21,10 @@ final class DispatcherController extends MainController
         catch (\Exception $e)
         {
             //$this->logpr(PATH_ROOT,"PATH_ROOT");
-            $this->logerr($this->argv,"EXCEPTION dispatcher.argv (trace)");
-            $this->logerr($e->getMessage(),"EXCEPTION dispatcher");
+            $title = Color::text("EXCEPTION dispatcher.argv (trace)",Color::LIGHT_RED);
+            $this->logerr($this->argv, $title);
+            $title = Color::text("EXCEPTION dispatcher",Color::LIGHT_RED);
+            $this->logerr($e->getMessage(), $title);
         }
     }//__invoke
 }
