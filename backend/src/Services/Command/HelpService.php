@@ -128,10 +128,13 @@ class HelpService extends ACommandService
 
     public function run()
     {
-        $this->_debug();
+
         $param = $this->_get_request(1) ?? ""; // h o vacio
         $param2 = $this->_get_request(2) ?? ""; //all, projects, ""
         $filter = $this->_get_param("f") ?? "";
+
+        if($this->_get_param("debug"))
+            $this->_debug();
 
         $this->echo[] = Color::text("\tcmds and crons",Color::LIGHT_GREEN);
         switch ($param2)
