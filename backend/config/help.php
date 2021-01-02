@@ -22,13 +22,13 @@ return [
 
     "cron.cleaner.dump"         => [
         "description"   => "
-        Limpia los backups más antiguos
+        Limpia los backups más antiguos dejando los 15 últimos
         ",
     ],
 
     "cron.cleaner.repeated"     => [
         "description"   => "
-        Limpia los backups más antiguos
+        Limpia los backups repetidos dejando el más antiguo
         ",
     ],
 
