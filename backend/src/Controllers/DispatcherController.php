@@ -14,7 +14,8 @@ final class DispatcherController extends MainController
             if(!$service) $service = "help";
 
             $class = $this->services[$service] ?? "";
-            if(!$this->_is_service($class)) throw new \Exception("Class \"$class\" not found for service or command $service");
+            if(!$this->_is_service($class))
+                throw new \Exception("Class \"$class\" not found for service or command $service");
 
             (new $class())->run();
         }
