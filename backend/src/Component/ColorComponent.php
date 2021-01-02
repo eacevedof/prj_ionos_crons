@@ -13,8 +13,9 @@ class ColorComponent
     public const BLUE           = 34;
     public const MAGENTA        = 35;
     public const CYAN           = 36;
+    public const LIGHT_GRAY     = 37;
 
-    public const LIGHT_GRAY     = 90;
+    public const DARK_GRAY      = 90;
     public const LIGHT_RED      = 91;
     public const LIGHT_GREEN    = 92;
     public const LIGHT_YELLOW   = 93;
@@ -27,7 +28,8 @@ class ColorComponent
 
     private function _get_tag(int $code): string
     {
-        return sprintf("\033[%s]m",$code);
+        //"\033[{}m{}\033[00m".format(colcode,strval)
+        return sprintf("\033[%sm", $code);
     }
     
     public function get_colored(string $text, int $color=self::DEFAULT): string
