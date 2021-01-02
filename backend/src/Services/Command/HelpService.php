@@ -82,6 +82,7 @@ class HelpService extends ACommandService
         switch ($param2)
         {
             case "":
+
                 echo $this->_param_basic($filter);
             break;
             case "all":
@@ -92,6 +93,7 @@ class HelpService extends ACommandService
             break;
             default:
                 echo Color::text("param not found",Color::LIGHT_YELLOW)."\n";
+                echo $this->_param_basic("");
         }
     }
 }
