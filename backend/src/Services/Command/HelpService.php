@@ -38,12 +38,34 @@ class HelpService extends ACommandService
         $basic = [];
         foreach ($this->help as $cmd => $arinfo)
         {
+            if(strstr($cmd,"cron.")) continue;
             if($this->_in_filter($cmd, $arinfo, $filter))
-            {
                 $basic[$cmd] = $arinfo;
-            }
         }
         return $basic;
+    }
+    
+    private function _get_crons(string $filter):array
+    {
+        $return = [];
+        foreach ($this->help as $cmd => $arinfo)
+        {
+            if(!strstr($cmd,"cron.")) continue;
+            if($this->_in_filter($cmd, $arinfo, $filter))
+                $return[$cmd] = $arinfo;
+        }
+        return $return;        
+    }
+
+    private function _get_all(string $filter):array
+    {
+        $return = [];
+        foreach ($this->help as $cmd => $arinfo)
+        {
+            if($this->_in_filter($cmd, $arinfo, $filter))
+                $return[$cmd] = $arinfo;
+        }
+        return $return;
     }
 
     private function _get_echo($glue="\n")
@@ -56,7 +78,6 @@ class HelpService extends ACommandService
         $cmds = $this->_get_basic($filter);
         foreach ($cmds as $cmd => $arinfo)
         {
-            if(strstr($cmd,"cron.")) continue;
             $cmd = Color::text($cmd,Color::LIGHT_GREEN);
             $description = $arinfo["description"] ?? "";
             $description = Color::text($description, Color::LIGHT_WHITE);
@@ -67,13 +88,43 @@ class HelpService extends ACommandService
     }
 
     private function _param_crons(string $filter): string
-    {}
+    {
+        $crons = $this->_get_crons($filter);
+        foreach ($crons as $cron => $arinfo)
+        {
+            $cron = Color::text($cron,Color::LIGHT_GREEN);
+            $description = $arinfo["description"] ?? "";
+            $description = Color::text($description, Color::LIGHT_WHITE);
+            $this->echo[] = "$cron:$description";
+        }
+        return $this->_get_echo();
+    }
 
     private function _param_all(string $filter): string
-    {}
+    {
+        $all = $this->_get_all($filter);
+        foreach ($all as $cmd => $arinfo)
+        {
+            $cmd = Color::text($cmd,Color::LIGHT_GREEN);
+            $description = $arinfo["description"] ?? "";
+            $description = Color::text($description, Color::LIGHT_WHITE);
+            $this->echo[] = "$cmd:$description";
+        }
+        return $this->_get_echo();
+    }
 
     private function _param_projects(string $filter): string
-    {}
+    {
+        $projects = $this->_get_projects();
+
+        foreach ($projects as $alias)
+        {
+            $alias = Color::text($alias,Color::YELLOW);
+            $this->echo[] = "$alias";
+        }
+
+        return $this->_get_echo();
+    }
 
     public function run()
     {
