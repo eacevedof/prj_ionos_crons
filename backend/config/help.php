@@ -4,7 +4,7 @@ return [
         "description"   => "
         Muestra el menu de ayuda con los comandos
         parámetros: 
-            crons: muestra solo los crons, all:  muestra crons y projectos, projects: muestra solo projectos
+            crons: muestra solo los crons, all:  muestra crons y proyectos, projects: muestra solo proyectos
         ",
     ],
 
