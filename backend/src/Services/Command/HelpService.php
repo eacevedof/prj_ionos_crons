@@ -23,10 +23,15 @@ class HelpService extends ACommandService
         return $r;
     }
 
-    private function _handle_param()
+    private function _param_basic(string $filter): string
     {
 
-
+        foreach ($cmds as $cmd => $class)
+        {
+            $cmd = Color::text($cmd,Color::LIGHT_GREEN);
+            $class = Color::text($class, Color::LIGHT_WHITE);
+            $echo[] = "$cmd:\n  $class";
+        }
     }
 
     public function run()
@@ -34,6 +39,7 @@ class HelpService extends ACommandService
         $param = $this->_get_request(2);
         $filter = $this->_get_param("f");
 
+        $this->echo[] = Color::text("\t\tHELP MENU",Color::LIGHT_GREEN);
         switch ($param)
         {
             case "":
@@ -49,22 +55,10 @@ class HelpService extends ACommandService
                 echo Color::text("param not found",Color::LIGHT_YELLOW);
         }
 
-        $cmds = $this->services;
 
-        $echo[] = "";
-        $echo[] = Color::text("\t\tHELP MENU",Color::LIGHT_GREEN);
-        foreach ($cmds as $cmd => $class)
-        {
-            $cmd = Color::text($cmd,Color::LIGHT_GREEN);
-            $class = Color::text($class, Color::LIGHT_WHITE);
-            $echo[] = "$cmd:\n  $class";
-        }
 
-        $echo[] = "\n\nprojects:";
-        $prjs = $this->_get_projects();
-        foreach ($prjs as $prj)
-            $echo[] = "\t$prj";
-        $echo[] = "\n";
-        echo implode("\n",$echo);
+
+
+
     }
 }
