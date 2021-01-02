@@ -16,7 +16,7 @@ class ConfigService extends ACommandService
         $this->_debug();
         $param = $this->_get_request(2) ?? "services";
 
-        $data = $this->_get_request($param);
+        $data = $this->_get_data($param);
         echo $data;
     }
 }
