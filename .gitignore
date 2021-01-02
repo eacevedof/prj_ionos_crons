@@ -2,6 +2,9 @@
 /backend/config/domains.php
 /backend/config/emails.php
 /backend/config/logs.php
+/backend/config/databases.php
+/backend/config/help.php
+
 
 /backend/logs/
 /backend/public/*_custom.log

@@ -22,6 +22,7 @@ class HelpService extends ACommandService
         return $r;
     }
 
+
     public function run()
     {
         $cmds = $this->services;
@@ -32,7 +33,7 @@ class HelpService extends ACommandService
         {
             $cmd = Color::text($cmd,Color::LIGHT_GREEN);
             $class = Color::text($class, Color::LIGHT_WHITE);
-            $echo[] = "\n$cmd:\n\t$class";
+            $echo[] = "\n$cmd:\n  $class";
         }
 
         $echo[] = "\n\nprojects:";
