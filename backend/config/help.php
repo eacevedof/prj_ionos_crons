@@ -74,7 +74,7 @@ return [
         parámetros:
             s[string opt]: subject, c [string opt]: content, p [string opt]: ruta al adjunto
         ejemplo:
-            email s='hola' c='este es el cuertpo <b>:</b>' p='/some/path/to/file.csv'    
+            email s='hola' c='este es el cuertpo <b>:)</b>' p='/some/path/to/file.csv'    
         "
     ],
     "get-useragent"     => [

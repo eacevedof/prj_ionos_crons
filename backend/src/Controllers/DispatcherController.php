@@ -9,6 +9,7 @@ final class DispatcherController extends MainController
         $this->log("dipsatcher.invoke");
         try
         {
+            $debug = $this->get_param("debug");
             $service = $this->get_param("service");
             if(!$service) $service = $this->get_param(1);
             if(!$service) $service = "help";
@@ -22,10 +23,13 @@ final class DispatcherController extends MainController
         catch (\Exception $e)
         {
             //$this->logpr(PATH_ROOT,"PATH_ROOT");
-            $title = Color::text("EXCEPTION dispatcher.argv (trace)",Color::LIGHT_RED);
-            $this->logerr($this->argv, $title);
+            if($debug){
+                $title = Color::text("EXCEPTION dispatcher.argv (trace)",Color::LIGHT_RED);
+                $this->logerr($this->argv, $title);
+            }
             $title = Color::text("EXCEPTION dispatcher",Color::LIGHT_RED);
-            $this->logerr($e->getMessage(), $title);
+            $msg = Color::text($e->getMessage(),Color::RED);
+            $this->logerr($msg, $title);
         }
     }//__invoke
 }

@@ -45,7 +45,7 @@ class HelpService extends ACommandService
         return $basic;
     }
     
-    private function _get_crons(string $filter):array
+    private function _get_crons(string $filter): array
     {
         $return = [];
         foreach ($this->help as $cmd => $arinfo)
@@ -57,7 +57,7 @@ class HelpService extends ACommandService
         return $return;        
     }
 
-    private function _get_all(string $filter):array
+    private function _get_all(string $filter): array
     {
         $return = [];
         foreach ($this->help as $cmd => $arinfo)
@@ -68,10 +68,7 @@ class HelpService extends ACommandService
         return $return;
     }
 
-    private function _get_echo($glue="\n")
-    {
-        return implode($glue,$this->echo)."\r";
-    }
+    private function _get_echo(string $glue="\n"): string {return implode($glue,$this->echo)."\r";}
 
     private function _param_basic(string $filter): string
     {
@@ -153,5 +150,5 @@ class HelpService extends ACommandService
                 echo Color::text("param `$param2` not found",Color::LIGHT_YELLOW)."\n";
                 echo $this->_param_basic("");
         }
-    }
+    }// run
 }
