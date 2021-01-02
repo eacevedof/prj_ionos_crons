@@ -5,6 +5,7 @@ return [
         Muestra el menu de ayuda con los comandos
         parámetros: 
             crons: muestra solo los crons, all:  muestra crons y projectos, projects: muestra solo projectos
+            services: mapeo cmd -> service
         ",
     ],
 

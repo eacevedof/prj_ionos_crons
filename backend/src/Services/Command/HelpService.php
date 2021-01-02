@@ -127,8 +127,8 @@ class HelpService extends ACommandService
 
     public function run()
     {
-        $param = $this->_get_request(1) ?? ""; // h o vacio
-        $param2 = $this->_get_request(2) ?? ""; //all, projects, ""
+        //$param = $this->_get_request(1) ?? ""; // h o vacio
+        $param2 = $this->_get_request(2) ?? ""; //all, projects, services
         $filter = $this->_get_param("f") ?? "";
 
         if($this->_get_param("debug"))
