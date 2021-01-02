@@ -24,6 +24,8 @@ class ColorComponent
     public const LIGHT_CYAN     = 96;
     public const LIGHT_WHITE    = 97;
 
+    //background 40-49,100-107
+
     private $texts = [];
 
     private function _get_tag(int $code): string
@@ -50,9 +52,9 @@ class ColorComponent
         return implode($glue, $this->texts);
     }
 
-    public function pr(): void
+    public function pr(string $glue=""): void
     {
-        echo $this->get();
+        echo $this->get($glue);
     }
 
     public static function text(string $text, int $color=self::DEFAULT): string

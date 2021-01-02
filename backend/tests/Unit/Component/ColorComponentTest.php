@@ -30,6 +30,8 @@ class ColorComponentTest extends TestCase
             ->add("light magenta\n",Color::LIGHT_MAGENTA)
             ->add("light cyan\n",Color::LIGHT_CYAN)
             ->add("light white\n",Color::LIGHT_WHITE)
-            ->pr("\T");
+
+            ->add("background\n",42)
+            ->pr("\t");
     }
 }
