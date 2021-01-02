@@ -56,6 +56,7 @@ class HelpService extends ACommandService
         $cmds = $this->_get_basic($filter);
         foreach ($cmds as $cmd => $arinfo)
         {
+            if(strstr($cmd,"cron.")) continue;
             $cmd = Color::text($cmd,Color::LIGHT_GREEN);
             $description = $arinfo["description"] ?? "";
             $description = Color::text($description, Color::LIGHT_WHITE);
@@ -82,7 +83,6 @@ class HelpService extends ACommandService
         switch ($param2)
         {
             case "":
-
                 echo $this->_param_basic($filter);
             break;
             case "all":

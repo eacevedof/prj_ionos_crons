@@ -1,10 +1,12 @@
 <?php
 return [
     "help"     => [
-        "description"   => "Muestra el menu de ayuda",
-        "alias"         => ["h"],
-        //"params"        => [""=>""],
-        "examples"       => ["help","h"]
+        "description"   => "
+        Muestra el menu de ayuda con los comandos
+        parámetros: 
+            all:        muestra crons y projectos
+            projects:   muestra solo projectos
+        ",
     ],
 
     "cron.dbbackup"             => [
