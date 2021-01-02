@@ -1,14 +1,26 @@
 <?php
 //php backend/vendor/bin/phpunit backend/tests/Unit/Component/ColorComponentTest.php
 namespace Tests\Unit\Component;
-
 use PHPUnit\Framework\TestCase;
 use App\Component\ColorComponent as Color;
-use App\Traits\LogTrait as Log;
 
 class ColorComponentTest extends TestCase
 {
-    use Log;
+
+    public function test_two_colors()
+    {
+        $title = "
+        Title in magenta!
+        ";
+        $text = "
+        It has survived not only five centuries, but also the leap into electronic typesetting, 
+        remaining essentially unchanged. It was popularised in the 1960s with the release of 
+        etraset sheets containing Lorem Ipsum passages, and more recently with desktop 
+        publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        ";
+        echo Color::text($title, Color::MAGENTA);
+        echo Color::text($text, Color::LIGHT_CYAN);
+    }
 
     public function test_multicolors()
     {
