@@ -19,7 +19,6 @@ class CleanRequestService extends ACommandService
         $this->db = db::get("ipblocker");
     }
 
-
     private function _get_ip()
     {
         $ip = $this->_get_request(2);

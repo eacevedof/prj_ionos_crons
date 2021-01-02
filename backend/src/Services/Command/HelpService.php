@@ -66,6 +66,9 @@ class HelpService extends ACommandService
         return $this->_get_echo();
     }
 
+    private function _param_crons(string $filter): string
+    {}
+
     private function _param_all(string $filter): string
     {}
 
@@ -85,6 +88,9 @@ class HelpService extends ACommandService
             case "":
                 echo $this->_param_basic($filter);
             break;
+            case "crons":
+                echo $this->_param_crons($filter);
+                break;
             case "all":
                 echo $this->_param_all($filter);
             break;

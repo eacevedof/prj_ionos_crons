@@ -4,59 +4,96 @@ return [
         "description"   => "
         Muestra el menu de ayuda con los comandos
         parámetros: 
-            all:        muestra crons y projectos
-            projects:   muestra solo projectos
+            crons: muestra solo los crons, all:  muestra crons y projectos, projects: muestra solo projectos
         ",
     ],
 
     "cron.dbbackup"             => [
-        "description"   => "Realiza backup de las bases de datos",
-        //"params"        => [""=>""],
+        "description"   => "
+        Realiza backup de las bases de datos
+        ",
     ],
 
     "cron.dbreplicator"         => [
-        "description"   => "Hace copias en una bd secundaria normalmente ro",
-        //"params"        => [""=>""],
+        "description"   => "
+        Hace copias en una bd secundaria normalmente ro
+        ",
     ],
 
     "cron.cleaner.dump"         => [
-        "description"   => "Limpia los backups más antiguos",
-        //"params"        => [""=>""],
+        "description"   => "
+        Limpia los backups más antiguos
+        ",
     ],
 
     "cron.cleaner.repeated"     => [
-        "description"   => "Limpia los backups más antiguos",
-        //"params"        => [""=>""],
+        "description"   => "
+        Limpia los backups más antiguos
+        ",
     ],
 
     "exclude-ip"     => [
-        "description"   => "Agrega la ip para evitar ser registrada en las peticiones y que se salte analytics",
-        //"alias"         => ["h"]
-        "params"        => ["ip"=>"segundo parametro"],
-        "examples"      => ["exclude-ip <ip>"]
+        "description"   => "
+        Agrega la ip para evitar ser registrada en las peticiones y que se salte analytics
+        parámetros: ip
+        ejemplo:
+            exclude-ip 123.4.5.6
+        ",
     ],
 
     "clean-request"     => [
-        "description"   => "Limpia ipblocker de las peticiones de una ip y peticiones icon",
-        "params"        => ["ip"=>"segundo parametro"],
-        "examples"      => ["clean-request <ip>"]
+        "description"   => "
+        Limpia ipblocker de las peticiones de una ip y peticiones icon
+        parámetros: ip
+        ejemplo:
+            clean-request 123.4.5.6
+        ",
     ],
 
     "check-dbconn"      => [
-        "description"   => "Comprueba las conexiones a la bd configuradas en projects.php",
-        //"params"        => ["ip"=>"segundo parametro"],
-        "examples"      => ["check-dbconn"]
+        "description"   => "
+        Comprueba las conexiones a la bd configuradas en projects.php
+        ",
     ],
 
     "check-domain"      => [
-        "description"   => "Comprueba las respuestas por curl de domains.php",
-        "examples"      => ["check-domain"]
+        "description"   => "
+        Comprueba las respuestas por curl de domains.php
+        ",
     ],
 
-    "env"                       => "App\\Services\\Command\\EnvService",
-    "email"                     => "App\\Services\\Command\\EmailService",
-    "get-useragent"             => "App\\Services\\Command\\Ipblocker\\UseragentService",
+    "env"               => [
+        "description"   => "
+        Imprime por pantalla las variables de entorno relacionadas con este proyecto
+        "
+    ],
+    "email"                     => [
+        "description"   => "
+        Realiza un envío de email
+        parámetros:
+            s[string opt]: subject, c [string opt]: content, p [string opt]: ruta al adjunto
+        ejemplo:
+            email s='hola' c='este es el cuertpo <b>:</b>' p='/some/path/to/file.csv'    
+        "
+    ],
+    "get-useragent"     => [
+        "description"   => "
+        Imprime por pantalla todas las cabeceras user-agent enviadas por una ip determinada
+        parámetros: ip
+        ejemplo:
+            get-useragent 123.4.5.6
+        "
+    ],
 
-    //params: all,
-    "get-bot"                   => "App\\Services\\Command\\Ipblocker\\BotService",
+    "get-bot"       => [
+        "description"   => "
+        Imprime por pantalla todas las ips que han enviado cabeceras tipo bot
+        parámetros: 
+            all: todos los bots, top: los últimos 15, name: solo los nombres 
+        ejemplo:
+            get-bot all
+            get-bot top
+            get-bot name
+        "
+    ],
 ];
