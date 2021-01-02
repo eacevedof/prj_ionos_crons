@@ -6,6 +6,15 @@ use function \App\Functions\get_config;
 
 class HelpService extends ACommandService
 {
+    private $help;
+
+    //help o h  param 2: all, projects
+    public function __construct()
+    {
+        parent::__construct();
+        $this->help = get_config("help");
+    }
+
     private function _get_projects()
     {
         $r = array_keys($this->projects);
@@ -18,10 +27,12 @@ class HelpService extends ACommandService
         $cmds = $this->services;
 
         $echo[] = "";
-        $echo[] = Color::text("\t\tHELP MENU","green");
+        $echo[] = Color::text("\t\tHELP MENU",Color::LIGHT_GREEN);
         foreach ($cmds as $cmd => $class)
         {
-            $echo[] = Color::text("$cmd:\n\t$class","yellow");
+            $cmd = Color::text($cmd,Color::LIGHT_GREEN);
+            $class = Color::text($class, Color::LIGHT_WHITE);
+            $echo[] = "\n$cmd:\n\t$class";
         }
 
         $echo[] = "\n\nprojects:";
