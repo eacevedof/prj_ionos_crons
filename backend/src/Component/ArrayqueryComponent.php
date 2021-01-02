@@ -326,10 +326,10 @@ class ArrayqueryComponent
         return $this;
     }
 
-    public function filter($function, $array=[])
+    public function filter($function, $flag=null, $array=[])
     {
         if($array) $this->array = $array;
-        $this->array = array_filter($this->array, $function);
+        $this->array = array_filter($this->array, $function, $flag);
         return $this;
     }
 

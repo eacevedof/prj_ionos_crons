@@ -1,6 +1,12 @@
 <?php
 return [
-    //jobs
+    "help"     => [
+        "description"   => "Muestra el menu de ayuda",
+        "alias"         => ["h"],
+        //"params"        => [""=>""],
+        "examples"       => ["help","h"]
+    ],
+
     "cron.dbbackup"             => [
         "description"   => "Realiza backup de las bases de datos",
         //"params"        => [""=>""],
@@ -19,13 +25,6 @@ return [
     "cron.cleaner.repeated"     => [
         "description"   => "Limpia los backups más antiguos",
         //"params"        => [""=>""],
-    ],
-
-    "help"     => [
-        "description"   => "Muestra el menu de ayuda",
-        "alias"         => ["h"],
-        //"params"        => [""=>""],
-        "examples"       => ["help","h"]
     ],
 
     "exclude-ip"     => [
