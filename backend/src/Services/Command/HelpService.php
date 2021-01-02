@@ -70,7 +70,7 @@ class HelpService extends ACommandService
 
     private function _get_echo($glue="\n")
     {
-        return implode($glue,$this->echo);
+        return implode($glue,$this->echo)."\r";
     }
 
     private function _param_basic(string $filter): string
@@ -122,13 +122,11 @@ class HelpService extends ACommandService
             $alias = Color::text($alias,Color::YELLOW);
             $this->echo[] = "$alias";
         }
-
         return $this->_get_echo();
     }
 
     public function run()
     {
-
         $param = $this->_get_request(1) ?? ""; // h o vacio
         $param2 = $this->_get_request(2) ?? ""; //all, projects, ""
         $filter = $this->_get_param("f") ?? "";
@@ -136,7 +134,7 @@ class HelpService extends ACommandService
         if($this->_get_param("debug"))
             $this->_debug();
 
-        $this->echo[] = Color::text("\tcmds and crons",Color::LIGHT_GREEN);
+        $this->echo[] = Color::text("\tcmds & crons",Color::LIGHT_GREEN);
         switch ($param2)
         {
             case "":
