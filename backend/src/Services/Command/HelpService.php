@@ -60,7 +60,7 @@ class HelpService extends ACommandService
             $cmd = Color::text($cmd,Color::LIGHT_GREEN);
             $description = $arinfo["description"] ?? "";
             $description = Color::text($description, Color::LIGHT_WHITE);
-            $this->echo[] = "$cmd:\n  $description";
+            $this->echo[] = "$cmd:$description";
         }
 
         return $this->_get_echo();
