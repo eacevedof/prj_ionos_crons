@@ -96,4 +96,12 @@ return [
             get-bot name
         "
     ],
+
+    "config" => [
+        "description"   => "
+        Imprime por pantalla el contenido de los ficheros en config
+        parámetros:
+            domains, emails, logs, projects, services[default]
+        "
+    ],
 ];
