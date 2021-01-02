@@ -2,6 +2,7 @@
 namespace App\Services\Command;
 
 use function App\Functions\get_config;
+use App\Component\ColorComponent as Color;
 
 class ConfigService extends ACommandService
 {
@@ -17,6 +18,7 @@ class ConfigService extends ACommandService
         $param = $this->_get_request(2) ?? "services";
 
         $data = $this->_get_data($param);
+        echo Color::text($param."\n",Color::BLUE);
         echo $data;
     }
 }
