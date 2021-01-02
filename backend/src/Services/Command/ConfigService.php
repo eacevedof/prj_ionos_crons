@@ -18,7 +18,7 @@ class ConfigService extends ACommandService
         $param = $this->_get_request(2) ?? "services";
 
         $data = $this->_get_data($param);
-        echo Color::text($param."\n",Color::BLUE);
+        echo Color::text("Config of $param:\n",Color::BLUE);
         echo $data;
     }
 }
