@@ -13,8 +13,9 @@ class ConfigService extends ACommandService
 
     public function run(): void
     {
-        if($this->_get_param("debug")) $this->_debug();
+        $this->_debug();
         $param = $this->_get_request(2) ?? "services";
+
         $data = $this->_get_request($param);
         echo $data;
     }
