@@ -7,6 +7,7 @@ use function \App\Functions\get_config;
 class HelpService extends ACommandService
 {
     private $help;
+    private $echo = [];
 
     //help o h  param 2: all, projects
     public function __construct()
@@ -22,9 +23,32 @@ class HelpService extends ACommandService
         return $r;
     }
 
+    private function _handle_param()
+    {
+
+
+    }
 
     public function run()
     {
+        $param = $this->_get_request(2);
+        $filter = $this->_get_param("f");
+
+        switch ($param)
+        {
+            case "":
+                echo $this->_param_basic($filter);
+            break;
+            case "all":
+                echo $this->_param_all($filter);
+            break;
+            case "projects":
+                echo $this->_param_projects($filter);
+                break;
+            default:
+                echo Color::text("param not found",Color::LIGHT_YELLOW);
+        }
+
         $cmds = $this->services;
 
         $echo[] = "";
