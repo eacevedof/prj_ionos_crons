@@ -10,7 +10,7 @@ class ColorComponentTest extends TestCase
 {
     use Log;
 
-    public function test_red()
+    public function test_multicolors()
     {
         (new Color())
             ->add("\n\nwhite\n",Color::WHITE)
