@@ -92,7 +92,7 @@ class HelpService extends ACommandService
                 echo $this->_param_projects($filter);
             break;
             default:
-                echo Color::text("param not found",Color::LIGHT_YELLOW)."\n";
+                echo Color::text("param `$param2` not found",Color::LIGHT_YELLOW)."\n";
                 echo $this->_param_basic("");
         }
     }
