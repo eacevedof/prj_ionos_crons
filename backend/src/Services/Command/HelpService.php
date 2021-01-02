@@ -75,10 +75,11 @@ class HelpService extends ACommandService
     {
         $this->_debug();
         $param = $this->_get_request(1) ?? ""; // h o vacio
+        $param2 = $this->_get_request(2) ?? ""; //all, projects, ""
         $filter = $this->_get_param("f") ?? "";
 
-        $this->echo[] = Color::text("\t\tHELP MENU",Color::LIGHT_GREEN);
-        switch ($param)
+        $this->echo[] = Color::text("\tcmds and crons",Color::LIGHT_GREEN);
+        switch ($param2)
         {
             case "":
                 echo $this->_param_basic($filter);
