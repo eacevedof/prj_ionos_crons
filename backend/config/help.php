@@ -104,4 +104,10 @@ return [
             domains, emails, logs, projects, services[default]
         "
     ],
+
+    "chalantest-fix" => [
+        "description"   => "
+            Actualiza la bd de El Chalan Test con el dominio de prueba
+        "
+    ],
 ];

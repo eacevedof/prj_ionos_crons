@@ -29,4 +29,5 @@ return [
     "get-useragent"             => "App\\Services\\Command\\Ipblocker\\UseragentService",
     "get-bot"                   => "App\\Services\\Command\\Ipblocker\\BotService",
     "config"                    => "App\\Services\\Command\\ConfigService",
+    "chalantest-fix"            => "App\\Services\\Command\\ChalantestFixService",
 ];
