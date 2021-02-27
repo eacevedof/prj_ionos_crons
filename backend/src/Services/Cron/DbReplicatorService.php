@@ -37,6 +37,7 @@ final class DbReplicatorService extends ACronService
     {
         $this->config = [
             "ipblocker" => ["ipblocker-ro","ipblocker-test"],
+            "elchalanwp" => ["elchalanwp-test"],
         ];
         return $this;
     }
