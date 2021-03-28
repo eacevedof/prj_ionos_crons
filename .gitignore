@@ -1,11 +1,3 @@
-/backend/config/projects.php
-/backend/config/domains.php
-/backend/config/emails.php
-/backend/config/logs.php
-/backend/config/databases.php
-/backend/config/help.php
-
-
 /backend/logs/
 /backend/public/*_custom.log
 .idea
@@ -14,3 +6,11 @@
 /backend/.env.local
 /backend/vendor
 /backend/.phpunit.result.cache
+
+/backend/config/projects.php
+/backend/config/domains.php
+/backend/config/emails.php
+/backend/config/logs.php
+/backend/config/databases.php
+/backend/config/help.php
+/backend/config/code.php

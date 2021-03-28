@@ -12,6 +12,7 @@ mapping:
 return [
     //jobs
     "cron.dbbackup"             => "App\\Services\\Cron\\DbBackupService",
+    "cron.codebackup"           => "App\\Services\\Cron\\CodeBackupService",
     "cron.dbreplicator"         => "App\\Services\\Cron\\DbReplicatorService",
 
     "cron.cleaner.dump"         => "App\\Services\\Cron\\Cleaner\\DumpService",

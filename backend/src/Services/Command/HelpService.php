@@ -131,7 +131,7 @@ class HelpService extends ACommandService
         if($this->_get_param("debug"))
             $this->_debug();
 
-        $this->echo[] = Color::text("\tcmds & crons",Color::LIGHT_GREEN);
+        $this->echo[] = Color::text("\tcmds & crons (all, projects, services)",Color::LIGHT_GREEN);
         switch ($param2)
         {
             case "":

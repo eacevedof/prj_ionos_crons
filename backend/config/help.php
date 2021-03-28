@@ -14,6 +14,14 @@ return [
         ",
     ],
 
+    "code.dbbackup"             => [
+        "description"   => "
+        Realiza backup de las rutas configuradas
+        parámetros:
+            c: key en config/code.php
+        ",
+    ],
+
     "cron.dbreplicator"         => [
         "description"   => "
         Hace copias en una bd secundaria normalmente ro
