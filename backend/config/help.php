@@ -14,7 +14,7 @@ return [
         ",
     ],
 
-    "code.dbbackup"             => [
+    "cron.codebackup"             => [
         "description"   => "
         Realiza backup de las rutas configuradas
         parámetros:
