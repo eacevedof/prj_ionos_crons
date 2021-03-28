@@ -26,6 +26,22 @@ final class CodeBackupService extends ACronService
         return $this;
     }
 
+    private function _get_excluded($codekey): string
+    {
+        $paths = $this->codes[$codekey];
+        $pathfrom = trim($paths["from"]);
+
+        $excludesubs =  array_map(
+            function($subpath) use($pathfrom) {
+                $subpath = trim($subpath);
+                return "$pathfrom/$subpath/*";
+            },
+            array_merge($paths["exclude"] ?? [], [".git"])
+        );
+
+        if($excludesubs) return "-x ".implode(" ",$excludesubs);
+    }
+
     private function _backup_single($codekey): string
     {
         $now = date("Ymd-His");
@@ -34,9 +50,10 @@ final class CodeBackupService extends ACronService
         $pathto = $paths["to"];
 
         $pathzip = "$pathto/{$codekey}_$now.zip";
+        $exclude = $this->_get_excluded($codekey);
 
         //comprime sin carpeta .git
-        $command = "zip -r $pathzip $pathfrom -x \"$pathfrom/.git/*\"";
+        $command = "zip -r $pathzip $pathfrom $exclude";
         $this->logpr($command, "command");
         exec($command, $output, $result);
         return "$codekey resultado: $result"; // 0:ok, 1:error
