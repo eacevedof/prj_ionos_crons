@@ -132,7 +132,7 @@ class HelpService extends ACommandService
             $this->_debug();
 
         $this->echo[] = Color::text(
-            "\tcmds & crons \n\t cmd h all | projects | services",
+            "\tcmds & crons \n\t cmd h all | projects | projects",
             Color::LIGHT_GREEN
         );
         switch ($param2)
