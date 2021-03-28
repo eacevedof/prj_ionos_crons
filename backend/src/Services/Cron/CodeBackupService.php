@@ -52,7 +52,7 @@ final class CodeBackupService extends ACronService
         }
         else
         {
-            foreach(array_keys($this->projects) as $codekey)
+            foreach(array_keys($this->codes) as $codekey)
                 $results[] = $this->_backup_single($codekey);
         }
 
