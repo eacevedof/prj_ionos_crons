@@ -26,19 +26,20 @@ final class CodeBackupService extends ACronService
         return $this;
     }
 
-    private function _backup_single($codkey): string
+    private function _backup_single($codekey): string
     {
         $now = date("Ymd-His");
-        $paths = $this->codes[$codkey];
+        $paths = $this->codes[$codekey];
         $pathfrom = $paths["from"];
         $pathto = $paths["to"];
 
-        $pathzip = "$pathto/{$codkey}_$now.zip";
+        $pathzip = "$pathto/{$codekey}_$now.zip";
 
         //comprime sin carpeta .git
         $command = "zip -r $pathzip $pathfrom -x \"$pathfrom/.git/*\"";
+        $this->logpr($command, "command");
         exec($command, $output, $result);
-        return "$codkey resultado: $result"; // 0:ok, 1:error
+        return "$codekey resultado: $result"; // 0:ok, 1:error
     }
 
     public function run(): void
