@@ -28,32 +28,48 @@ final class CodeBackupService extends ACronService
 
     private function _get_excluded($codekey): string
     {
-        $paths = $this->codes[$codekey];
-        $pathfrom = trim($paths["from"]);
+        $parts = $this->_get_parts_from($codekey);
+        $end = $parts["end"];
 
         $excludesubs =  array_map(
-            function($subpath) use($pathfrom) {
+            function($subpath) use($end) {
                 $subpath = trim($subpath);
-                return "$pathfrom/$subpath/*";
+                return "./$end/$subpath/*";
             },
-            array_merge($paths["exclude"] ?? [], [".git"])
+            array_merge($this->codes[$codekey]["exclude"] ?? [], [".git"])
         );
 
         if($excludesubs) return "-x ".implode(" ",$excludesubs);
     }
 
+    private function _get_parts_from($codekey): array
+    {
+        $paths = $this->codes[$codekey];
+        $pathfrom = trim($paths["from"]);
+        $folders = explode("/",$pathfrom);
+        return [
+            "pathfrom"  => $pathfrom,
+            "pathprev"      => implode("/", array_slice($folders, 0, -1)),
+            "end"       => end($folders)
+        ];
+    }
+
     private function _backup_single($codekey): string
     {
         $now = date("Ymd-His");
-        $paths = $this->codes[$codekey];
-        $pathfrom = $paths["from"];
-        $pathto = $paths["to"];
+        $parts = $this->_get_parts_from($codekey);
+        $pathprev = $parts["pathprev"];
 
+        $pathto = $this->codes[$codekey]["to"];
         $pathzip = "$pathto/{$codekey}_$now.zip";
+
+        $end = "./".$parts["end"];
+
         $exclude = $this->_get_excluded($codekey);
 
         //comprime sin carpeta .git
-        $command = "zip -r $pathzip $pathfrom $exclude";
+        $command = "cd $pathprev; zip -r $pathzip $end $exclude";
+
         $this->logpr($command, "command");
         exec($command, $output, $result);
         return "$codekey resultado: $result"; // 0:ok, 1:error
