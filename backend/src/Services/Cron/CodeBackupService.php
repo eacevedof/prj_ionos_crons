@@ -34,7 +34,7 @@ final class CodeBackupService extends ACronService
         $excludesubs =  array_map(
             function($subpath) use($end) {
                 $subpath = trim($subpath);
-                return "\"./$end/$subpath/*\"";
+                return strstr($subpath,"*") ? "\"./$end/$subpath\"" : "\"./$end/$subpath/*\"";
             },
             array_merge($this->codes[$codekey]["exclude"] ?? [], [".git"])
         );
