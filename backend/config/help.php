@@ -118,4 +118,11 @@ return [
             Actualiza la bd de El Chalan Test con el dominio de prueba
         "
     ],
+
+    "ban-ips" => [
+        "description"   => "
+            Lee posibles ataques a partir de la url en la request y las ips sospechosas las
+            inserta en blacklist
+        "
+    ],
 ];
