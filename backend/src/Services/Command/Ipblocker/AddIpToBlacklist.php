@@ -3,13 +3,15 @@
  * Actualizado: 26/10/2021
  * Busca peticiones sospechosas, recupera las ips y las vuelca en blacklist
  */
-namespace App\Services\Cron;
+namespace App\Services\Command\Ipblocker;
 
-use App\Factories\Db;
+use App\Services\Command\ACommandService;
+use App\Factories\Db as db;
 
-final class IpBlockerService extends ACronService
+final class AddIpToBlacklist extends ACommandService
 {
     private $now;
+    private const CONTEXT = "ipblocker";
 
     private function _add_to_blacklist(): void
     {
@@ -31,7 +33,7 @@ final class IpBlockerService extends ACronService
         )
         ORDER BY remote_ip DESC
         ";
-        db::get("ipblocker")->exec($sql);
+        db::get(self::CONTEXT)->exec($sql);
     }
 
     private function get_added_ips(): array
@@ -43,7 +45,7 @@ final class IpBlockerService extends ACronService
         AND insert_date > '$this->now'
         AND reason LIKE 'cron%'
         ";
-        $data = db::get("ipblocker")->query($sql);
+        $data = db::get(self::CONTEXT)->query($sql);
         return $data;
     }
 

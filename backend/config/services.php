@@ -31,4 +31,5 @@ return [
     "get-bot"                   => "App\\Services\\Command\\Ipblocker\\BotService",
     "config"                    => "App\\Services\\Command\\ConfigService",
     "chalantest-fix"            => "App\\Services\\Command\\ChalantestFixService",
+    "ban-ips"                   => "App\\Services\\Command\\Ipblocker\\AddIpToBlacklist",
 ];

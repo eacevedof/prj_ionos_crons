@@ -4,7 +4,7 @@ namespace App\Services\Command\Ipblocker;
 use App\Services\Command\ACommandService;
 use App\Factories\Db as db;
 
-class BotService extends ACommandService
+final class BotService extends ACommandService
 {
     private $db;
     private $ctx;
