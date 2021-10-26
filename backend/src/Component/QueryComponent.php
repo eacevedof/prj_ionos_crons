@@ -3,7 +3,7 @@ namespace App\Component;
 use function App\Functions\get_config;
 use App\Component\Db\MysqlComponent;
 
-class QueryComponent
+final class QueryComponent
 {
     private $context;
     /**
@@ -12,7 +12,7 @@ class QueryComponent
     private $db;
     private $projects;
 
-    public function __construct($context="ipblocker")
+    public function __construct(string $context="ipblocker")
     {
         $this->projects = get_config("projects");
         $this->context = $context;

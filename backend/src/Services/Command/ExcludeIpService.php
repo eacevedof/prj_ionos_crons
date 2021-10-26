@@ -3,7 +3,7 @@ namespace App\Services\Command;
 
 use App\Factories\Db as db;
 
-class ExcludeIpService extends ACommandService
+final class ExcludeIpService extends ACommandService
 {
     private $ip;
 

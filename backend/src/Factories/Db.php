@@ -5,7 +5,7 @@ use App\Component\QueryComponent;
 
 final class Db
 {
-    public static function get($context)
+    public static function get(string $context)
     {
        return new QueryComponent($context);
     }
