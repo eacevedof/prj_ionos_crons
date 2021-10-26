@@ -45,6 +45,10 @@ cmd-check-dbconn:
 	clear
 	${phpexe} backend/public/index.php check-dbconn
 
+cmd-ban-ips:
+	clear
+	${phpexe} backend/public/index.php ban-ips
+
 help:
 	clear
 	cat makefile
