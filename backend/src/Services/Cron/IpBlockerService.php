@@ -11,9 +11,10 @@ final class IpBlockerService extends ACronService
 {
     private function _add_to_blacklist()
     {
-        $today = date("Y-m-d");
+        $now = date("Y-m-d H:i:s");
+
         $sql = "
-        INSERT INTO app_ip_blacklist(remote_ip,reason,is_blocked)
+        INSERT INTO app_ip_blacklist(remote_ip, reason, is_blocked)
         SELECT DISTINCT remote_ip,'cron - mlicious request',1
         FROM app_ip_request
         WHERE 1
