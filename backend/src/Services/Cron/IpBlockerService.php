@@ -1,7 +1,7 @@
 <?php
 /**
- * Actualizado: 27/11/2020
- * Replica un dump en bds ReadOnly
+ * Actualizado: 26/10/2021
+ * Busca peticiones sospechosas, recupera las ips y las vuelca en blacklist
  */
 namespace App\Services\Cron;
 
@@ -9,10 +9,12 @@ use App\Factories\Db;
 
 final class IpBlockerService extends ACronService
 {
-    private function _add_to_blacklist()
-    {
-        $now = date("Y-m-d H:i:s");
+    private $now;
 
+    private function _add_to_blacklist(): void
+    {
+        $this->now = date("Y-m-d H:i:00");
+        sleep(1);
         $sql = "
         INSERT INTO app_ip_blacklist(remote_ip, reason, is_blocked)
         SELECT DISTINCT remote_ip,'cron - mlicious request',1
@@ -32,10 +34,25 @@ final class IpBlockerService extends ACronService
         db::get("ipblocker")->exec($sql);
     }
 
+    private function get_added_ips(): array
+    {
+        $sql = "
+        SELECT remote_ip 
+        FROM app_ip_blacklist
+        WHERE 1 
+        AND insert_date > '$this->now'
+        AND reason LIKE 'cron%'
+        ";
+        $data = db::get("ipblocker")->query($sql);
+        return $data;
+    }
+
     public function run(): void
     {
         $this->logpr("START IPBLOCKER Blacklist");
         $this->_add_to_blacklist();
+        $added = $this->get_added_ips();
+        $this->logpr($added,"Added IPS");
         $this->logpr("END IPBLOCKER Blacklist");
     }
 
