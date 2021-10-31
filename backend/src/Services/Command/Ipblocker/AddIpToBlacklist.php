@@ -19,7 +19,7 @@ final class AddIpToBlacklist extends ACommandService
         sleep(1);
         $sql = "
         INSERT INTO app_ip_blacklist(remote_ip, reason, is_blocked)
-        SELECT DISTINCT remote_ip,'cron - malicious request v6',1
+        SELECT DISTINCT remote_ip,'cron - malicious request v2',1
         FROM app_ip_request
         WHERE 1
         AND insert_date > CURDATE()
@@ -33,11 +33,11 @@ final class AddIpToBlacklist extends ACommandService
                 )
             ) 
             -- para wp
-            OR (domain = 'elchalanaruba.com' AND get LIKE '{\"author\":\"%')
+            OR (domain = 'elchalanaruba.com' AND get LIKE '%author%:%')
             -- para todos
             OR (
                 request_uri LIKE '%wallet.dat%' OR request_uri LIKE '%th1s_1s_a_4o4%' OR request_uri LIKE '%/.env%' 
-                OR post LIKE '{\"0x\":[\"%'
+                OR post LIKE '{%0x%:[%'
             )
         )
         AND remote_ip NOT IN (
