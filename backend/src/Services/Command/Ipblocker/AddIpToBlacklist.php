@@ -23,10 +23,15 @@ final class AddIpToBlacklist extends ACommandService
         FROM app_ip_request
         WHERE 1
         AND insert_date > CURDATE()
-        AND domain IN ('eduardoaf.com','doblerr.es','theframework.es')
         AND (
-            request_uri LIKE '%wp_admin%' OR request_uri LIKE '%.env%' OR request_uri LIKE '%.php%'
-            OR request_uri LIKE '%wlwmanifest.xml%'
+            (
+		        domain IN ('eduardoaf.com','doblerr.es','theframework.es')
+                AND (
+                    request_uri LIKE '%wp_admin%' OR request_uri LIKE '%.env%' OR request_uri LIKE '%.php%'
+                    OR request_uri LIKE '%wlwmanifest.xml%' OR post LIKE '{\"0x\":[\"%' 
+                )
+            ) 
+            OR (domain = 'elchalanaruba.com' AND get LIKE '{\"author\":\"%') 
         )
         AND remote_ip NOT IN(
             SELECT DISTINCT remote_ip FROM app_ip_blacklist
