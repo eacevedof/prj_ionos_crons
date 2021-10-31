@@ -36,8 +36,8 @@ final class AddIpToBlacklist extends ACommandService
             OR (domain = 'elchalanaruba.com' AND get LIKE '{\"author\":\"%')
             -- para todos
             OR (
-                request_uri LIKE '%wallet.dat%' OR request_uri LIKE '%th1s_1s_a_4o4%' 
-                OR post LIKE '{\"0x\":[\"%' OR request_uri LIKE '%/.env%'
+                request_uri LIKE '%wallet.dat%' OR request_uri LIKE '%th1s_1s_a_4o4%' OR request_uri LIKE '%/.env%' 
+                OR post LIKE '{\"0x\":[\"%'
             )
         )
         AND remote_ip NOT IN (
