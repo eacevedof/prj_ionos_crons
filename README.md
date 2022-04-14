@@ -1,5 +1,7 @@
 # prj_ionos_crons
 Crons
+- crontab -l #listar
+- crontab -e #editar
 
 #### comandos
 - php backend/public/index.php service=cron.dbbackupservice
