@@ -144,7 +144,6 @@ final class DailyReportService extends ACommandService
         AND COALESCE(TRIM(user_agent),'') != '' 
         ORDER BY insert_date DESC
         ";
-
         return $this->db->query($sql);
     }
 
