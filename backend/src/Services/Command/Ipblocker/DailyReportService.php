@@ -15,6 +15,7 @@ final class DailyReportService extends ACommandService
     {
         $this->db = db::get("ipblocker-ro");
         $this->yesterday = date("Y-m-d", strtotime("-1 days"));
+        if($value = $this->_get_request(2)) $this->yesterday = (string)$value;
     }
 
     private function _get_requests_by_bots(): array
