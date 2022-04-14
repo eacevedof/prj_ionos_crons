@@ -134,6 +134,33 @@ final class DailyReportService extends ACommandService
         return $this->db->query($sql);
     }
 
+    private function _get_blocked_ips_and_num_visits_of_no_bots(): array
+    {
+        $sql = "
+        SELECT nobots.*, app_ip.country, IF(bl.id IS NULL,'','blocked') is_blocked, 
+        bl.insert_date block_date, bl.reason
+        FROM
+        (
+            SELECT remote_ip, COUNT(id) num_visits
+            FROM `app_ip_request`
+            WHERE 1 
+            AND insert_date LIKE '{$this->yesterday}%'
+            AND remote_ip IN (SELECT remote_ip FROM app_ip_blacklist)
+            AND (
+                TRIM(user_agent)!='' AND user_agent NOT LIKE '%bot%' AND user_agent NOT LIKE '%crawl%' AND user_agent NOT LIKE '%ALittle%'
+                AND user_agent NOT LIKE '%spider%' AND user_agent NOT LIKE '%Go-http-client%' AND user_agent NOT LIKE '%facebookexternalhit%'
+                AND user_agent NOT LIKE '%evc-batch%'
+            )
+            GROUP BY remote_ip
+        ) nobots
+        LEFT JOIN app_ip
+        ON app_ip.remote_ip = nobots.remote_ip
+        LEFT JOIN app_ip_blacklist bl
+        ON nobots.remote_ip = bl.remote_ip
+        ORDER BY num_visits DESC, country
+        ";
+    }
+
     private function _get_user_agents(): array
     {
         $sql = "
