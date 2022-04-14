@@ -47,7 +47,7 @@ final class DailyReportService extends ACommandService
         SELECT bots.*, app_ip.country, IF(bl.id IS NULL,'','blocked') is_blocked, bl.insert_date block_date, bl.reason
         FROM
         (
-            SELECT remote_ip, MIN(insert_date) first_visit, MAX(insert_date) last_visit, MAX(CONCAT(domain,request_uri)) request_uri
+            SELECT remote_ip, MIN(insert_date) first_visit, MAX(insert_date) last_visit, MAX(CONCAT(`domain`,request_uri)) request_uri
             FROM `app_ip_request`
             WHERE 1 
             AND insert_date LIKE '{$this->yesterday}%'
@@ -69,7 +69,7 @@ final class DailyReportService extends ACommandService
         SELECT bots.*, app_ip.country, IF(bl.id IS NULL,'','blocked') is_blocked, bl.insert_date block_date, bl.reason
         FROM
         (
-            SELECT remote_ip, COUNT(id) num_visits, MAX(CONCAT(domain, request_uri)) request_uri, MAX(user_agent) user_agent
+            SELECT remote_ip, COUNT(id) num_visits, MAX(CONCAT(`domain`, request_uri)) request_uri, MAX(user_agent) user_agent
             FROM `app_ip_request`
             WHERE 1 
             AND insert_date LIKE '{$this->yesterday}%'
@@ -94,7 +94,7 @@ final class DailyReportService extends ACommandService
     private function _get_most_visited_urls_by_no_bots():array
     {
         $sql = "
-        SELECT CONCAT(domain, request_uri) request_uri, COUNT(id) num_visits
+        SELECT CONCAT(`domain`, request_uri) request_uri, COUNT(id) num_visits
         FROM `app_ip_request`
         WHERE 1 
         AND insert_date LIKE '{$this->yesterday}%'
@@ -103,8 +103,8 @@ final class DailyReportService extends ACommandService
             AND user_agent NOT LIKE '%spider%' AND user_agent NOT LIKE '%Go-http-client%' AND user_agent NOT LIKE '%facebookexternalhit%'
             AND user_agent NOT LIKE '%evc-batch%'
         )
-        GROUP BY CONCAT(domain, request_uri)
-        ORDER BY 2 DESC, 1 ASC
+        GROUP BY CONCAT(`domain`, request_uri)
+        ORDER BY `domain` ASC, 2 DESC, 1 ASC
         ";
         return $this->db->query($sql);
     }
@@ -112,7 +112,7 @@ final class DailyReportService extends ACommandService
     private function _get_user_agents(): array
     {
         $sql = "
-        SELECT insert_date, user_agent, CONCAT(domain,request_uri) url 
+        SELECT insert_date, user_agent, CONCAT(`domain`,request_uri) url 
         FROM app_ip_request
         WHERE 1
         AND remote_ip='$this->ip'
