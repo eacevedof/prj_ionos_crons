@@ -13,7 +13,7 @@ final class DailyReportService extends ACommandService
 
     public function __construct()
     {
-        $this->db = db::get("ipblocker-ro");
+        $this->db = db::get("ipblocker-test");
         $this->yesterday = date("Y-m-d", strtotime("-1 days"));
         if($value = $this->_get_request(2)) $this->yesterday = (string)$value;
     }
