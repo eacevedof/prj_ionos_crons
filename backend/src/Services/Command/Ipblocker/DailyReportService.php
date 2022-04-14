@@ -162,22 +162,48 @@ final class DailyReportService extends ACommandService
         return $this->db->query($sql);
     }
 
-    private function _get_user_agents(): array
+    private function _get_html(array $data, string $h3): string
     {
-        $sql = "
-        SELECT insert_date, user_agent, CONCAT(`domain`,request_uri) url 
-        FROM app_ip_request
-        WHERE 1
-        AND remote_ip='$this->ip'
-        AND COALESCE(TRIM(user_agent),'') != '' 
-        ORDER BY insert_date DESC
-        ";
-        return $this->db->query($sql);
+        $titles = array_keys($data[0] ?? []);
+        if(!$titles) return "<h3>$h3</h3>";
+        $html = [
+            "<h3>$h3</h3>",
+            "<table>"
+        ];
+        $tmp = [];
+        foreach ($titles as $title) {
+            $tmp[] = "<th>$title</th>";
+        }
+        $tmp = implode("", $tmp);
+        $html[] = "<tr>$tmp</tr>";
+
+        foreach ($data as $row) {
+            $tmp = [];
+            foreach ($titles as $field) {
+                $tmp[] = "<td>{$row[$field]}</td>";
+            }
+            $tmp = implode("", $tmp);
+            $html[] = "<tr>$tmp</tr>";
+        }
+        $html[] = "</table>";
+        return implode("\n", $html);
     }
 
     public function run()
     {
         $this->logpr("START DAILYREPORT");
+        $html = [];
+
+        $data = $this->_get_anonymous_requests();
+        $html[] = $this->_get_html($data, "Anonymous requests");
+
+        $data = $this->_get_blocked_ips_and_num_visits_of_no_bots();
+        $html[] = $this->_get_html($data, "Blocked ips and num visits of no bots");
+
+        $data = $this->_get_max_requests_by_no_bots();
+        $html[] = $this->_get_html($data, "Max requests by no bots");
+
+
 
         $this->logpr("END DAILYREPORT");
     }
