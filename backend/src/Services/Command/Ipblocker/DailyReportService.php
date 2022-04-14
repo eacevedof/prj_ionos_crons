@@ -47,7 +47,7 @@ final class DailyReportService extends ACommandService
     private function _get_anonymous_requests(): array
     {
         $sql = "
-        SELECT bots.*, app_ip.country, IF(bl.id IS NULL,'','blocked') is_blocked, bl.insert_date block_date, bl.reason
+        SELECT bots.*, app_ip.country, app_ip.`whois`, IF(bl.id IS NULL,'','blocked') is_blocked, bl.insert_date block_date, bl.reason
         FROM
         (
             SELECT remote_ip, MIN(insert_date) first_visit, MAX(insert_date) last_visit, MAX(CONCAT(`domain`,request_uri)) request_uri
@@ -82,13 +82,13 @@ final class DailyReportService extends ACommandService
                 AND user_agent NOT LIKE '%evc-batch%'
             )
             GROUP BY remote_ip
-            ORDER BY COUNT(id) DESC
         ) bots
         LEFT JOIN app_ip
         ON app_ip.remote_ip = bots.remote_ip
         LEFT JOIN app_ip_blacklist bl
         ON bots.remote_ip = bl.remote_ip
-        ORDER BY user_agent ASC
+        ORDER BY num_visits DESC
+        LIMIT 25
         ";
 
         return $this->db->query($sql);
@@ -160,7 +160,32 @@ final class DailyReportService extends ACommandService
         ON app_ip.remote_ip = nobots.remote_ip
         LEFT JOIN app_ip_blacklist bl
         ON nobots.remote_ip = bl.remote_ip
-        ORDER BY bl.insert_date DESC, num_visits DESC, country
+        ORDER BY num_visits DESC,  bl.insert_date DESC, country
+        ";
+        return $this->db->query($sql);
+    }
+
+    private function _get_eduardoaf_root_requests(): array
+    {
+        $sql = "
+        SELECT app_ip.country, app_ip.`whois`, eduardoaf.*
+        FROM
+        (
+            SELECT remote_ip, user_agent, insert_date, `post`, `get`, files
+            FROM `app_ip_request`
+            WHERE 1 
+            AND insert_date LIKE '{$this->yesterday}%'
+            AND `domain`='eduardoaf.com'
+            AND request_uri='/' 
+            AND (
+                TRIM(user_agent)!='' AND user_agent NOT LIKE '%bot%' AND user_agent NOT LIKE '%crawl%' AND user_agent NOT LIKE '%ALittle%'
+                AND user_agent NOT LIKE '%spider%' AND user_agent NOT LIKE '%Go-http-client%' AND user_agent NOT LIKE '%facebookexternalhit%'
+                AND user_agent NOT LIKE '%evc-batch%'
+            )
+        ) eduardoaf
+        LEFT JOIN app_ip
+        ON eduardoaf.remote_ip = app_ip.remote_ip
+        ORDER BY country ASC, remote_ip
         ";
         return $this->db->query($sql);
     }
@@ -218,8 +243,11 @@ final class DailyReportService extends ACommandService
         $this->logpr("START DAILYREPORT");
         $html = [];
 
-        $data = $this->_get_anonymous_requests();
-        $html[] = $this->_get_html($data, "Anonymous requests");
+        $data = $this->_get_most_visited_urls_by_no_bots();
+        $html[] = $this->_get_html($data, "Most visited urls by no bots");
+
+        $data = $this->_get_eduardoaf_root_requests();
+        $html[] = $this->_get_html($data, "eduardoaf root by no bots");
 
         $data = $this->_get_blocked_ips_and_num_visits_of_no_bots();
         $html[] = $this->_get_html($data, "Blocked ips and num visits of no bots");
@@ -227,14 +255,14 @@ final class DailyReportService extends ACommandService
         $data = $this->_get_max_requests_by_no_bots();
         $html[] = $this->_get_html($data, "Max requests by no bots");
 
-        $data = $this->_get_most_visited_urls_by_no_bots();
-        $html[] = $this->_get_html($data, "Most visited urls by no bots");
-
         $data = $this->_get_requests_by_bots();
         $html[] = $this->_get_html($data, "Requests made by bots");
 
         $data = $this->_get_num_visits_by_country_no_bots();
         $html[] = $this->_get_html($data, "Num of visits by country no bots");
+
+        $data = $this->_get_anonymous_requests();
+        $html[] = $this->_get_html($data, "Anonymous requests");
 
         $html = implode("\n", $html);
         $this->_send($html);
