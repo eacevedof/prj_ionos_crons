@@ -69,7 +69,7 @@ final class DailyReportService extends ACommandService
         SELECT bots.*, app_ip.country, IF(bl.id IS NULL,'','blocked') is_blocked, bl.insert_date block_date, bl.reason
         FROM
         (
-            SELECT remote_ip, COUNT(id) n_visits, MAX(CONCAT(domain, request_uri)) request_uri, MAX(user_agent) user_agent
+            SELECT remote_ip, COUNT(id) num_visits, MAX(CONCAT(domain, request_uri)) request_uri, MAX(user_agent) user_agent
             FROM `app_ip_request`
             WHERE 1 
             AND insert_date LIKE '{$this->yesterday}%'
@@ -88,6 +88,24 @@ final class DailyReportService extends ACommandService
         ORDER BY user_agent ASC
         ";
 
+        return $this->db->query($sql);
+    }
+
+    private function _get_most_visited_urls_by_no_bots():array
+    {
+        $sql = "
+        SELECT CONCAT(domain, request_uri) request_uri, COUNT(id) num_visits
+        FROM `app_ip_request`
+        WHERE 1 
+        AND insert_date LIKE '{$this->yesterday}%'
+        AND (
+            TRIM(user_agent)!='' AND user_agent NOT LIKE '%bot%' AND user_agent NOT LIKE '%crawl%' AND user_agent NOT LIKE '%ALittle%'
+            AND user_agent NOT LIKE '%spider%' AND user_agent NOT LIKE '%Go-http-client%' AND user_agent NOT LIKE '%facebookexternalhit%'
+            AND user_agent NOT LIKE '%evc-batch%'
+        )
+        GROUP BY CONCAT(domain, request_uri)
+        ORDER BY 2 DESC, 1 ASC
+        ";
         return $this->db->query($sql);
     }
 
