@@ -203,7 +203,11 @@ final class DailyReportService extends ACommandService
         $data = $this->_get_max_requests_by_no_bots();
         $html[] = $this->_get_html($data, "Max requests by no bots");
 
+        $data = $this->_get_most_visited_urls_by_no_bots();
+        $html[] = $this->_get_html($data, "Most visited urls by no bots");
 
+        $data = $this->_get_requests_by_bots();
+        $html[] = $this->_get_html($data, "Requests made by bots");
 
         $this->logpr("END DAILYREPORT");
     }
