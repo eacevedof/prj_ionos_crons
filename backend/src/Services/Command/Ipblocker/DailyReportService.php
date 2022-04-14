@@ -196,14 +196,30 @@ final class DailyReportService extends ACommandService
         return $this->db->query($sql);
     }
 
+    private function _get_new_blocked_ips(): array
+    {
+        $sql = "
+        SELECT bl.remote_ip, ip.country, ip.`whois`, bl.reason, bl.insert_date
+        FROM app_ip_blacklist bl
+        LEFT JOIN app_ip ip
+        ON bl.remote_ip = ip.remote_ip
+        WHERE 1
+        AND is_blocked=1
+        AND insert_date LIKE '{$this->yesterday}%'
+        ORDER BY bl.insert_date DESC
+        ";
+        return $this->db->query($sql);
+    }
+
     private function _get_html(array $data, string $h3): string
     {
+        if(!$count = count($data)) return "<h3>$h3 - (0)</h3>";
+
         $titles = array_keys($data[0] ?? []);
-        if(!$titles) return "<h3>$h3</h3>";
         $html = [
             "<hr/>",
             "<br/>",
-            "<h3>$h3</h3>",
+            "<h3>$h3 ($count)</h3>",
             "<table>"
         ];
         $tmp = ["<th>Nº</th>"];
@@ -248,6 +264,9 @@ final class DailyReportService extends ACommandService
     {
         $this->logpr("START DAILYREPORT {$this->yesterday}");
         $html = [];
+
+        $data = $this->_get_new_blocked_ips();
+        $html[] = $this->_get_html($data, "New blocked");
 
         $data = $this->_get_most_visited_urls_by_no_bots();
         $html[] = $this->_get_html($data, "Most visited urls by no bots");
