@@ -65,9 +65,9 @@ final class DbReplicatorService extends ACronService
     private function _get_lastdump($prefix)
     {
         $pattern = "/{$prefix}_[\d]{14}\.sql/";
-        $results = [];
         foreach ($this->dumps as $file)
         {
+            $results = [];
             preg_match_all($pattern, $file, $results);
             if($results[0][0] ?? null)
                 return $file;
