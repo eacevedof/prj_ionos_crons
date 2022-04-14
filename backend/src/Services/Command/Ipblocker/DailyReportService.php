@@ -157,8 +157,9 @@ final class DailyReportService extends ACommandService
         ON app_ip.remote_ip = nobots.remote_ip
         LEFT JOIN app_ip_blacklist bl
         ON nobots.remote_ip = bl.remote_ip
-        ORDER BY num_visits DESC, country
+        ORDER BY bl.insert_date DESC, num_visits DESC, country
         ";
+        return $this->db->query($sql);
     }
 
     private function _get_user_agents(): array
