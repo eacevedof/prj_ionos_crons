@@ -106,8 +106,10 @@ final class DailyReportService extends ACommandService
             AND user_agent NOT LIKE '%spider%' AND user_agent NOT LIKE '%Go-http-client%' AND user_agent NOT LIKE '%facebookexternalhit%'
             AND user_agent NOT LIKE '%evc-batch%'
         )
+        -- de las ips que no estan bloqueadas
+        AND remote_ip NOT IN (SELECT remote_ip FROM app_ip_blacklist WHERE 1 AND is_blocked=1)
         GROUP BY CONCAT(`domain`, request_uri)
-        ORDER BY `domain` ASC, 2 DESC, 1 ASC
+        ORDER BY `domain` ASC, num_visits DESC, request_uri ASC
         ";
         return $this->db->query($sql);
     }
@@ -140,7 +142,7 @@ final class DailyReportService extends ACommandService
     private function _get_blocked_ips_and_num_visits_of_no_bots(): array
     {
         $sql = "
-        SELECT nobots.*, app_ip.country, IF(bl.id IS NULL,'','yes') blocked, 
+        SELECT DISTINCT nobots.*, app_ip.country, IF(bl.id IS NULL,'','yes') blocked, 
         bl.insert_date block_date, bl.reason
         FROM
         (
