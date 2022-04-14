@@ -200,7 +200,7 @@ final class DailyReportService extends ACommandService
 
         $r = EmailComponent::get($config)
             ->set_from($config["email"])
-            ->add_to($this->emails["contacts"][0])  //gmail
+            ->add_to($emails["contacts"][0])  //gmail
             ->set_subject("Daily report of $this->yesterday")
             ->set_content($content)
             ->send()
