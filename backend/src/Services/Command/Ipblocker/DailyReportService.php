@@ -1,8 +1,10 @@
 <?php
 namespace App\Services\Command\Ipblocker;
 
+use App\Component\Email\EmailComponent;
 use App\Services\Command\ACommandService;
 use App\Factories\Db as db;
+use function App\Functions\get_config;
 
 final class DailyReportService extends ACommandService
 {
@@ -189,6 +191,23 @@ final class DailyReportService extends ACommandService
         return implode("\n", $html);
     }
 
+    private function _send(string $content): void
+    {
+        $this->logpr("email._send");
+        $emails = get_config("emails");
+        $config = $emails["configs"][0];
+
+        $r = EmailComponent::get($config)
+            ->set_from($config["email"])
+            ->add_to($this->emails["contacts"][0])  //gmail
+            ->set_subject("Daily report of $this->yesterday")
+            ->set_content($content)
+            ->send()
+            ->get_errors()
+        ;
+        $this->logpr($r, "error on send?");
+    }
+
     public function run()
     {
         $this->logpr("START DAILYREPORT");
@@ -209,6 +228,8 @@ final class DailyReportService extends ACommandService
         $data = $this->_get_requests_by_bots();
         $html[] = $this->_get_html($data, "Requests made by bots");
 
+        $html = implode("\n", $html);
+        $this->_send($html);
         $this->logpr("END DAILYREPORT");
     }
 }
