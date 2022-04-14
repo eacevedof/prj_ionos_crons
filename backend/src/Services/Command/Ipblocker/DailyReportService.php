@@ -25,9 +25,12 @@ final class DailyReportService extends ACommandService
             FROM `app_ip_request`
             WHERE 1 
             AND insert_date LIKE '{$this->yesterday}%'
-            AND (user_agent LIKE '%bot%')
+            AND (
+                user_agent LIKE '%bot%' OR user_agent LIKE '%crawl%' OR user_agent LIKE '%ALittle%'
+                OR user_agent LIKE '%spider%' OR user_agent LIKE '%Go-http-client%' 
+                OR user_agent LIKE '%facebookexternalhit%' OR user_agent LIKE '%evc-batch%'
+            )
             GROUP BY user_agent
-            -- order by user_agent desc
         ) bots
         LEFT JOIN app_ip
         ON app_ip.remote_ip = bots.remote_ip
