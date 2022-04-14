@@ -131,6 +131,7 @@ final class DailyReportService extends ACommandService
         GROUP BY country
         ORDER BY num_visits DESC, country
         ";
+        return $this->db->query($sql);
     }
 
     private function _get_user_agents(): array
