@@ -2,4 +2,4 @@
 # para ejecutarlo ./cmd <arguments>
 thisdir=$(dirname $0)
 clear
-/usr/bin/php8.0-cli $thisdir"/index.php" "$@"
+/usr/bin/php7.4-cli $thisdir"/index.php" "$@"
