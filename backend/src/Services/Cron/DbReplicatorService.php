@@ -64,9 +64,12 @@ final class DbReplicatorService extends ACronService
 
     private function _get_lastdump($prefix)
     {
+        $pattern = "/{$prefix}_[\d]{14}\.sql/";
+        $results = [];
         foreach ($this->dumps as $file)
         {
-            if(strpos($file,$prefix)===0)
+            preg_match_all($pattern, $file, $results);
+            if($results[0][0] ?? null)
                 return $file;
         }
         return "";
@@ -135,6 +138,7 @@ final class DbReplicatorService extends ACronService
                 if(!is_file($this->tmpdump)) continue;
                 
                 $command = "/usr/bin/mysql --host={$server} --user={$user} --password={$password} {$database} < $this->tmpdump";
+                //$this->logpr($command, "command");
                 exec($command, $output, $result);
                 sleep(1);
                 $results[] = "$ctxto resultado: $result"; // 0:ok, 1:error
