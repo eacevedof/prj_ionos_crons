@@ -205,7 +205,7 @@ final class DailyReportService extends ACommandService
         ON bl.remote_ip = ip.remote_ip
         WHERE 1
         AND is_blocked=1
-        AND insert_date LIKE '{$this->yesterday}%'
+        AND bl.insert_date LIKE '{$this->yesterday}%'
         ORDER BY bl.insert_date DESC
         ";
         return $this->db->query($sql);
