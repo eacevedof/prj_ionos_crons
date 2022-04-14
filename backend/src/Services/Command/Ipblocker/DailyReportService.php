@@ -21,7 +21,7 @@ final class DailyReportService extends ACommandService
     private function _get_requests_by_bots(): array
     {
         $sql = "
-        SELECT bots.*, app_ip.country, IF(bl.id IS NULL,'','blocked') is_blocked, bl.reason
+        SELECT bots.*, app_ip.country, IF(bl.id IS NULL,'','yes') blocked, bl.reason
         FROM
         (
             SELECT user_agent, MIN(insert_date) first_visit, MAX(insert_date) last_visit, MAX(remote_ip) remote_ip
@@ -47,7 +47,7 @@ final class DailyReportService extends ACommandService
     private function _get_anonymous_requests(): array
     {
         $sql = "
-        SELECT bots.*, app_ip.country, app_ip.`whois`, IF(bl.id IS NULL,'','blocked') is_blocked, bl.insert_date block_date, bl.reason
+        SELECT bots.*, app_ip.country, app_ip.`whois`, IF(bl.id IS NULL,'','yes') blocked, bl.insert_date block_date, bl.reason
         FROM
         (
             SELECT remote_ip, MIN(insert_date) first_visit, MAX(insert_date) last_visit, MAX(CONCAT(`domain`,request_uri)) request_uri
@@ -69,7 +69,7 @@ final class DailyReportService extends ACommandService
     private function _get_max_requests_by_no_bots(): array
     {
         $sql = "
-        SELECT bots.*, app_ip.country, IF(bl.id IS NULL,'','blocked') is_blocked, bl.insert_date block_date, bl.reason
+        SELECT bots.*, app_ip.country, IF(bl.id IS NULL,'','yes') blocked, bl.insert_date block_date, bl.reason
         FROM
         (
             SELECT remote_ip, COUNT(id) num_visits, MAX(CONCAT(`domain`, request_uri)) request_uri, MAX(user_agent) user_agent
@@ -140,7 +140,7 @@ final class DailyReportService extends ACommandService
     private function _get_blocked_ips_and_num_visits_of_no_bots(): array
     {
         $sql = "
-        SELECT nobots.*, app_ip.country, IF(bl.id IS NULL,'','blocked') is_blocked, 
+        SELECT nobots.*, app_ip.country, IF(bl.id IS NULL,'','yes') blocked, 
         bl.insert_date block_date, bl.reason
         FROM
         (
@@ -168,7 +168,9 @@ final class DailyReportService extends ACommandService
     private function _get_eduardoaf_root_requests(): array
     {
         $sql = "
-        SELECT app_ip.country, app_ip.`whois`, eduardoaf.*
+        SELECT app_ip.country, app_ip.whois, 
+        IF(bl.id IS NULL,'','yes') blocked,
+        eduardoaf.*
         FROM
         (
             SELECT remote_ip, user_agent, insert_date, `post`, `get`, files
@@ -185,6 +187,8 @@ final class DailyReportService extends ACommandService
         ) eduardoaf
         LEFT JOIN app_ip
         ON eduardoaf.remote_ip = app_ip.remote_ip
+        LEFT JOIN app_ip_blacklist bl
+        ON eduardoaf.remote_ip = bl.remote_ip
         ORDER BY country ASC, remote_ip
         ";
         return $this->db->query($sql);
@@ -200,15 +204,15 @@ final class DailyReportService extends ACommandService
             "<h3>$h3</h3>",
             "<table>"
         ];
-        $tmp = [];
+        $tmp = ["<th>Nº</th>"];
         foreach ($titles as $title) {
             $tmp[] = "<th>$title</th>";
         }
         $tmp = implode("", $tmp);
         $html[] = "<tr>$tmp</tr>";
 
-        foreach ($data as $row) {
-            $tmp = [];
+        foreach ($data as $i=>$row) {
+            $tmp = ["<td>{$i}</td>"];
             foreach ($titles as $field) {
                 $value = $row[$field];
                 $value = htmlentities($value);
