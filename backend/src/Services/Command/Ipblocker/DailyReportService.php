@@ -15,7 +15,7 @@ final class DailyReportService extends ACommandService
         $this->yesterday = date("Y-m-d", strtotime("-1 days"));
     }
 
-    private function _get_bots(): array
+    private function _get_bots_requests(): array
     {
         $sql = "
         SELECT bots.*, app_ip.country, IF(bl.id IS NULL,'','blocked') is_blocked, bl.reason
@@ -41,7 +41,7 @@ final class DailyReportService extends ACommandService
         return $this->db->query($sql);
     }
 
-    private function _get_anonymous(): array
+    private function _get_anonymous_requests(): array
     {
         $sql = "
         SELECT bots.*, app_ip.country, IF(bl.id IS NULL,'','blocked') is_blocked, bl.insert_date block_date, bl.reason
@@ -60,6 +60,34 @@ final class DailyReportService extends ACommandService
         ON bots.remote_ip = bl.remote_ip
         ORDER BY first_visit, last_visit
         ";
+        return $this->db->query($sql);
+    }
+
+    private function _get_max_requests_by_no_bot_ip(): array
+    {
+        $sql = "
+        SELECT bots.*, app_ip.country, IF(bl.id IS NULL,'','blocked') is_blocked, bl.insert_date block_date, bl.reason
+        FROM
+        (
+            SELECT remote_ip, COUNT(id) n_visits, MAX(CONCAT(domain, request_uri)) request_uri, MAX(user_agent) user_agent
+            FROM `app_ip_request`
+            WHERE 1 
+            AND insert_date LIKE '{$this->yesterday}%'
+            AND (
+                TRIM(user_agent)!='' AND user_agent NOT LIKE '%bot%' AND user_agent NOT LIKE '%crawl%' AND user_agent NOT LIKE '%ALittle%'
+                AND user_agent NOT LIKE '%spider%' AND user_agent NOT LIKE '%Go-http-client%' AND user_agent NOT LIKE '%facebookexternalhit%'
+                AND user_agent NOT LIKE '%evc-batch%'
+            )
+            GROUP BY remote_ip
+            ORDER BY COUNT(id) DESC
+        ) bots
+        LEFT JOIN app_ip
+        ON app_ip.remote_ip = bots.remote_ip
+        LEFT JOIN app_ip_blacklist bl
+        ON bots.remote_ip = bl.remote_ip
+        ORDER BY user_agent ASC
+        ";
+
         return $this->db->query($sql);
     }
 
