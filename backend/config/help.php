@@ -126,7 +126,7 @@ return [
         "
     ],
 
-    "exclude-ip"     => [
+    "send-report"     => [
         "description"   => "
             Envia por email el reporte diario del día anterior al actual de las peticiones de los distintos
             dominios.
