@@ -69,6 +69,9 @@ final class DbReplicatorService extends ACronService
         {
             $results = [];
             preg_match_all($pattern, $file, $results);
+            $this->logpr($pattern,"pattern");
+            $this->logpr($file,"in file");
+            $this->logpr($results, "results");
             if($results[0][0] ?? null)
                 return $file;
         }
