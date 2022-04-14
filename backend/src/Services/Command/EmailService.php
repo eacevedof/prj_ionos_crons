@@ -3,7 +3,7 @@ namespace App\Services\Command;
 use App\Component\Email\EmailComponent;
 use function App\Functions\get_config;
 
-class EmailService extends ACommandService
+final class EmailService extends ACommandService
 {
     private $emails;
     private $data;
