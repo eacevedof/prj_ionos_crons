@@ -14,7 +14,7 @@ server:
 test:
 	${phpexe} backend/vendor/bin/phpunit backend/tests
 
-remlogs:
+rem-logs:
 	rm -fr backend/logs/*
 
 show-services:
