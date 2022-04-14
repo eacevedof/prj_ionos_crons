@@ -18,13 +18,22 @@ final class DailyReportService extends ACommandService
     private function _get_bots(): array
     {
         $sql = "
-        SELECT user_agent, MIN(insert_date) first_visit, MAX(insert_date) last_visit
-        FROM `app_ip_request`
-        WHERE 1 
-        AND insert_date LIKE '{$this->yesterday}%'
-        AND (user_agent LIKE '%bot%' OR TRIM(user_agent)='')
-        GROUP BY user_agent
-        ORDER BY user_agent DESC
+        SELECT bots.*, app_ip.country, IF(bl.id IS NULL,'','blocked'), bl.reason
+        FROM
+        (
+            SELECT user_agent, MIN(insert_date) first_visit, MAX(insert_date) last_visit, MAX(remote_ip) remote_ip
+            FROM `app_ip_request`
+            WHERE 1 
+            AND insert_date LIKE '{$this->yesterday}%'
+            AND (user_agent LIKE '%bot%')
+            GROUP BY user_agent
+            -- order by user_agent desc
+        ) bots
+        LEFT JOIN app_ip
+        ON app_ip.remote_ip = bots.remote_ip
+        LEFT JOIN app_ip_blacklist bl
+        ON bots.remote_ip = bl.remote_ip
+        ORDER BY first_visit, last_visit
         ";
         return $this->db->query($sql);
     }
