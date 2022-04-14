@@ -170,6 +170,8 @@ final class DailyReportService extends ACommandService
         $titles = array_keys($data[0] ?? []);
         if(!$titles) return "<h3>$h3</h3>";
         $html = [
+            "<hr/>",
+            "<br/>",
             "<h3>$h3</h3>",
             "<table>"
         ];
@@ -183,7 +185,9 @@ final class DailyReportService extends ACommandService
         foreach ($data as $row) {
             $tmp = [];
             foreach ($titles as $field) {
-                $tmp[] = "<td>{$row[$field]}</td>";
+                $value = $row[$field];
+                $value = htmlentities($value);
+                $tmp[] = "<td>{$value}</td>";
             }
             $tmp = implode("", $tmp);
             $html[] = "<tr>$tmp</tr>";
@@ -228,6 +232,9 @@ final class DailyReportService extends ACommandService
 
         $data = $this->_get_requests_by_bots();
         $html[] = $this->_get_html($data, "Requests made by bots");
+
+        $data = $this->_get_num_visits_by_country_no_bots();
+        $html[] = $this->_get_html($data, "Num of visits by country no bots");
 
         $html = implode("\n", $html);
         $this->_send($html);
