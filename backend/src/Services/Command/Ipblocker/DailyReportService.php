@@ -18,7 +18,7 @@ final class DailyReportService extends ACommandService
     private function _get_bots(): array
     {
         $sql = "
-        SELECT bots.*, app_ip.country, IF(bl.id IS NULL,'','blocked'), bl.reason
+        SELECT bots.*, app_ip.country, IF(bl.id IS NULL,'','blocked') is_blocked, bl.reason
         FROM
         (
             SELECT user_agent, MIN(insert_date) first_visit, MAX(insert_date) last_visit, MAX(remote_ip) remote_ip
@@ -38,6 +38,27 @@ final class DailyReportService extends ACommandService
         return $this->db->query($sql);
     }
 
+    private function _get_anonymous(): array
+    {
+        $sql = "
+        SELECT bots.*, app_ip.country, IF(bl.id IS NULL,'','blocked') is_blocked, bl.insert_date block_date, bl.reason
+        FROM
+        (
+            SELECT remote_ip, MIN(insert_date) first_visit, MAX(insert_date) last_visit, MAX(CONCAT(domain,request_uri)) request_uri
+            FROM `app_ip_request`
+            WHERE 1 
+            AND insert_date LIKE '{$this->yesterday}%'
+            AND TRIM(user_agent)=''
+            GROUP BY remote_ip
+        ) bots
+        LEFT JOIN app_ip
+        ON app_ip.remote_ip = bots.remote_ip
+        LEFT JOIN app_ip_blacklist bl
+        ON bots.remote_ip = bl.remote_ip
+        ORDER BY first_visit, last_visit
+        ";
+        return $this->db->query($sql);
+    }
 
     private function _get_user_agents(): array
     {
