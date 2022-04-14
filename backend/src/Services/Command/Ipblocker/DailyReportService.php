@@ -15,7 +15,7 @@ final class DailyReportService extends ACommandService
         $this->yesterday = date("Y-m-d", strtotime("-1 days"));
     }
 
-    private function _get_bots_requests(): array
+    private function _get_requests_by_bots(): array
     {
         $sql = "
         SELECT bots.*, app_ip.country, IF(bl.id IS NULL,'','blocked') is_blocked, bl.reason
@@ -63,7 +63,7 @@ final class DailyReportService extends ACommandService
         return $this->db->query($sql);
     }
 
-    private function _get_max_requests_by_no_bot_ip(): array
+    private function _get_max_requests_by_no_bots(): array
     {
         $sql = "
         SELECT bots.*, app_ip.country, IF(bl.id IS NULL,'','blocked') is_blocked, bl.insert_date block_date, bl.reason
@@ -107,6 +107,30 @@ final class DailyReportService extends ACommandService
         ORDER BY `domain` ASC, 2 DESC, 1 ASC
         ";
         return $this->db->query($sql);
+    }
+
+    private function _get_num_visits_by_country_no_bots(): array
+    {
+        $sql = "
+        SELECT app_ip.country, SUM(num_visits) num_visits
+        FROM
+        (
+            SELECT remote_ip, COUNT(id) num_visits
+            FROM `app_ip_request`
+            WHERE 1 
+            AND insert_date LIKE '{$this->yesterday}%'
+            AND (
+                TRIM(user_agent)!='' AND user_agent NOT LIKE '%bot%' AND user_agent NOT LIKE '%crawl%' AND user_agent NOT LIKE '%ALittle%'
+                AND user_agent NOT LIKE '%spider%' AND user_agent NOT LIKE '%Go-http-client%' AND user_agent NOT LIKE '%facebookexternalhit%'
+                AND user_agent NOT LIKE '%evc-batch%'
+            )
+            GROUP BY remote_ip
+        ) visits
+        LEFT JOIN app_ip
+        ON app_ip.remote_ip = visits.remote_ip
+        GROUP BY country
+        ORDER BY num_visits DESC, country
+        ";
     }
 
     private function _get_user_agents(): array
