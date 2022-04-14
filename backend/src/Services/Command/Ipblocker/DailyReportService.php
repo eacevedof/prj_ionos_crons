@@ -21,7 +21,7 @@ final class DailyReportService extends ACommandService
         SELECT user_agent, MIN(insert_date) first_visit, MAX(insert_date) last_visit
         FROM `app_ip_request`
         WHERE 1 
-        AND insert_date LIKE '2021-12-27%'
+        AND insert_date LIKE '{$this->yesterday}%'
         AND (user_agent LIKE '%bot%' OR TRIM(user_agent)='')
         GROUP BY user_agent
         ORDER BY user_agent DESC
