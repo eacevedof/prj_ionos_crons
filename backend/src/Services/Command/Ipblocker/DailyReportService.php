@@ -240,7 +240,7 @@ final class DailyReportService extends ACommandService
 
     public function run()
     {
-        $this->logpr("START DAILYREPORT");
+        $this->logpr("START DAILYREPORT {$this->yesterday}");
         $html = [];
 
         $data = $this->_get_most_visited_urls_by_no_bots();
