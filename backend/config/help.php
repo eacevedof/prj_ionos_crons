@@ -125,4 +125,14 @@ return [
             inserta en blacklist
         "
     ],
+
+    "exclude-ip"     => [
+        "description"   => "
+            Envia por email el reporte diario del día anterior al actual de las peticiones de los distintos
+            dominios.
+            parámetros: fecha (opcional. Por defecto ayer)
+            ejemplo:
+                send-report 2022-02-25
+        ",
+    ],
 ];

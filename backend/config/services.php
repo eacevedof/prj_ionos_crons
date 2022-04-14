@@ -29,6 +29,7 @@ return [
     "email"                     => "App\\Services\\Command\\EmailService",
     "get-useragent"             => "App\\Services\\Command\\Ipblocker\\UseragentService",
     "get-bot"                   => "App\\Services\\Command\\Ipblocker\\BotService",
+    "send-report"               => "App\\Services\\Command\\Ipblocker\\DailyReportService",
     "config"                    => "App\\Services\\Command\\ConfigService",
     "chalantest-fix"            => "App\\Services\\Command\\ChalantestFixService",
     "ban-ips"                   => "App\\Services\\Command\\Ipblocker\\AddIpToBlacklist",
