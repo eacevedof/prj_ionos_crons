@@ -308,7 +308,13 @@ final class DailyReportService extends ACommandService
         $html = [];
 
         $data = $this->_get_num_visits_by_all();
-        $html[] = $this->_get_html($data, "All visits");
+        $sum = array_column($data, "num_visits");
+        $sum = array_sum($sum);
+        $html[] = $this->_get_html(
+            $data,
+            "All visits",
+            "total visits: $sum"
+        );
 
         $data = $this->_get_new_blocked_ips();
         $html[] = $this->_get_html($data, "New blocked");
@@ -326,8 +332,6 @@ final class DailyReportService extends ACommandService
                 "total visits: $sum"
             );
         }
-
-        $html[] = $this->_get_html($data, "Most visited urls by no bots and no blocked");
 
         $data = $this->_get_eduardoaf_root_requests();
         $html[] = $this->_get_html($data, "eduardoaf root by no bots");
