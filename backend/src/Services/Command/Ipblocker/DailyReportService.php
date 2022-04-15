@@ -229,13 +229,13 @@ final class DailyReportService extends ACommandService
     private function _get_num_visits_by_all(): array
     {
         $sql = "
-        SELECT ip.remote_ip, ip.country, ip.whois, remotes.num_visits, bl.insert_date, bl.reason, user_agent
+        SELECT ip.remote_ip, ip.country, ip.`whois`, remotes.num_visits, bl.insert_date, bl.reason, user_agent
         FROM
         (
             SELECT remote_ip, COUNT(id) num_visits, MAX(user_agent) user_agent
             FROM `app_ip_request`
             WHERE 1 
-            AND bl.insert_date LIKE '{$this->yesterday}%'
+            AND insert_date LIKE '{$this->yesterday}%'
             GROUP BY remote_ip
         ) remotes
         LEFT JOIN app_ip ip
