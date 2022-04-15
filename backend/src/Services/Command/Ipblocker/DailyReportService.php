@@ -21,7 +21,7 @@ final class DailyReportService extends ACommandService
     private function _get_requests_by_bots(): array
     {
         $sql = "
-        SELECT bots.*, app_ip.country, IF(bl.id IS NULL,'','yes') blocked, bl.reason
+        SELECT DISTINCT bots.*, app_ip.country, bl.reason, bl.insert_date
         FROM
         (
             SELECT user_agent, MIN(insert_date) first_visit, MAX(insert_date) last_visit, MAX(remote_ip) remote_ip
