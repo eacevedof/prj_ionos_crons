@@ -97,21 +97,36 @@ final class DailyReportService extends ACommandService
     private function _get_most_visited_urls_by_no_bots_and_non_blocked():array
     {
         $sql = "
-        SELECT CONCAT(`domain`, request_uri) request_uri, COUNT(id) num_visits
-        FROM `app_ip_request`
+        SELECT DISTINCT `domain`
+        FROM app_ip_request
         WHERE 1 
         AND insert_date LIKE '{$this->yesterday}%'
-        AND (
-            TRIM(user_agent)!='' AND user_agent NOT LIKE '%bot%' AND user_agent NOT LIKE '%crawl%' AND user_agent NOT LIKE '%ALittle%'
-            AND user_agent NOT LIKE '%spider%' AND user_agent NOT LIKE '%Go-http-client%' AND user_agent NOT LIKE '%facebookexternalhit%'
-            AND user_agent NOT LIKE '%evc-batch%'
-        )
-        -- de las ips que no estan bloqueadas
-        AND remote_ip NOT IN (SELECT remote_ip FROM app_ip_blacklist WHERE 1 AND is_blocked=1)
-        GROUP BY CONCAT(`domain`, request_uri)
-        ORDER BY `domain` ASC, num_visits DESC, request_uri ASC
+        ORDER BY 1 ASC
         ";
-        return $this->db->query($sql);
+        $domains = $this->db->query($sql);
+        $domains = array_column($domains,"domain");
+
+        $result = [];
+        foreach ($domains as $domain)
+        {
+            $sql = "
+            SELECT CONCAT(`domain`, request_uri) request_uri, COUNT(id) num_visits
+            FROM `app_ip_request`
+            WHERE 1 
+            AND insert_date LIKE '{$this->yesterday}%'
+            AND `domain`='$domain'  
+            AND (
+                TRIM(user_agent)!='' AND user_agent NOT LIKE '%bot%' AND user_agent NOT LIKE '%crawl%' AND user_agent NOT LIKE '%ALittle%'
+                AND user_agent NOT LIKE '%spider%' AND user_agent NOT LIKE '%Go-http-client%' AND user_agent NOT LIKE '%facebookexternalhit%'
+                AND user_agent NOT LIKE '%evc-batch%'
+            )
+            AND remote_ip NOT IN (SELECT remote_ip FROM app_ip_blacklist WHERE 1 AND is_blocked=1)
+            GROUP BY CONCAT(`domain`, request_uri)
+            ORDER BY `domain` ASC, num_visits DESC, request_uri ASC
+            ";
+            $result[$domain] = $this->db->query($sql);
+        }
+        return $result;
     }
 
     private function _get_num_visits_by_country_no_bots(): array
@@ -232,11 +247,13 @@ final class DailyReportService extends ACommandService
         return $this->db->query($sql);
     }
 
-    private function _get_html(array $data, string $h3): string
+    private function _get_html(array $data, string $h3, string $footer=""): string
     {
         if(!$count = count($data)) return "<h3>$h3 - (0)</h3>";
 
         $titles = array_keys($data[0] ?? []);
+        $ntitles = count($titles)+1;
+
         $html = [
             "<hr/>",
             "<br/>",
@@ -260,6 +277,10 @@ final class DailyReportService extends ACommandService
             $tmp = implode("", $tmp);
             $html[] = "<tr>$tmp</tr>";
         }
+
+        if ($footer)
+            $html[] = "<tr><td colspan=\"$ntitles\">$footer</td></tr>";
+
         $html[] = "</table>";
         return implode("\n", $html);
     }
@@ -293,6 +314,19 @@ final class DailyReportService extends ACommandService
         $html[] = $this->_get_html($data, "New blocked");
 
         $data = $this->_get_most_visited_urls_by_no_bots_and_non_blocked();
+        $domains = array_keys($data);
+        foreach ($domains as $domain)
+        {
+            $bydomain = $data[$domain];
+            $sum = array_column($bydomain, "num_visits");
+            $sum = array_sum($sum);
+            $html[] = $this->_get_html(
+                $bydomain,
+                "Most visited urls by no bots and no blocked in $domain",
+                "total visits: $sum"
+            );
+        }
+
         $html[] = $this->_get_html($data, "Most visited urls by no bots and no blocked");
 
         $data = $this->_get_eduardoaf_root_requests();
