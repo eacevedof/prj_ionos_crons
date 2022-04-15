@@ -124,7 +124,8 @@ final class DailyReportService extends ACommandService
             GROUP BY CONCAT(`domain`, request_uri)
             ORDER BY `domain` ASC, num_visits DESC, request_uri ASC
             ";
-            $result[$domain] = $this->db->query($sql);
+            $r = $this->db->query($sql);
+            if($r) $result[$domain] = $r;
         }
         return $result;
     }
@@ -307,15 +308,6 @@ final class DailyReportService extends ACommandService
         $this->logpr("START DAILYREPORT {$this->yesterday}");
         $html = [];
 
-        $data = $this->_get_num_visits_by_all();
-        $sum = array_column($data, "num_visits");
-        $sum = array_sum($sum);
-        $html[] = $this->_get_html(
-            $data,
-            "All visits",
-            "total visits: $sum"
-        );
-
         $data = $this->_get_new_blocked_ips();
         $html[] = $this->_get_html($data, "New blocked");
 
@@ -350,6 +342,15 @@ final class DailyReportService extends ACommandService
 
         $data = $this->_get_anonymous_requests();
         $html[] = $this->_get_html($data, "Anonymous requests");
+
+        $data = $this->_get_num_visits_by_all();
+        $sum = array_column($data, "num_visits");
+        $sum = array_sum($sum);
+        $html[] = $this->_get_html(
+            $data,
+            "All visits",
+            "total visits: $sum"
+        );
 
         $html = implode("\n", $html);
         $this->_send($html);
