@@ -94,7 +94,7 @@ final class DailyReportService extends ACommandService
         return $this->db->query($sql);
     }
 
-    private function _get_most_visited_urls_by_no_bots():array
+    private function _get_most_visited_urls_by_no_bots_and_non_blocked():array
     {
         $sql = "
         SELECT CONCAT(`domain`, request_uri) request_uri, COUNT(id) num_visits
@@ -211,6 +211,27 @@ final class DailyReportService extends ACommandService
         return $this->db->query($sql);
     }
 
+    private function _get_num_visits_by_all(): array
+    {
+        $sql = "
+        SELECT ip.remote_ip, ip.country, ip.whois, remotes.num_visits, bl.insert_date, bl.reason, user_agent
+        FROM
+        (
+            SELECT remote_ip, COUNT(id) num_visits, MAX(user_agent) user_agent
+            FROM `app_ip_request`
+            WHERE 1 
+            AND bl.insert_date LIKE '{$this->yesterday}%'
+            GROUP BY remote_ip
+        ) remotes
+        LEFT JOIN app_ip ip
+        ON remotes.remote_ip = ip.remote_ip
+        LEFT JOIN app_ip_blacklist bl 
+        ON remotes.remote_ip = bl. remote_ip
+        ORDER BY num_visits DESC, country ASC
+        ";
+        return $this->db->query($sql);
+    }
+
     private function _get_html(array $data, string $h3): string
     {
         if(!$count = count($data)) return "<h3>$h3 - (0)</h3>";
@@ -265,11 +286,14 @@ final class DailyReportService extends ACommandService
         $this->logpr("START DAILYREPORT {$this->yesterday}");
         $html = [];
 
+        $data = $this->_get_num_visits_by_all();
+        $html[] = $this->_get_html($data, "All visits");
+
         $data = $this->_get_new_blocked_ips();
         $html[] = $this->_get_html($data, "New blocked");
 
-        $data = $this->_get_most_visited_urls_by_no_bots();
-        $html[] = $this->_get_html($data, "Most visited urls by no bots");
+        $data = $this->_get_most_visited_urls_by_no_bots_and_non_blocked();
+        $html[] = $this->_get_html($data, "Most visited urls by no bots and no blocked");
 
         $data = $this->_get_eduardoaf_root_requests();
         $html[] = $this->_get_html($data, "eduardoaf root by no bots");
