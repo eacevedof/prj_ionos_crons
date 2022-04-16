@@ -46,6 +46,7 @@ final class DbReplicatorService extends ACronService
     {
         $dumps = scandir(self::$PATH_DUMPSDS);
         arsort($dumps);
+        $dumps = array_values($dumps);
         $this->logpr($dumps, "dumps");;
         $this->dumps = $dumps;
         return $this;
@@ -145,9 +146,11 @@ final class DbReplicatorService extends ACronService
                 $command = "/usr/bin/mysql --host={$server} --user={$user} --password={$password} {$database} < $this->tmpdump";
                 $this->logpr($command, "command");
                 $result = "";
+                $output = [];
                 //exec($command, $output, $result);
                 sleep(1);
                 $results[] = "$ctxto resultado: $result"; // 0:ok, 1:error
+                $results[] = $output;
 
                 $this->_logtables($ctxto);
                 unlink($this->tmpdump);
