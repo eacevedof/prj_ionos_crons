@@ -13,6 +13,7 @@ final class DbReplicatorService extends ACronService
      * @var string
      */
     private static $PATH_DUMPSDS;
+    private const LOG_PREFIX = "replicator";
     private $config;
     private $dumps;
     private $tmpdump;
@@ -47,7 +48,7 @@ final class DbReplicatorService extends ACronService
         $dumps = scandir(self::$PATH_DUMPSDS);
         arsort($dumps);
         $dumps = array_values($dumps);
-        $this->logpr($dumps, "dumps");;
+        $this->logpr($dumps, "dumps", self::LOG_PREFIX);
         $this->dumps = $dumps;
         return $this;
     }
@@ -71,10 +72,10 @@ final class DbReplicatorService extends ACronService
         {
             $results = [];
             preg_match_all($pattern, $file, $results);
-            //$this->logpr($pattern,"pattern");
-            //$this->logpr($file,"in file");
+            //$this->logpr($pattern,"pattern", self::LOG_PREFIX);
+            //$this->logpr($file,"in file", self::LOG_PREFIX);
             if($results[0][0] ?? null) {
-                $this->logpr($results, "found");
+                $this->logpr($results, "found", self::LOG_PREFIX);
                 return $file;
             }
         }
@@ -84,9 +85,9 @@ final class DbReplicatorService extends ACronService
     private function _create_tmpdump($file)
     {
         $path = self::$PATH_DUMPSDS.$file;
-        $this->logpr($path,"path to read");
+        $this->logpr($path,"path to read", self::LOG_PREFIX);
         $content = file_get_contents($path);
-        //$this->logpr($content,"content 1");
+        //$this->logpr($content,"content 1", self::LOG_PREFIX);
         $arcontent = explode("\n",$content);
 
         //elimina las 12 ultimas
@@ -100,49 +101,49 @@ final class DbReplicatorService extends ACronService
         $this->tmpdump = "tmp_".uniqid().".sql";
         $this->tmpdump = self::$PATH_DUMPSDS.$this->tmpdump;
         $r = file_put_contents($this->tmpdump, $content);
-        //$this->logpr($content,"content");
-        $this->logpr($r, "file_put_contents.r");
+        //$this->logpr($content,"content", self::LOG_PREFIX);
+        $this->logpr($r, "file_put_contents.r", self::LOG_PREFIX);
         sleep(1);
     }
 
     private function _logtables($context)
     {
         $r = Db::get($context)->get_tables();
-        $this->logpr($r, "tables of $context");
+        $this->logpr($r, "tables of $context", self::LOG_PREFIX);
     }
 
     public function run()
     {
-        $this->logpr("START DBREPLICATOR");
+        $this->logpr("START DBREPLICATOR", self::LOG_PREFIX);
         //$this->_check_intime();
         $results = [];
         foreach ($this->config as $ctxfrom => $arto)
         {
-            $this->logpr($ctxfrom,"ctxfrom");
+            $this->logpr($ctxfrom,"ctxfrom", self::LOG_PREFIX);
             $arproject = $this->projects[$ctxfrom] ?? "";
-            $this->logpr($arproject,"project from");
+            $this->logpr($arproject,"project from", self::LOG_PREFIX);
             if(!$arproject) continue;
 
             $dblocal = $arproject["dblocal"];
-            $this->logpr($dblocal,"dblocal");
+            $this->logpr($dblocal,"dblocal", self::LOG_PREFIX);
             $prefix = "cron_{$dblocal}_";
             $filename = $this->_get_lastdump($prefix);
-            $this->logpr($filename,"temp filename");
+            $this->logpr($filename,"temp filename", self::LOG_PREFIX);
             if(!$filename) continue;
 
             foreach ($arto as $ctxto)
             {
                 $arproject = $this->projects[$ctxto] ?? "";
-                $this->logpr($arproject,"project to");
+                $this->logpr($arproject,"project to", self::LOG_PREFIX);
                 if(!$arproject) continue;
 
                 list($dblocal, $server, $port, $database, $user, $password) = array_values($arproject);
                 $this->_create_tmpdump($filename);
-                $this->logpr($this->tmpdump,"tmpdump");
+                $this->logpr($this->tmpdump,"tmpdump", self::LOG_PREFIX);
                 if(!is_file($this->tmpdump)) continue;
                 
                 $command = "/usr/bin/mysql --host={$server} --user={$user} --password={$password} {$database} < $this->tmpdump";
-                $this->logpr($command, "command");
+                $this->logpr($command, "command", self::LOG_PREFIX);
                 $result = "";
                 $output = [];
                 $r = exec($command, $output, $result);
@@ -156,8 +157,8 @@ final class DbReplicatorService extends ACronService
 
         }//foreach from=>To
         
-        $this->log($results,"dbreplicator.run.results");
-        $this->logpr("END DBREPLICATOR");
+        $this->log($results,"dbreplicator.run.results", self::LOG_PREFIX);
+        $this->logpr("END DBREPLICATOR", self::LOG_PREFIX);
     }
 
 }//class DbReplicatorService
