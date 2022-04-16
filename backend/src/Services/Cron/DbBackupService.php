@@ -29,7 +29,9 @@ final class DbBackupService extends ACronService
     public function _load_exclude()
     {
         $this->exclude = [
-            "ipblocker-ro"
+            "ipblocker-ro",
+            "ipblocker-test",
+            "elchalanwp-test"
         ];
     }
 
@@ -45,8 +47,7 @@ final class DbBackupService extends ACronService
 
         foreach($this->projects as $context => $arproject)
         {
-            if(in_array($context,$this->exclude)) continue;
-            
+            if(in_array($context, $this->exclude)) continue;
             if(!$arproject) continue;
 
             list($dblocal, $server, $port, $database, $user, $password) = array_values($arproject);

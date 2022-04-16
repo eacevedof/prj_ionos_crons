@@ -69,8 +69,8 @@ final class DbReplicatorService extends ACronService
         {
             $results = [];
             preg_match_all($pattern, $file, $results);
-            $this->logpr($pattern,"pattern");
-            $this->logpr($file,"in file");
+            //$this->logpr($pattern,"pattern");
+            //$this->logpr($file,"in file");
             $this->logpr($results, "results");
             if($results[0][0] ?? null)
                 return $file;
@@ -141,8 +141,9 @@ final class DbReplicatorService extends ACronService
                 if(!is_file($this->tmpdump)) continue;
                 
                 $command = "/usr/bin/mysql --host={$server} --user={$user} --password={$password} {$database} < $this->tmpdump";
-                //$this->logpr($command, "command");
-                exec($command, $output, $result);
+                $this->logpr($command, "command");
+                $result = "";
+                //exec($command, $output, $result);
                 sleep(1);
                 $results[] = "$ctxto resultado: $result"; // 0:ok, 1:error
 
