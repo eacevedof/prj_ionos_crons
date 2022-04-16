@@ -116,8 +116,6 @@ final class DbReplicatorService extends ACronService
         $this->logpr("START DBREPLICATOR");
         //$this->_check_intime();
         $results = [];
-        $output = [];
-
         foreach ($this->config as $ctxfrom => $arto)
         {
             $this->logpr($ctxfrom,"ctxfrom");
@@ -147,17 +145,16 @@ final class DbReplicatorService extends ACronService
                 $this->logpr($command, "command");
                 $result = "";
                 $output = [];
-                //exec($command, $output, $result);
+                exec($command, $output, $result);
                 sleep(1);
-                $results[] = "$ctxto resultado: $result"; // 0:ok, 1:error
-                $results[] = $output;
+                $results[$ctxto]["result"] = $ctxto ? "ok" : "error"; // 0:ok, 1:error
+                $results[$ctxto]["output"] = $output;
 
                 $this->_logtables($ctxto);
                 unlink($this->tmpdump);
-
             }//foreach arto
 
-        }//foreach this->config
+        }//foreach from=>To
         
         $this->log($results,"dbreplicator.run.results");
         $this->logpr("END DBREPLICATOR");
