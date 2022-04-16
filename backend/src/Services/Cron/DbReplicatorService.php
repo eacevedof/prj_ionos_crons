@@ -158,7 +158,7 @@ final class DbReplicatorService extends ACronService
         }//foreach from=>To
         
         $this->log($results,"dbreplicator.run.results", self::LOG_PREFIX);
-        $this->logpr("END DBREPLICATOR", self::LOG_PREFIX);
+        $this->logpr("END DBREPLICATOR", "",self::LOG_PREFIX);
     }
 
 }//class DbReplicatorService
