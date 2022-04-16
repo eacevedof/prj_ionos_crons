@@ -4,32 +4,31 @@ use App\Component\LogComponent As L;
 
 trait LogTrait
 {
-
     private function _get_pathlog(){return realpath(__DIR__."/../../logs");}
 
-    protected function log($mxVar,$sTitle=NULL)
+    protected function log($mxVar, $title=null, $prefix="")
     {
         $pathlogs = $this->_get_pathlog();
-        $oLog = new L("trace",$pathlogs);
-        $oLog->save($mxVar,$sTitle);
+        $oLog = new L("trace", $pathlogs, $prefix);
+        $oLog->save($mxVar,$title, $prefix);
     }
 
-    protected function logd($mxVar,$sTitle=NULL)
+    protected function logd($mxVar, $title="", $prefix="")
     {
         $pathlogs = $this->_get_pathlog();
         $oLog = new L("debug",$pathlogs);
-        $oLog->save($mxVar,$sTitle);
+        $oLog->save($mxVar, $title, $prefix);
     }
 
-    protected function logerr($mxVar,$sTitle=NULL)
+    protected function logerr($mxVar,$title="", $prefix="")
     {
-        $this->_pr($mxVar,$sTitle);
+        $this->_pr($mxVar,$title);
         $pathlogs = $this->_get_pathlog();
         $oLog = new L("error",$pathlogs);
-        $oLog->save($mxVar,$sTitle);
+        $oLog->save($mxVar, $title, $prefix);
     }
 
-    private function _pr($mxvar,$title="")
+    private function _pr($mxvar, $title="")
     {
         $now = date("Ymd H:i:s");
         echo "\n$now\n";
@@ -38,9 +37,9 @@ trait LogTrait
         echo "\n";
     }
 
-    protected function logpr($mxvar,$title="")
+    protected function logpr($mxvar, $title="", $prefix="")
     {
         $this->_pr($mxvar,$title);
-        $this->log($mxvar,$title);
+        $this->log($mxvar,$title, $prefix);
     }
 }

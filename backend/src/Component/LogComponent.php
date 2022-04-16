@@ -1,29 +1,30 @@
 <?php
 namespace App\Component;
 
-class LogComponent
+final class LogComponent
 {
     const DS = DIRECTORY_SEPARATOR;
+    
+    private string $pathfolder;
+    private string $subtype;
+    private string $filename;
 
-    private $sPathFolder;
-    private $sSubfType;
-    private $sFileName;
-
-    public function __construct($sSubfType="",$sPathFolder="")
+    public function __construct($subtype="", $pathfolder="", $prefix="")
     {
-        $this->sPathFolder = $sPathFolder;
-        $this->sSubfType = $sSubfType;
-        $this->sFileName = "app_".date("Ymd").".log";
-        if(!$sPathFolder) $this->sPathFolder = __DIR__;
-        if(!$sSubfType) $this->sSubfType = "debug";
+        $this->pathfolder = $pathfolder;
+        $this->subtype = $subtype;
+        $this->filename = "app_".date("Ymd").".log";
+        if($prefix) $this->filename = "app_${$prefix}_".date("Ymd").".log";
+        if(!$pathfolder) $this->pathfolder = __DIR__;
+        if(!$subtype) $this->subtype = "debug";
         //intenta crear la carpeta de logs
-        $this->fix_folder();
+        $this->_fix_folder();
     }
 
-    private function fix_folder()
+    private function _fix_folder()
     {
-        $sLogFolder = $this->sPathFolder.self::DS
-            .$this->sSubfType.self::DS;
+        $sLogFolder = $this->pathfolder.self::DS
+            .$this->subtype.self::DS;
         //die($sLogFolder);
         if(!is_dir($sLogFolder)) @mkdir($sLogFolder);
     }
@@ -42,9 +43,9 @@ class LogComponent
         if(!is_string($mxVar))
             $mxVar = var_export($mxVar,1);
 
-        $sPathFile = $this->sPathFolder.self::DS
-            .$this->sSubfType.self::DS
-            .$this->sFileName;
+        $sPathFile = $this->pathfolder.self::DS
+            .$this->subtype.self::DS
+            .$this->filename;
 
         if(is_file($sPathFile))
             $oCursor = fopen($sPathFile,"a");
@@ -65,6 +66,6 @@ class LogComponent
         return TRUE;
     }//save
 
-    public function set_filename($sValue){$this->sFileName="$sValue.log";}
-    public function set_subfolder($sValue){$this->sSubfType="$sValue";}
+    public function set_filename($sValue){$this->filename="$sValue.log";}
+    public function set_subfolder($sValue){$this->subtype="$sValue";}
 }
