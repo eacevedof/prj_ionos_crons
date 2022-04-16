@@ -1,10 +1,11 @@
 <?php
 namespace App\Services\Command\Ipblocker;
 
-use App\Component\Email\EmailComponent;
 use App\Services\Command\ACommandService;
 use App\Factories\Db as db;
 use function App\Functions\get_config;
+use App\Component\Html\ArrayToTable;
+use App\Component\Email\EmailComponent;
 
 final class DailyReportService extends ACommandService
 {
@@ -250,40 +251,7 @@ final class DailyReportService extends ACommandService
 
     private function _get_html(array $data, string $h3, string $footer=""): string
     {
-        if(!$count = count($data)) return "<h3>$h3 - (0)</h3>";
-
-        $titles = array_keys($data[0] ?? []);
-        $ntitles = count($titles)+1;
-
-        $html = [
-            "<hr/>",
-            "<br/>",
-            "<h3>$h3 ($count)</h3>",
-            "<table>"
-        ];
-        $tmp = ["<th>Nº</th>"];
-        foreach ($titles as $title) {
-            $tmp[] = "<th>$title</th>";
-        }
-        $tmp = implode("", $tmp);
-        $html[] = "<tr>$tmp</tr>";
-
-        foreach ($data as $i=>$row) {
-            $tmp = ["<td>{$i}</td>"];
-            foreach ($titles as $field) {
-                $value = $row[$field];
-                $value = htmlentities($value);
-                $tmp[] = "<td>{$value}</td>";
-            }
-            $tmp = implode("", $tmp);
-            $html[] = "<tr>$tmp</tr>";
-        }
-
-        if ($footer)
-            $html[] = "<tr><td colspan=\"$ntitles\">$footer</td></tr>";
-
-        $html[] = "</table>";
-        return implode("\n", $html);
+        return (new ArrayToTable($data, $h3, $footer))();
     }
 
     private function _send(string $content): void
@@ -295,7 +263,7 @@ final class DailyReportService extends ACommandService
         $r = EmailComponent::get($config)
             ->set_from($config["email"])
             ->add_to($emails["contacts"][0])  //gmail
-            ->set_subject("Daily report of $this->yesterday")
+            ->set_subject("Daily security report on $this->yesterday")
             ->set_content($content)
             ->send()
             ->get_errors()
