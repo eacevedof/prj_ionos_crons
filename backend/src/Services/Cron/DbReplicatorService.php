@@ -26,14 +26,14 @@ final class DbReplicatorService extends ACronService
             ->_load_dumps();
     }
 
-    private function _load_pathdumps()
+    private function _load_pathdumps(): self
     {
         $home = $this->_get_env("HOME");
         self::$PATH_DUMPSDS = "$home/backup_bd/";
         return $this;
     }
 
-    private function _load_config()
+    private function _load_config(): self
     {
         $this->config = [
             "ipblocker" => ["ipblocker-ro","ipblocker-test"],
@@ -42,10 +42,11 @@ final class DbReplicatorService extends ACronService
         return $this;
     }
 
-    private function _load_dumps()
+    private function _load_dumps(): self
     {
         $dumps = scandir(self::$PATH_DUMPSDS);
         arsort($dumps);
+        $this->logpr($dumps, "dumps");;
         $this->dumps = $dumps;
         return $this;
     }
@@ -71,9 +72,10 @@ final class DbReplicatorService extends ACronService
             preg_match_all($pattern, $file, $results);
             //$this->logpr($pattern,"pattern");
             //$this->logpr($file,"in file");
-            $this->logpr($results, "results");
-            if($results[0][0] ?? null)
+            if($results[0][0] ?? null) {
+                $this->logpr($results, "found");
                 return $file;
+            }
         }
         return "";
     }

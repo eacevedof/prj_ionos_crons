@@ -22,7 +22,7 @@ class MysqlComponent
 
     public function __construct($arConn=["server"=>"127.0.0.1","database"=>"","port"=>"","user"=>"","password"=>""])
     {
-        $this->isError = FALSE;
+        $this->isError = false;
         $this->arErrors = [];
         $this->arConn = $arConn;
     }
@@ -81,7 +81,7 @@ class MysqlComponent
             //$oPdo->setAttribute(\PDO::ATTR_ERRMODE,\PDO::ERRMODE_EXCEPTION );
             $this->log($sSQL,"MysqlComponent.query");
             $oCursor = $oPdo->query($sSQL);
-            if($oCursor===FALSE)
+            if($oCursor===false)
             {
                 $this->add_error("exec-error: $sSQL");
             }
@@ -118,7 +118,7 @@ class MysqlComponent
             $mxR = $oPdo->exec($sSQL);
 
             $this->iAffected = $mxR;
-            if($mxR===FALSE)
+            if($mxR===false)
             {
                 $this->add_error("exec-error: $sSQL");
             }
@@ -143,5 +143,6 @@ class MysqlComponent
 
     public function get_conn($k){return $this->arConn[$k];}
     public function get_affected(){return $this->iAffected;}
+    public function get_dbname(){return $this->arConn["database"] ?? "";}
 
 }//MysqlComponent
