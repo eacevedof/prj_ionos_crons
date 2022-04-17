@@ -9,6 +9,7 @@ namespace App\Services\Cron;
 
 final class DbBackupService extends ACronService
 {
+    private const LOG_PREFIX = "dbbackup";
     private $exclude;
     
     private function _check_intime()
@@ -37,7 +38,7 @@ final class DbBackupService extends ACronService
 
     public function run()
     {
-        $this->logpr("START","dbbackupservice.run");
+        $this->logpr("START","dbbackupservice.run", self::LOG_PREFIX);
         $this->_load_exclude();
         $r = $this->_check_intime();
         $min = $r["min"];
@@ -53,7 +54,10 @@ final class DbBackupService extends ACronService
             list($dblocal, $server, $port, $database, $user, $password) = array_values($arproject);
 
             $dbfile = "~/backup_bd/cron_{$dblocal}_{$min}.sql";
-            if(is_file($dbfile)) die("backup already done");
+            if(is_file($dbfile)) {
+                $this->logpr("is_file $dbfile","backup already done");
+                die("backup already done");
+            }
 
             $command = "/usr/bin/mysqldump --no-tablespaces --host={$server} --user={$user} --password={$password} {$database} > {$dbfile}";
             //echo "$command \n";
@@ -63,8 +67,8 @@ final class DbBackupService extends ACronService
 
         }//foreach this->projects
 
-        $this->logpr($results,"dbbackupservice.run.results");
-        $this->logpr("END","dbbackupservice.run");
+        $this->logpr($results,"dbbackupservice.run.results", self::LOG_PREFIX);
+        $this->logpr("END","dbbackupservice.run", self::LOG_PREFIX);
     }
 
 }//class CronDbbackup
