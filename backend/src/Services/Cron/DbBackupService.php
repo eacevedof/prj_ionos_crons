@@ -58,6 +58,7 @@ final class DbBackupService extends ACronService
             }
 
             $command = "/usr/bin/mysqldump --no-tablespaces --host={$server} --user={$user} --password={$password} {$database} > {$dbfile}";
+            $this->logpr($command, "command", self::LOG_PREFIX);
             //echo "$command \n";
             $output = [];
             $result = null;
