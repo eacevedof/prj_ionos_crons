@@ -12,11 +12,11 @@ final class DbReplicatorService extends ACronService
     /**
      * @var string
      */
-    private static $PATH_DUMPSDS;
+    private static string $PATH_DUMPSDS;
     private const LOG_PREFIX = "replicator";
-    private $config;
-    private $dumps;
-    private $tmpdump;
+    private array $config;
+    private array $dumps;
+    private string $tmpdump;
     
     public function __construct()
     {
@@ -43,14 +43,13 @@ final class DbReplicatorService extends ACronService
         return $this;
     }
 
-    private function _load_dumps(): self
+    private function _load_dumps()
     {
         $dumps = scandir(self::$PATH_DUMPSDS);
         arsort($dumps);
         $dumps = array_values($dumps);
         $this->logpr($dumps, "dumps", self::LOG_PREFIX);
         $this->dumps = $dumps;
-        return $this;
     }
 
     private function _check_intime()
@@ -65,24 +64,21 @@ final class DbReplicatorService extends ACronService
             die("Out of time");
     }
 
-    private function _get_lastdump($prefix)
+    private function _get_lastdump(string $prefix): string
     {
         $pattern = "/{$prefix}[\d]{14}\.sql/";
-        foreach ($this->dumps as $file)
-        {
+        foreach ($this->dumps as $file) {
             $results = [];
             preg_match_all($pattern, $file, $results);
-            //$this->logpr($pattern,"pattern", self::LOG_PREFIX);
-            //$this->logpr($file,"in file", self::LOG_PREFIX);
-            if($results[0][0] ?? null) {
-                $this->logpr($results, "found", self::LOG_PREFIX);
-                return $file;
+            if($found = ($results[0][0] ?? null)) {
+                $this->logpr($found, "found", self::LOG_PREFIX);
+                return $found;
             }
         }
         return "";
     }
 
-    private function _create_tmpdump($file)
+    private function _create_tmp_dump(string $file): void
     {
         $path = self::$PATH_DUMPSDS.$file;
         $this->logpr($path,"path to read", self::LOG_PREFIX);
@@ -102,11 +98,11 @@ final class DbReplicatorService extends ACronService
         $this->tmpdump = self::$PATH_DUMPSDS.$this->tmpdump;
         $r = file_put_contents($this->tmpdump, $content);
         //$this->logpr($content,"content", self::LOG_PREFIX);
-        $this->logpr($r, "file_put_contents.r", self::LOG_PREFIX);
+        $this->logpr($r, "file_put_contents result on $this->tmpdump", self::LOG_PREFIX);
         sleep(1);
     }
 
-    private function _logtables($context)
+    private function _logtables(string $context): void
     {
         $r = Db::get($context)->get_tables();
         $this->logpr($r, "tables of $context", self::LOG_PREFIX);
@@ -131,24 +127,25 @@ final class DbReplicatorService extends ACronService
             $this->logpr($filename,"temp filename", self::LOG_PREFIX);
             if(!$filename) continue;
 
-            foreach ($arto as $ctxto)
-            {
+            foreach ($arto as $ctxto) {
                 $arproject = $this->projects[$ctxto] ?? "";
                 $this->logpr($arproject,"project to", self::LOG_PREFIX);
                 if(!$arproject) continue;
 
                 list($dblocal, $server, $port, $database, $user, $password) = array_values($arproject);
-                $this->_create_tmpdump($filename);
+                $this->_create_tmp_dump($filename);
                 $this->logpr($this->tmpdump,"tmpdump", self::LOG_PREFIX);
                 if(!is_file($this->tmpdump)) continue;
                 
                 $command = "/usr/bin/mysql --host={$server} --user={$user} --password={$password} {$database} < $this->tmpdump";
                 $this->logpr($command, "command", self::LOG_PREFIX);
-                $result = "";
+
                 $output = [];
+                $result = null;
                 $r = exec($command, $output, $result);
                 sleep(5);
-                $results[$ctxto]["result"] = $ctxto ? "error" : "ok"; // 0:ok, 1:error
+                $results[$ctxto]["now"] = date("Y-m-d H:i:s");
+                $results[$ctxto]["result"] = $result ? "error" : "success";
                 $results[$ctxto]["exec"] = $r;
                 $results[$ctxto]["output"] = $output;
                 $this->_logtables($ctxto);

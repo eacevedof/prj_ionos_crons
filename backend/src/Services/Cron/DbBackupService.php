@@ -67,7 +67,7 @@ final class DbBackupService extends ACronService
             $results[$database]["now"] = date("Y-m-d H:i:s");
             $results[$database]["result"] = $result ? "error": "success";
             $results[$database]["output"] = $output;
-            $results[$database]["exec_result"] = $r;
+            $results[$database]["exec"] = $r;
 
         }//foreach this->projects
 
