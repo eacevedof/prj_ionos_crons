@@ -44,8 +44,6 @@ final class DbBackupService extends ACronService
         $min = $r["min"];
 
         $results = [];
-        $output = [];
-
         foreach($this->projects as $context => $arproject)
         {
             if(in_array($context, $this->exclude)) continue;
@@ -61,9 +59,14 @@ final class DbBackupService extends ACronService
 
             $command = "/usr/bin/mysqldump --no-tablespaces --host={$server} --user={$user} --password={$password} {$database} > {$dbfile}";
             //echo "$command \n";
-            exec($command, $output, $result);
+            $output = [];
+            $result = null;
+            $r = exec($command, $output, $result);
             //$result = shell_exec($command);
-            $results[] = "$context resultado: $result"; // 0:ok, 1:error
+            $results[$database]["now"] = date("Y-m-d H:i:s");
+            $results[$database]["result"] = $result ? "error": "success";
+            $results[$database]["output"] = $output;
+            $results[$database]["exec_result"] = $r;
 
         }//foreach this->projects
 
