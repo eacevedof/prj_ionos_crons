@@ -149,7 +149,7 @@ final class DbReplicatorService extends ACronService
                 $results[$ctxto]["exec"] = $r;
                 $results[$ctxto]["output"] = $output;
                 $this->_logtables($ctxto);
-                unlink($this->tmpdump);
+                //unlink($this->tmpdump);
             }//foreach arto
 
         }//foreach from=>To
