@@ -10,13 +10,13 @@ namespace App\Services\Cron;
 final class DbBackupService extends ACronService
 {
     private const LOG_PREFIX = "dbbackup";
-    private $exclude;
+    private array $exclude;
     
-    private function _check_intime()
+    private function _check_intime(): array
     {
         $now = date("YmdHis");
-
         $today = date("Ymd");
+
         $min = "{$today}030000";
         $max = "{$today}040000";
         if(!$this->_get_param("force"))
@@ -27,7 +27,7 @@ final class DbBackupService extends ACronService
         ];
     }
 
-    public function _load_exclude()
+    public function _load_exclude(): void
     {
         $this->exclude = [
             "ipblocker-ro",
@@ -36,7 +36,7 @@ final class DbBackupService extends ACronService
         ];
     }
 
-    public function run()
+    public function run(): void
     {
         $this->logpr("START","dbbackupservice.run", self::LOG_PREFIX);
         $this->_load_exclude();
