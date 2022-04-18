@@ -6,26 +6,26 @@ trait LogTrait
 {
     private function _get_pathlog(){return realpath(__DIR__."/../../logs");}
 
-    protected function log($mxVar, $title=null, $prefix="")
+    protected function log($mxVar, string $title="", string $prefix=""): void
     {
         $pathlogs = $this->_get_pathlog();
         $oLog = new L("trace", $pathlogs, $prefix);
-        $oLog->save($mxVar,$title, $prefix);
+        $oLog->save($mxVar,$title);
     }
 
-    protected function logd($mxVar, $title="", $prefix="")
+    protected function logd($mxVar, string $title="", string $prefix=""): void
     {
         $pathlogs = $this->_get_pathlog();
-        $oLog = new L("debug",$pathlogs);
-        $oLog->save($mxVar, $title, $prefix);
+        $oLog = new L("debug", $pathlogs, $prefix);
+        $oLog->save($mxVar, $title);
     }
 
-    protected function logerr($mxVar,$title="", $prefix="")
+    protected function logerr($mxVar, string $title="", string $prefix=""): void
     {
-        $this->_pr($mxVar,$title);
+        $this->_pr($mxVar, $title);
         $pathlogs = $this->_get_pathlog();
-        $oLog = new L("error",$pathlogs);
-        $oLog->save($mxVar, $title, $prefix);
+        $oLog = new L("error", $pathlogs, $prefix);
+        $oLog->save($mxVar, $title);
     }
 
     private function _pr($mxvar, $title="")
@@ -40,6 +40,6 @@ trait LogTrait
     protected function logpr($mxvar, $title="", $prefix="")
     {
         $this->_pr($mxvar,$title);
-        $this->log($mxvar,$title, $prefix);
+        $this->log($mxvar, $title, $prefix);
     }
 }
