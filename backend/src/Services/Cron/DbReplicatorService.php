@@ -110,7 +110,7 @@ final class DbReplicatorService extends ACronService
 
     public function run()
     {
-        $this->logpr("START DBREPLICATOR", self::LOG_PREFIX);
+        $this->logpr("START DBREPLICATOR", "", self::LOG_PREFIX);
         //$this->_check_intime();
         $results = [];
         foreach ($this->config as $ctxfrom => $arto)

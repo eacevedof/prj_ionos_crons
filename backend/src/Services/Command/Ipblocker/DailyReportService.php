@@ -9,6 +9,7 @@ use App\Component\Email\EmailComponent;
 
 final class DailyReportService extends ACommandService
 {
+    private const LOG_PREFIX = "dailyreport";
     private $db;
     private string $yesterday;
 
@@ -256,7 +257,7 @@ final class DailyReportService extends ACommandService
 
     private function _send(string $content): void
     {
-        $this->logpr("email._send");
+        $this->logpr("email._send", "", self::LOG_PREFIX);
         $emails = get_config("emails");
         $config = $emails["configs"][0];
 
@@ -268,12 +269,12 @@ final class DailyReportService extends ACommandService
             ->send()
             ->get_errors()
         ;
-        $this->logpr($r, "error on send?");
+        $this->logpr($r, "error on send?", "", self::LOG_PREFIX);
     }
 
     public function run()
     {
-        $this->logpr("START DAILYREPORT {$this->yesterday}");
+        $this->logpr("START DAILYREPORT {$this->yesterday}", "", self::LOG_PREFIX);
         $html = [];
 
         $data = $this->_get_new_blocked_ips();
@@ -322,6 +323,6 @@ final class DailyReportService extends ACommandService
 
         $html = implode("\n", $html);
         $this->_send($html);
-        $this->logpr("END DAILYREPORT");
+        $this->logpr("END DAILYREPORT", "", self::LOG_PREFIX);
     }
 }

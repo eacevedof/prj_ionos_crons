@@ -10,7 +10,7 @@ trait LogTrait
     {
         $pathlogs = $this->_get_pathlog();
         $oLog = new L("trace", $pathlogs, $prefix);
-        $oLog->save($mxVar,$title);
+        $oLog->save($mxVar, $title);
     }
 
     protected function logd($mxVar, string $title="", string $prefix=""): void
