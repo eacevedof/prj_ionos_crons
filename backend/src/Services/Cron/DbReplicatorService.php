@@ -143,7 +143,7 @@ final class DbReplicatorService extends ACronService
                 $output = [];
                 $result = null;
                 $r = exec($command, $output, $result);
-                sleep(5);
+                sleep(1);
                 $results[$ctxto]["now"] = date("Y-m-d H:i:s");
                 $results[$ctxto]["result"] = $result ? "error" : "success";
                 $results[$ctxto]["exec"] = $r;
