@@ -15,7 +15,7 @@ final class LogComponent
         $this->subtype = $subtype;
 
         $this->filename = "app_".date("Ymd").".log";
-        if($prefix) $this->filename = "app_${$prefix}_".date("Ymd").".log";
+        if($prefix = trim($prefix)) $this->filename = "app_${$prefix}_".date("Ymd").".log";
 
         if(!$pathfolder) $this->pathfolder = __DIR__;
         if(!$subtype) $this->subtype = "debug";
