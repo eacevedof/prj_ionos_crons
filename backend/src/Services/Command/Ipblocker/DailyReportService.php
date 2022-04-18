@@ -269,7 +269,7 @@ final class DailyReportService extends ACommandService
             ->send()
             ->get_errors()
         ;
-        $this->logpr($r, "error on send?", "", self::LOG_PREFIX);
+        $this->logpr($r, "error on send?", self::LOG_PREFIX);
     }
 
     public function run()
