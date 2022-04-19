@@ -83,20 +83,28 @@ final class DbReplicatorService extends ACronService
         $path = self::$PATH_DUMPSDS.$file;
         $this->logpr($path,"path to read", self::LOG_PREFIX);
         $content = file_get_contents($path);
-        //$this->logpr($content,"content 1", self::LOG_PREFIX);
-        $arcontent = explode("\n",$content);
+        $this->logpr(strlen($content),"content read chars", self::LOG_PREFIX);
+        $arcontent = explode("\n", $content);
+        unset($content);
 
+        $this->logpr(count($arcontent),"lines in content", self::LOG_PREFIX);
         //elimina las 12 ultimas
         array_splice($arcontent,-12);
-
         //elimina las primeras 20 (desde la pos 0 contar 20 posiciones)
         array_splice($arcontent,0,20);
 
         $content = implode("\n",$arcontent);
-
+        unset($arcontent);
         $this->tmpdump = "tmp_".uniqid().".sql";
         $this->tmpdump = self::$PATH_DUMPSDS.$this->tmpdump;
-        $r = file_put_contents($this->tmpdump, $content);
+        $this->logpr($this->tmpdump, "this->tmpdump", self::LOG_PREFIX);
+        try {
+            $r = file_put_contents($this->tmpdump, $content);
+        }
+        catch (\Exception $e) {
+            $this->logerr($e->getMessage(),"error saving on file $this->tmpdump", self::LOG_PREFIX);
+        }
+
         //$this->logpr($content,"content", self::LOG_PREFIX);
         $this->logpr($r, "file_put_contents result on $this->tmpdump", self::LOG_PREFIX);
         sleep(1);
