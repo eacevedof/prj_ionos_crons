@@ -24,33 +24,37 @@ final class DumpComponent
         $this->pathtmp = getenv("HOME")."/mi_temporal";
         $this->path1 = $path1;
         $this->path2 = $path2;
-
-        $this->name1 = basename($path1);
-        $this->pathcp1 = "$this->pathtmp/$this->name1";
-        copy($path1, $this->pathcp1);
-
-        $this->name2 = basename($path2);
-        $this->pathcp2 = "$this->pathtmp/$this->name2";
-        copy($path2, $this->pathcp2);
-        //pr("file1:$path1, file2:$path2","dumpcomponent");
     }
 
     private function _same_len(): bool
     {
-        $cmd = "cat $this->pathcp1 | wc -m";
+        $cmd = "cat $this->path1 | wc -m";
         $len1 = (int) cmd::exec($cmd)["exec"];
 
-        $cmd = "cat $this->pathcp2 | wc -m";
+        $cmd = "cat $this->path2 | wc -m";
         $len2 = (int) cmd::exec($cmd)["exec"];
 
         $this->logpr("l1:$len1, l2:$len2","same_len","dumpcomponent");
         return $len1 === $len2;
     }
+
+    private function _make_temporal_copy(): void
+    {
+        $this->name1 = basename($this->path1);
+        $this->pathcp1 = "$this->pathtmp/$this->name1";
+        copy($this->path1, $this->pathcp1);
+
+        $this->name2 = basename($this->path2);
+        $this->pathcp2 = "$this->pathtmp/$this->name2";
+        copy($this->path2, $this->pathcp2);
+        //pr("file1:$path1, file2:$path2","dumpcomponent");
+    }
     
     private function _remove_last_line_of_dumpdate(): void
     {
+        //se intenta quitar la ultima linea de los dumps:
+        //-- Dump completed on 2022-04-02  3:15:08
         //$cmd = "tac file | sed '1,2d' | tac";
-        //quita la ultima linea
         $cmd = "head -n -1 $this->pathcp1 > $this->pathtmp/tmp1.log";
         $r = cmd::exec($cmd);
         $this->logpr($r,"_remove_last_line_of_dumpdate","dumpcomponent");
@@ -89,10 +93,8 @@ final class DumpComponent
 
     public function are_thesame(): bool
     {
-        if(!$this->_same_len()) {
-            $this->_clean_temporal();
-            return false;
-        }
+        if(!$this->_same_len()) return false;
+        $this->_make_temporal_copy();
         $this->_remove_last_line_of_dumpdate();
         $r = $this->_same_md5_of_content();
         $this->_clean_temporal();
