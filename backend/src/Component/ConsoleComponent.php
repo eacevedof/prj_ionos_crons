@@ -72,9 +72,10 @@ final class ConsoleComponent
         $status = 0;
         $exec = exec($cmd, $output, $status);
         return [
+            "cmd" => $cmd,
+            "status" => $status===0 ? "success" : "error",
             "exec" => $exec,
             "output" => $output,
-            "status" => $status===0 ? "success" : "error",
         ];
     }
 }

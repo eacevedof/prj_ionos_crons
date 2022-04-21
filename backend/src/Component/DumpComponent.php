@@ -1,7 +1,7 @@
 <?php
 namespace App\Component;
 
-class DumpComponent
+final class DumpComponent
 {
     private $str1;
     private $str2;

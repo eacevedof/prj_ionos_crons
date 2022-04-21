@@ -5,7 +5,8 @@
 namespace App\Services\Cron\Cleaner;
 
 use App\Services\Cron\ACronService;
-use App\Component\DumpComponent;
+//use App\Component\DumpComponent;
+use App\Component\Console\DumpComponent;
 
 final class RepeatedService extends ACronService
 {
@@ -79,7 +80,7 @@ final class RepeatedService extends ACronService
                 if($file1 == $file2) continue;
 
                 $path2 = self::$PATH_DUMPSDS.$file2;
-                $areequal = (new DumpComponent($path1,$path2))->are_thesame();
+                $areequal = (new DumpComponent($path1, $path2))->are_thesame();
 
                 if($areequal) $r[] = $file2;
 
