@@ -38,7 +38,7 @@ final class DumpComponent
     {
         //$cmd = "tac file | sed '1,2d' | tac";
         //quita la ultima linea
-        $cmd = "head -n -1 $this->pathcp1 > tmp1.log";
+        $cmd = "head -n -1 $this->pathcp1 > $this->pathtmp/tmp1.log";
         $r = cmd::exec($cmd);
         $this->logerr($r,"","dumpcomponent");
 
@@ -46,7 +46,7 @@ final class DumpComponent
         $r = cmd::exec($cmd);
         $this->logerr($r,"","dumpcomponent");
 
-        $cmd = "head -n -1 $this->pathcp2 > tmp1.log";
+        $cmd = "head -n -1 $this->pathcp2 > $this->pathtmp/tmp1.log";
         $r = cmd::exec($cmd);
         $this->logerr($r,"","dumpcomponent");
 
