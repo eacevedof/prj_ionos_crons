@@ -41,19 +41,19 @@ final class DumpComponent
         //quita la ultima linea
         $cmd = "head -n -1 $this->pathcp1 > $this->pathtmp/tmp1.log";
         $r = cmd::exec($cmd);
-        $this->log($r,"","dumpcomponent");
+        $this->log($r,"_remove_dumpdate","dumpcomponent");
 
         $cmd = "mv $this->pathtmp/tmp1.log $this->pathtmp/$this->name1";
         $r = cmd::exec($cmd);
-        $this->log($r,"","dumpcomponent");
+        $this->log($r,"_remove_dumpdate","dumpcomponent");
 
         $cmd = "head -n -1 $this->pathcp2 > $this->pathtmp/tmp1.log";
         $r = cmd::exec($cmd);
-        $this->log($r,"","dumpcomponent");
+        $this->log($r,"_remove_dumpdate","dumpcomponent");
 
         $cmd = "mv $this->pathtmp/tmp1.log $this->pathtmp/$this->name2";
         $r = cmd::exec($cmd);
-        $this->log($r,"","dumpcomponent");
+        $this->log($r,"_remove_dumpdate","dumpcomponent");
     }
 
     private function _same_len(): bool
