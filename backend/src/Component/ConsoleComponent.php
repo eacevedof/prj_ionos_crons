@@ -5,8 +5,8 @@ final class ConsoleComponent
 {
     private const KEY_PATTERN = "^([\-]{0,2}[a-z,\d]+)\s*=\s*";
 
-    private $argv = [];
-    private $request = [];
+    private array $argv = [];
+    private array $request = [];
 
     public function __construct($argv=[])
     {
@@ -40,7 +40,7 @@ final class ConsoleComponent
     private function _get_splitted($strkeyval)
     {
         $key = $this->_get_key($strkeyval);
-        $value = str_replace($key,"",$strkeyval);
+        $value = str_replace($key,"", $strkeyval);
         $value = trim($value);
         $key = $this->_get_keycleaned($key);
         return [
@@ -48,7 +48,7 @@ final class ConsoleComponent
         ];
     }
 
-    private function _get_request($strkeyval,$i)
+    private function _get_request($strkeyval, $i): array
     {
         if(strstr($strkeyval,"=")){
             return $this->_get_splitted($strkeyval);
@@ -56,7 +56,7 @@ final class ConsoleComponent
         return ["key"=>$i,"value"=>$strkeyval];
     }
 
-    public function get_request()
+    public function get_request(): array
     {
         $this->_load_file();
         foreach ($this->argv as $i=>$strkeyval){
@@ -66,14 +66,15 @@ final class ConsoleComponent
         return $this->request;
     }
     
-    public static function exec($cmd)
+    public static function exec(string $cmd): array
     {
-        $output = null;
-        $status = null;
-        exec($cmd, $output, $status);
+        $output = [];
+        $status = 0;
+        $exec = exec($cmd, $output, $status);
         return [
+            "exec" => $exec,
             "output" => $output,
-            "status" => $status===0 ? "ok" : "nok",
+            "status" => $status===0 ? "success" : "error",
         ];
     }
 }
