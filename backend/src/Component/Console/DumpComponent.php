@@ -35,27 +35,6 @@ final class DumpComponent
         //pr("file1:$path1, file2:$path2","dumpcomponent");
     }
 
-    private function _remove_dumpdate(): void
-    {
-        //$cmd = "tac file | sed '1,2d' | tac";
-        //quita la ultima linea
-        $cmd = "head -n -1 $this->pathcp1 > $this->pathtmp/tmp1.log";
-        $r = cmd::exec($cmd);
-        $this->logpr($r,"_remove_dumpdate","dumpcomponent");
-
-        $cmd = "mv $this->pathtmp/tmp1.log $this->pathtmp/$this->name1";
-        $r = cmd::exec($cmd);
-        $this->logpr($r,"_remove_dumpdate","dumpcomponent");
-
-        $cmd = "head -n -1 $this->pathcp2 > $this->pathtmp/tmp1.log";
-        $r = cmd::exec($cmd);
-        $this->logpr($r,"_remove_dumpdate","dumpcomponent");
-
-        $cmd = "mv $this->pathtmp/tmp1.log $this->pathtmp/$this->name2";
-        $r = cmd::exec($cmd);
-        $this->logpr($r,"_remove_dumpdate","dumpcomponent");
-    }
-
     private function _same_len(): bool
     {
         $cmd = "cat $this->pathcp1 | wc -m";
@@ -67,7 +46,28 @@ final class DumpComponent
         $this->logpr("l1:$len1, l2:$len2","same_len","dumpcomponent");
         return $len1 === $len2;
     }
+    
+    private function _remove_last_line_of_dumpdate(): void
+    {
+        //$cmd = "tac file | sed '1,2d' | tac";
+        //quita la ultima linea
+        $cmd = "head -n -1 $this->pathcp1 > $this->pathtmp/tmp1.log";
+        $r = cmd::exec($cmd);
+        $this->logpr($r,"_remove_last_line_of_dumpdate","dumpcomponent");
 
+        $cmd = "mv $this->pathtmp/tmp1.log $this->pathtmp/$this->name1";
+        $r = cmd::exec($cmd);
+        $this->logpr($r,"_remove_last_line_of_dumpdate","dumpcomponent");
+
+        $cmd = "head -n -1 $this->pathcp2 > $this->pathtmp/tmp1.log";
+        $r = cmd::exec($cmd);
+        $this->logpr($r,"_remove_last_line_of_dumpdate","dumpcomponent");
+
+        $cmd = "mv $this->pathtmp/tmp1.log $this->pathtmp/$this->name2";
+        $r = cmd::exec($cmd);
+        $this->logpr($r,"_remove_last_line_of_dumpdate","dumpcomponent");
+    }
+    
     private function _same_md5_of_content(): bool
     {
         $cmd = "cat $this->pathcp1 | md5sum";
@@ -93,7 +93,7 @@ final class DumpComponent
             $this->_clean_temporal();
             return false;
         }
-        $this->_remove_dumpdate();
+        $this->_remove_last_line_of_dumpdate();
         $r = $this->_same_md5_of_content();
         $this->_clean_temporal();
         return $r;
