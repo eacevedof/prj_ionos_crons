@@ -63,32 +63,30 @@ final class RepeatedService extends ACronService
         return $r;
     }
 
-    private function _get_repeated($files)
+    private function _get_repeated(array $files): array
     {
         sort($files);
-        $r = [];
+        $repeated = [];
         //buscar
         foreach($files as $file1)
         {
             //si ya está en repetidos se comprueba el sig
-            if(in_array($file1,$r)) continue;
-
+            if(in_array($file1, $repeated)) continue;
             $path1 = self::$PATH_DUMPSDS.$file1;
-
             foreach ($files as $file2)
             {
-                if($file1 == $file2) continue;
+                if($file1 === $file2) continue;
+                //si no tienen el mismo prefijo no se compara
+                if(!(substr($file1,0, -19) === substr($file2,0, -19))) continue;
 
                 $path2 = self::$PATH_DUMPSDS.$file2;
                 $areequal = (new DumpComponent($path1, $path2))->are_thesame();
-
-                if($areequal) $r[] = $file2;
-
+                if($areequal) $repeated[] = $file2;
             }//foreach file2
 
         }//foreach file1
 
-        return $r;
+        return $repeated;
     }
 
     private function _remove($files)
