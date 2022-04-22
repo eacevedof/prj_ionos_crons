@@ -20,7 +20,7 @@ final class ArrayToTable
         $this->footer = $footer;
     }
 
-    private function __invoke(): string
+    public function __invoke(): string
     {
         if(!$count = count($this->data)) return "<h3>$this->h3 - (0)</h3>";
 
