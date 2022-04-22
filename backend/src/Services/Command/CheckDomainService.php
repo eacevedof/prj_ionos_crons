@@ -35,20 +35,20 @@ final class CheckDomainService extends ACommandService
         $this->logpr($r,"is error?");
     }
 
-    private function _clean_ok()
+    private function _clean_ok(): void
     {
         $noks = [];
-        $errors = ["HTTP/1.1 403 Forbidden","HTTP/1.1 404 Not Found","HTTP/1.1 301 Moved Permanently"];
+        $errors = ["HTTP/1.1 403 Forbidden", "HTTP/1.1 404 Not Found", "HTTP/1.1 301 Moved Permanently"];
         foreach ($this->result as $domain=>$result)
         {
-            if($result["status"] === "nok")
-            {
+            if($result["status"] === "nok") {
                 $noks[$domain] = $result;
+                continue;
             }
-            elseif (!$result["output"][0] || in_array($result["output"][0],$errors))
-            {
+
+            $output = $result["output"][0] ?? "";
+            if (!$output || in_array($output, $errors))
                 $noks[$domain] = $result;
-            }
         }
         $this->result = $noks;
     }
