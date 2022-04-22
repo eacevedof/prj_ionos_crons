@@ -78,4 +78,24 @@ final class ConsoleComponent
             "output" => $output,
         ];
     }
+
+    public static function exec_sep(array $cmds): array
+    {
+        $result = [];
+        foreach ($cmds as $cmd)
+            $result[] = self::exec($cmd);
+        return $result;
+    }
+
+    public static function exec_inline(array $cmds): array
+    {
+        $inline = implode(";", $cmds);
+        return self::exec($inline);
+    }
+
+    public static function exec_pipe(array $cmds): array
+    {
+        $piped = implode(" | ", $cmds);
+        return self::exec($piped);
+    }
 }
