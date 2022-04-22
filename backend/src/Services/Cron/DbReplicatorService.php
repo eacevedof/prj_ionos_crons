@@ -86,7 +86,8 @@ final class DbReplicatorService extends ACronService
         $this->logpr($dumpfile,"_create_tmp_dump_with_console dumpfile", self::LOG_PREFIX);
         if (!is_file($pathfile = self::$PATH_DUMPS_DS.$dumpfile)) return;
 
-        $tmp1 = "tmp_{$dumpfile}_".uniqid().".sql";
+        $justname = str_replace(".sql", "", $dumpfile);
+        $tmp1 = "tmp_{$justname}_".uniqid().".sql";
         $this->tmpdump = self::$PATH_TEMP_DS.$tmp1;
 
         $cmd = "cp $pathfile $this->tmpdump";
@@ -99,7 +100,7 @@ final class DbReplicatorService extends ACronService
         }
 
         //elimina ultimas 12 lineas
-        $tmp2 = "tmp_{$dumpfile}_".uniqid()."_rm.sql";
+        $tmp2 = "tmp_{$justname}_".uniqid()."_rm.sql";
         $cmds = [
             "cd ".self::$PATH_TEMP_DS,
             "head -n -12 $this->tmpdump > ./$tmp2",
@@ -109,7 +110,7 @@ final class DbReplicatorService extends ACronService
         $this->logpr($r, "elimina ultimas 12 lineas", self::LOG_PREFIX);
 
         //elimina primeras 20 lineas
-        $tmp2 = "tmp_{$dumpfile}_".uniqid()."_rm.sql";
+        $tmp2 = "tmp_{$justname}_".uniqid()."_rm.sql";
         $cmds = [
             "cd ".self::$PATH_TEMP_DS,
             "head -n 20 $this->tmpdump > ./$tmp2",
