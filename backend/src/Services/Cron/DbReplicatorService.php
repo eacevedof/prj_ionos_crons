@@ -188,7 +188,6 @@ final class DbReplicatorService extends ACronService
                 $r = cmd::exec($command);
                 $this->logpr($r, "restore tmpdump", self::LOG_PREFIX);
 
-                continue;
                 $command = "rm -f $this->tmpdump";
                 $r = cmd::exec($command);
                 $this->logpr($r, "remove tmpdump", self::LOG_PREFIX);
