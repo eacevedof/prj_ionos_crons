@@ -89,7 +89,7 @@ final class ConsoleComponent
 
     public static function exec_inline(array $cmds): array
     {
-        $inline = implode(";", $cmds);
+        $inline = implode("; ", $cmds);
         return self::exec($inline);
     }
 

@@ -6,6 +6,9 @@
 namespace App\Services\Cron;
 
 use App\Factories\Db;
+use App\Component\ConsoleComponent as cmd;
+use App\Component\Console\DumpComponent;
+
 
 final class DbReplicatorService extends ACronService
 {
@@ -78,7 +81,45 @@ final class DbReplicatorService extends ACronService
         return "";
     }
 
-    private function _create_tmp_dump(string $file): void
+    private function _create_tmp_dump_with_console(string $dumpfile): void
+    {
+        $this->logpr($dumpfile,"_create_tmp_dump_with_console dumpfile", self::LOG_PREFIX);
+        if (!is_file($pathfile = self::$PATH_DUMPS_DS.$dumpfile)) return;
+
+        $tmp1 = "tmp_{$dumpfile}_".uniqid().".sql";
+        $this->tmpdump = self::$PATH_TEMP_DS.$tmp1;
+
+        $cmd = "cp $pathfile $this->tmpdump";
+        $r = cmd::exec($cmd);
+        $this->logpr($r, $cmd, self::LOG_PREFIX);
+
+        if (!is_file($this->tmpdump)) {
+            $this->logerr("File {$dumpfile} not copied to $this->tmpdump");
+            return;
+        }
+
+        //elimina ultimas 12 lineas
+        $tmp2 = "tmp_{$dumpfile}_".uniqid()."_rm.sql";
+        $cmds = [
+            "cd ".self::$PATH_TEMP_DS,
+            "head -n -12 $this->tmpdump > ./$tmp2",
+            "mv ./$tmp2 ./$tmp1"
+        ];
+        $r = cmd::exec_inline($cmds);
+        $this->logpr($r, "elimina ultimas 12 lineas", self::LOG_PREFIX);
+
+        //elimina primeras 20 lineas
+        $tmp2 = "tmp_{$dumpfile}_".uniqid()."_rm.sql";
+        $cmds = [
+            "cd ".self::$PATH_TEMP_DS,
+            "head -n 20 $this->tmpdump > ./$tmp2",
+            "mv ./$tmp2 ./$tmp1"
+        ];
+        $r = cmd::exec_inline($cmds);
+        $this->logpr($r, "elimina ultimas 20 lineas", self::LOG_PREFIX);
+    }
+
+    private function _create_tmp_dump_with_raw_php(string $file): void
     {
         $path = self::$PATH_DUMPS_DS.$file;
         $this->logpr($path,"path to read", self::LOG_PREFIX);
@@ -141,28 +182,24 @@ final class DbReplicatorService extends ACronService
                 if(!$arproject) continue;
 
                 list($dblocal, $server, $port, $database, $user, $password) = array_values($arproject);
-                $this->_create_tmp_dump($filename);
-                $this->logpr($this->tmpdump,"tmpdump", self::LOG_PREFIX);
+                $this->_create_tmp_dump_with_console($filename);
                 if(!is_file($this->tmpdump)) continue;
                 
                 $command = "/usr/bin/mysql --host={$server} --user={$user} --password={$password} {$database} < $this->tmpdump";
-                $this->logpr($command, "command", self::LOG_PREFIX);
+                $r = cmd::exec($command);
+                $this->logpr($r, "restore tmpdump", self::LOG_PREFIX);
 
-                $output = [];
-                $result = null;
-                $r = exec($command, $output, $result);
-                sleep(1);
-                $results[$ctxto]["now"] = date("Y-m-d H:i:s");
-                $results[$ctxto]["result"] = $result ? "error" : "success";
-                $results[$ctxto]["exec"] = $r;
-                $results[$ctxto]["output"] = $output;
+                continue;
+                $command = "rm -f $this->tmpdump";
+                $r = cmd::exec($command);
+                $this->logpr($r, "remove tmpdump", self::LOG_PREFIX);
+
                 $this->_logtables($ctxto);
                 //unlink($this->tmpdump);
             }//foreach arto
 
         }//foreach from=>To
-        
-        $this->log($results,"dbreplicator.run.results", self::LOG_PREFIX);
+
         $this->logpr("END DBREPLICATOR", "",self::LOG_PREFIX);
     }
 
