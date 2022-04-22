@@ -110,11 +110,9 @@ final class DbReplicatorService extends ACronService
         $this->logpr($r, "elimina ultimas 12 lineas", self::LOG_PREFIX);
 
         //elimina primeras 20 lineas
-        $tmp2 = "tmp_{$justname}_".uniqid()."_rm.sql";
         $cmds = [
             "cd ".self::$PATH_TEMP_DS,
-            "head -n 20 $this->tmpdump > ./$tmp2",
-            "mv ./$tmp2 ./$tmp1"
+            "sed -i '1,20d' ./$tmp1",
         ];
         $r = cmd::exec_inline($cmds);
         $this->logpr($r, "elimina ultimas 20 lineas", self::LOG_PREFIX);
