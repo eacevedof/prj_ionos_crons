@@ -103,7 +103,7 @@ final class DbReplicatorService extends ACronService
         $tmp2 = "tmp_{$justname}_".uniqid()."_rm.sql";
         $cmds = [
             "cd ".self::$PATH_TEMP_DS,
-            "head -n -12 $this->tmpdump > ./$tmp2",
+            "head -n -11 $this->tmpdump > ./$tmp2",
             "mv ./$tmp2 ./$tmp1"
         ];
         $r = cmd::exec_inline($cmds);
