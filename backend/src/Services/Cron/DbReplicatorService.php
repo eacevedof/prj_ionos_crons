@@ -9,10 +9,8 @@ use App\Factories\Db;
 
 final class DbReplicatorService extends ACronService
 {
-    /**
-     * @var string
-     */
-    private static string $PATH_DUMPSDS;
+    private static string $PATH_DUMPS_DS;
+    private static string $PATH_TEMP_DS;
     private const LOG_PREFIX = "replicator";
     private array $config;
     private array $dumps;
@@ -30,7 +28,8 @@ final class DbReplicatorService extends ACronService
     private function _load_pathdumps(): self
     {
         $home = $this->_get_env("HOME");
-        self::$PATH_DUMPSDS = "$home/backup_bd/";
+        self::$PATH_DUMPS_DS = "$home/backup_bd/";
+        self::$PATH_TEMP_DS = "$home/mi_temporal/";
         return $this;
     }
 
@@ -43,9 +42,10 @@ final class DbReplicatorService extends ACronService
         return $this;
     }
 
-    private function _load_dumps()
+    private function _load_dumps(): void
     {
-        $dumps = scandir(self::$PATH_DUMPSDS);
+        $dumps = scandir(self::$PATH_DUMPS_DS);
+        //ordena descendentemente
         arsort($dumps);
         $dumps = array_values($dumps);
         $this->logpr($dumps, "dumps", self::LOG_PREFIX);
@@ -80,7 +80,7 @@ final class DbReplicatorService extends ACronService
 
     private function _create_tmp_dump(string $file): void
     {
-        $path = self::$PATH_DUMPSDS.$file;
+        $path = self::$PATH_DUMPS_DS.$file;
         $this->logpr($path,"path to read", self::LOG_PREFIX);
         $content = file_get_contents($path);
         $this->logpr(strlen($content),"content read chars", self::LOG_PREFIX);
@@ -96,7 +96,7 @@ final class DbReplicatorService extends ACronService
         $content = implode("\n",$arcontent);
         unset($arcontent);
         $this->tmpdump = "tmp_".uniqid().".sql";
-        $this->tmpdump = self::$PATH_DUMPSDS.$this->tmpdump;
+        $this->tmpdump = self::$PATH_DUMPS_DS.$this->tmpdump;
         $this->logpr($this->tmpdump, "this->tmpdump", self::LOG_PREFIX);
         try {
             $r = file_put_contents($this->tmpdump, $content);
