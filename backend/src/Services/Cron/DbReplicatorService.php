@@ -115,7 +115,7 @@ final class DbReplicatorService extends ACronService
             "sed -i '1,20d' ./$tmp1",
         ];
         $r = cmd::exec_inline($cmds);
-        $this->logpr($r, "elimina ultimas 20 lineas", self::LOG_PREFIX);
+        $this->logpr($r, "elimina primeras 20 lineas", self::LOG_PREFIX);
     }
 
     private function _create_tmp_dump_with_raw_php(string $file): void
