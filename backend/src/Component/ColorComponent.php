@@ -4,9 +4,9 @@ namespace App\Component;
 
 class ColorComponent
 {
+    private const END_OF_COLOR   = 0;
     public const DEFAULT        = 39;
     public const WHITE          = 0;
-    public const END_OF_COLOR   = 0;
 
     public const RED            = 31;
     public const GREEN          = 32;
