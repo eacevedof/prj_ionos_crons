@@ -65,15 +65,6 @@ class EmailComponentTest extends TestCase
                 </p> 
                 <b>$now</b>
             ")
-            /**
-            //con adjuntos no llega a yahoo
-            ->add_attachment([
-            "path"=>PATH_CONFIGDS."domains.example.php",
-            ])
-            ->add_attachment([
-            "path"=>PATH_CONFIGDS."projects.example.php",
-            ])
-            /**/
             ->send()
             ->get_errors()
         ;

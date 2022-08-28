@@ -4,7 +4,7 @@ namespace App\Component;
 
 class ColorComponent
 {
-    private const END_OF_COLOR   = 0;
+    private const END_OF_COLOR   = "00";
     public const DEFAULT        = 39;
     public const WHITE          = 0;
 
