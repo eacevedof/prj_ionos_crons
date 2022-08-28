@@ -16,14 +16,14 @@ class EmailComponentTest extends TestCase
         $this->emails = get_config("emails");
     }
 
-    public function test_pear_mail()
+    private function old_test_pear_mail()
     {
         $this->logpr("emailservice._send_smptp");
 
         $config = $this->emails["configs"][0];
         $now = date("Y-m-d H:i:s");
 
-        $r = EmailComponent::fn_mail($config)
+        $r = EmailComponent::pear($config)
             //si no se pone from no se hace el envio, si se pone uno distinto aplica
             //el usuario en la config de smtp
             ->set_from($this->emails["contacts"][1])
