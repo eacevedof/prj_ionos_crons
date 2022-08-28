@@ -9,4 +9,13 @@ final class EmailComponent
         return (new FuncEmail());
     }
 
+    public static function pear(array $config=[]): PearEmail
+    {
+        return (new PearEmail($config));
+    }
+
+    public static function fn_mail(): FuncEmail
+    {
+        return (new FuncEmail());
+    }
 }
