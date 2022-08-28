@@ -6,6 +6,7 @@ class ColorComponent
 {
     public const DEFAULT        = 39;
     public const WHITE          = 0;
+    public const END_OF_COLOR   = 0;
 
     public const RED            = 31;
     public const GREEN          = 32;
@@ -25,7 +26,6 @@ class ColorComponent
     public const LIGHT_WHITE    = 97;
 
     //background 40-49,100-107
-
     private $texts = [];
 
     private function _get_tag(int $code): string
@@ -37,7 +37,8 @@ class ColorComponent
     public function get_colored(string $text, int $color=self::DEFAULT): string
     {
         $pre = $this->_get_tag($color);
-        $def = $this->_get_tag(self::DEFAULT);
+        //$def = $this->_get_tag(self::DEFAULT);
+        $def = $this->_get_tag(self::END_OF_COLOR);
         return "$pre$text$def";
     }
 
