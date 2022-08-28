@@ -23,7 +23,7 @@ class EmailComponentTest extends TestCase
         $config = $this->emails["configs"][0];
         $now = date("Y-m-d H:i:s");
 
-        $r = EmailComponent::get($config)
+        $r = EmailComponent::fn_mail($config)
             //si no se pone from no se hace el envio, si se pone uno distinto aplica
             //el usuario en la config de smtp
             ->set_from($this->emails["contacts"][1])
